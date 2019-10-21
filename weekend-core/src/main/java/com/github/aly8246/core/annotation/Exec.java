@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Documented
 public @interface Exec {
-    String value();
+    String[] value();
 }

@@ -34,8 +34,9 @@ public class WeekendProxy<T> implements InvocationHandler {
 
         //TODO 获取返回值，查询注解
         Exec exec = method.getDeclaredAnnotation(Exec.class);
-        String value = exec.value();
-        System.out.println("执行的sql  :  " + value);
+        String sql = Arrays.stream(exec.value()).collect(Collectors.joining());
+
+        System.out.println("执行的sql  :  " + sql);
         System.out.println("返回值     :  " + method.getReturnType());
 
 
