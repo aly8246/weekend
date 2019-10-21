@@ -1,2 +1,2 @@
-weekend:
-  base-package: com.github.aly8246.dev.mdao
+server:
+  port: 8246
