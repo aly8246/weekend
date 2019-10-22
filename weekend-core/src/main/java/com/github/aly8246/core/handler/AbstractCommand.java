@@ -1,5 +1,8 @@
 package com.github.aly8246.core.handler;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * @Author ：南有乔木
  * @Email ：1558146696@qq.com
@@ -15,7 +18,7 @@ public Operation run(String baseCommand) {
 	operation.setBaseCommand(baseCommand);
 	operation.setOperation("select");
 	operation.setField("*");
-	operation.setTableName("user_info2");
+	operation.setTableName(Arrays.stream(baseCommand.split(" ")).collect(Collectors.toList()).get(3));
 	
 	//TODO 获得主表子表和查询条件等等操作
 	Condition condition = new Condition();

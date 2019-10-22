@@ -35,16 +35,6 @@ public class WeekendBeanFactory implements ImportBeanDefinitionRegistrar, Resour
 private ResourcePatternResolver resourcePatternResolver;
 private MetadataReaderFactory metadataReaderFactory;
 
-private MongoTemplate mongoTemplate2;
-
-@javax.annotation.Resource
-public void setMongoTemplate2(MongoTemplate mongoTemplate) {
-	this.mongoTemplate2 = mongoTemplate;
-	WeekendBeanFactory.mongoTemplate = mongoTemplate;
-}
-
-public static MongoTemplate mongoTemplate;
-
 @Override
 public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
 	AnnotationAttributes mapperScansAttrs = AnnotationAttributes

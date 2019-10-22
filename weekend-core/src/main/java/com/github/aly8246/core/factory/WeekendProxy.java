@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 
-import static com.github.aly8246.core.factory.WeekendBeanFactory.mongoTemplate;
+import static com.github.aly8246.core.util.MongoTemplateUtil.mongoTemplate;
 
 public class WeekendProxy<T> implements InvocationHandler {
 private Class<T> target;
