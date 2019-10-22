@@ -1,6 +1,9 @@
 package com.github.aly8246.core.query;
 
+import com.github.aly8246.core.handler.Condition;
 import org.springframework.data.mongodb.core.query.Query;
+
+import java.util.List;
 
 /**
  * @Author ：南有乔木
@@ -11,9 +14,6 @@ import org.springframework.data.mongodb.core.query.Query;
  */
 public interface WeekendQuery {
 
-Query buildQuery();
+Query run(List<Condition> conditionList);
 
-Query where(Query query);
-
-Query and(Query query);
 }

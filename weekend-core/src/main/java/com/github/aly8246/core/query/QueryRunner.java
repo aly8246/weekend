@@ -10,18 +10,5 @@ import org.springframework.data.mongodb.core.query.Query;
  * @version: ：V
  */
 public class QueryRunner extends AbstractWeekendQuery {
-@Override
-public Query buildQuery() {
-	return null;
-}
 
-@Override
-public Query where(Query query) {
-	return null;
-}
-
-@Override
-public Query and(Query query) {
-	return null;
-}
 }

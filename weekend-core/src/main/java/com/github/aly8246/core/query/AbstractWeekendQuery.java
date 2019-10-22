@@ -1,6 +1,9 @@
 package com.github.aly8246.core.query;
 
+import com.github.aly8246.core.handler.Condition;
 import org.springframework.data.mongodb.core.query.Query;
+
+import java.util.List;
 
 /**
  * @Author ：南有乔木
@@ -10,19 +13,13 @@ import org.springframework.data.mongodb.core.query.Query;
  * @version: ：V
  */
 public abstract class AbstractWeekendQuery implements WeekendQuery {
-//TODO 得到一个Query对象，根据用户所输入的条件来继续组装query，然后将query交给execute
+
 @Override
-public Query buildQuery() {
+public Query run(List<Condition> conditionList) {
+	System.err.println(conditionList);
+	//TODO 组装query
 	return new Query();
 }
+//TODO 得到一个Query对象，根据用户所输入的条件来继续组装query，然后将query交给execute
 
-@Override
-public Query where(Query query) {
-	return null;
-}
-
-@Override
-public Query and(Query query) {
-	return null;
-}
 }

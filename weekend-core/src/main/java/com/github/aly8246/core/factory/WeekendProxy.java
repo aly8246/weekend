@@ -2,8 +2,11 @@ package com.github.aly8246.core.factory;
 
 import com.github.aly8246.core.annotation.Exec;
 import com.github.aly8246.core.handler.Command;
+import com.github.aly8246.core.handler.Condition;
 import com.github.aly8246.core.handler.Operation;
 import com.github.aly8246.core.handler.SqlCommandHandler;
+import com.github.aly8246.core.query.QueryRunner;
+import com.github.aly8246.core.query.WeekendQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
@@ -55,34 +58,43 @@ public static void main(String[] args) {
 
 @Override
 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-	
 	if (Object.class.equals(method.getDeclaringClass())) {
 		return method.invoke(this, args);
 	} else if (isDefaultMethod(method)) {
 		return invokeDefaultMethod(proxy, method, args);
 	}
+	Class<?> returnType = method.getReturnType();
 	
-	//TODO 获取返回值，查询注解
 	Exec exec = this.getExec(method);
 	String baseCommand = this.getBaseCommand(exec);
 	
-	
-	Class<?> returnType = method.getReturnType();
-	
-	System.out.println("返回值     :  " + returnType);
-	
+	//获取执行命令
 	Operation run = this.getCommand(exec).run(baseCommand);
-	System.out.println(run);
 	
-	run.getConditionList().forEach(System.err::println);
 	
-	if (returnType.equals(List.class)) {
-		String realClass = this.regxListParamClass(method.toGenericString());
-		return mongoTemplate.find(new Query(), Class.forName(realClass).newInstance().getClass(), run.getTableName());
-	} else if (returnType.equals(Object.class)) {
-		System.out.println("something");
-	} else {
-		return mongoTemplate.findOne(new Query(), returnType, run.getTableName());
+	//组装query
+	List<Condition> conditionList = run.getConditionList();
+	WeekendQuery weekendQuery = new QueryRunner();
+	Query query = weekendQuery.run(conditionList);
+	
+	
+	//执行并返回
+	
+	//如果交给exec，需要 TODO 传递参数值 传递方法相关 返回结果相关
+	
+	if (run.getOperation().equals("select")) {
+		if (returnType.equals(List.class)) {
+			String realClass = this.regxListParamClass(method.toGenericString());
+			
+			return mongoTemplate.find(query, Class.forName(realClass).newInstance().getClass(), run.getTableName());
+			
+		} else if (returnType.equals(Object.class)) {//TODO 如果需要分页,需要单独处理
+			System.out.println("something");
+		} else {
+			return mongoTemplate.findOne(query, returnType, run.getTableName());
+		}
+	} else if (run.getOperation().equals("update")) {
+	
 	}
 	
 	

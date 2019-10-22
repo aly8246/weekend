@@ -27,8 +27,6 @@ public static void main(String[] args) {
 
 @Resource
 TestDao testDao;
-@Resource
-MongoTemplate mongoTemplate;
 
 @Bean
 public void test() {
