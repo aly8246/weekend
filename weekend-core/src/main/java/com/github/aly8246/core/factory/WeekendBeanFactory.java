@@ -44,7 +44,6 @@ public class WeekendBeanFactory implements ImportBeanDefinitionRegistrar, Resour
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
-
         AnnotationAttributes mapperScansAttrs = AnnotationAttributes
                 .fromMap(importingClassMetadata.getAnnotationAttributes(WeekendDaoScan.class.getName()));
         String[] packages = (String[]) mapperScansAttrs.get("value");
