@@ -1,18 +1,16 @@
 package com.github.aly8246.core.factory;
 
 import com.github.aly8246.core.annotation.Exec;
-import com.github.aly8246.core.handler.AbstractCommand;
 import com.github.aly8246.core.handler.Command;
+import com.github.aly8246.core.handler.Operation;
 import com.github.aly8246.core.handler.SqlCommandHandler;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
+import static com.github.aly8246.core.factory.WeekendBeanFactory.mongoTemplate;
 
 public class WeekendProxy<T> implements InvocationHandler {
 private Class<T> target;
@@ -29,28 +27,21 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 	} else if (isDefaultMethod(method)) {
 		return invokeDefaultMethod(proxy, method, args);
 	}
-	//基础功能
-	//将sql解析
-	//组装mongo需要的查询条件
-	//执行条件查询
 	
 	//TODO 获取返回值，查询注解
 	Exec exec = this.getExec(method);
-	String sql = this.getBaseSql(exec);
+	String baseCommand = this.getBaseCommand(exec);
 	
 	
 	Class<?> returnType = method.getReturnType();
 	
-	System.out.println("执行的sql  :  " + sql);
 	System.out.println("返回值     :  " + returnType);
 	
-	//将得到的原始命令交由Command接口处理
+	Operation run = this.getCommand(exec).run(baseCommand);
+	System.out.println(run);
 	
-	//写一个sqlHandler，调用valid方法
-	Command command = this.getCommand(exec);
-	command.validCommand();
-
-
+	System.out.println(mongoTemplate);
+	Object one = mongoTemplate.findOne(new Query(), returnType, run.getTableName());
 //	for (int i = 0; i < args.length; i++) {
 //		System.err.println(args[i]);
 //		args[i].getClass();
@@ -66,7 +57,8 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 //	}
 //
 	
-	return "param.isPresent()";
+	return one;
+	
 }
 
 private Exec getExec(Method method) {
@@ -75,10 +67,10 @@ private Exec getExec(Method method) {
 	return exec;
 }
 
-private String getBaseSql(Exec exec) {
-	String sql = Arrays.stream(exec.value()).collect(Collectors.joining());
-	if (StringUtils.isEmpty(sql)) throw new RuntimeException("SQL不能为空");
-	return sql;
+private String getBaseCommand(Exec exec) {
+	String baseCommand = String.join("", exec.value());
+	if (StringUtils.isEmpty(baseCommand)) throw new RuntimeException("BaseCommand不能为空");
+	return baseCommand;
 }
 
 private Command getCommand(Exec exec) {

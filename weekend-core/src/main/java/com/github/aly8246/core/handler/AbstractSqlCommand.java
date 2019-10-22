@@ -10,9 +10,8 @@ package com.github.aly8246.core.handler;
 public class AbstractSqlCommand extends AbstractCommand {
 
 @Override
-public void validCommand() {
-	System.out.println("2-AbstractSqlCommand running");
-	super.validCommand();
+public void validCommand(String baseCommand) {
+	super.validCommand(baseCommand);
 }
 
 }

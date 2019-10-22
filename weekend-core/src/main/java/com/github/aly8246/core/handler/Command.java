@@ -8,9 +8,12 @@ package com.github.aly8246.core.handler;
  * @version: ：V
  */
 public interface Command {
-void validCommand();
+
+Operation run(String baseCommand);
+
 //校验exec命令
 
-
+//void operation(String baseCommand);
+//条件串
 //根据
 }

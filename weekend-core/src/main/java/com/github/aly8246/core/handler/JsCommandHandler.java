@@ -9,8 +9,7 @@ package com.github.aly8246.core.handler;
  */
 public class JsCommandHandler extends AbstractJsCommand {
 @Override
-public void validCommand() {
-	System.out.println("3-JsCommandHandler running");
-	super.validCommand();
+public void validCommand(String baseCommand) {
+	super.validCommand(baseCommand);
 }
 }
