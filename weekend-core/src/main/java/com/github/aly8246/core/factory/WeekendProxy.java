@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.aly8246.core.util.MongoTemplateUtil.mongoTemplate;
 
@@ -40,8 +42,27 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 	Operation run = this.getCommand(exec).run(baseCommand);
 	System.out.println(run);
 	
-	System.out.println(mongoTemplate);
-	Object one = mongoTemplate.findOne(new Query(), returnType, run.getTableName());
+	//System.out.println(List.class);
+	System.out.println(returnType.getClass().getName());
+	System.out.println(returnType);
+	
+	
+	System.out.println(target);
+	
+	if (returnType.equals(List.class)) {
+		System.out.println(method.toGenericString());
+		
+		List<Map> maps = mongoTemplate.find(new Query(), Map.class, run.getTableName());
+		
+		System.out.println(maps);
+	} else {
+		return mongoTemplate.findOne(new Query(), returnType, run.getTableName());
+	}
+
+//	System.out.println(returnType);
+	//System.out.println(returnType.getClass().getName());
+
+
 //	for (int i = 0; i < args.length; i++) {
 //		System.err.println(args[i]);
 //		args[i].getClass();
@@ -57,7 +78,7 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 //	}
 //
 	
-	return one;
+	return null;
 	
 }
 

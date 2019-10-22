@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootApplication(scanBasePackages = "com.github.aly8246.dev")
@@ -33,7 +34,7 @@ MongoTemplate mongoTemplate;
 
 @Bean
 public void test() {
-	UserInfo exec = testDao.exec("小黄", "小黑");
+	List<UserInfo> exec = testDao.exec("小黄", "小黑");
 //	UserInfo u = new UserInfo(UUID.randomUUID().toString(), "小黑", "400");
 //	mongoTemplate.insert(u, "user_info2");
 //	UserInfo user_info = mongoTemplate.findOne(new Query(), UserInfo.class, "user_info2");
