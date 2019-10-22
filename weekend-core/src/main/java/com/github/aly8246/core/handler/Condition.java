@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Condition {
+
 private String type;
 //执行的类型
 private String fieldName;

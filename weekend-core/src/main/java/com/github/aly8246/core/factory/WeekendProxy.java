@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,39 +74,19 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 	Operation run = this.getCommand(exec).run(baseCommand);
 	System.out.println(run);
 	
-	//System.out.println(List.class);
-	System.out.println(returnType.getClass().getName());
-	System.out.println(returnType);
-	
-	
-	System.out.println(target);
+	run.getConditionList().forEach(System.err::println);
 	
 	if (returnType.equals(List.class)) {
 		String realClass = this.regxListParamClass(method.toGenericString());
 		return mongoTemplate.find(new Query(), Class.forName(realClass).newInstance().getClass(), run.getTableName());
+	} else if (returnType.equals(Object.class)) {
+		System.out.println("something");
 	} else {
 		return mongoTemplate.findOne(new Query(), returnType, run.getTableName());
 	}
-
-//	System.out.println(returnType);
-	//System.out.println(returnType.getClass().getName());
-
-
-//	for (int i = 0; i < args.length; i++) {
-//		System.err.println(args[i]);
-//		args[i].getClass();
-//	}
-//	Optional<Object> param = Arrays.stream(args).collect(Collectors.toList()).stream().findAny();
-//	if (param.isPresent()) {
-//		System.out.println(param.get());
-//		List<Object> collect = (List<Object>) param.get();
-//		if (collect.stream().anyMatch("小黄"::equals)) {
-//			System.err.println("小黄不能有，我给你换成小张了");
-//			return "小张--小黄不能有，我给你换成小张了";
-//		}
-//	}
-//
 	
+	
+	return null;
 }
 
 private Exec getExec(Method method) {

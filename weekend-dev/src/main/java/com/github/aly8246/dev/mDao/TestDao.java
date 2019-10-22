@@ -13,6 +13,10 @@ public interface TestDao {
 @Exec(value = "select * from user_info")
 List<UserInfo> exec(String name, String name2);
 
+@Exec(value = "select * from user_info")
+UserInfo exec2(String name, String name2);
+
+
 @Exec("select")
 String exe2();
 }
