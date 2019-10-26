@@ -1,4 +1,4 @@
-package com.github.aly8246.core.factory;
+package com.github.aly8246.core.proxy;
 
 import org.springframework.beans.factory.FactoryBean;
 

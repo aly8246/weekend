@@ -41,6 +41,8 @@ public Operation run(String baseCommand) {
 	return operation;
 }
 
+
+
 public void validCommand(String baseCommand) {
 	System.out.println("1-AbstractCommand running");
 }
