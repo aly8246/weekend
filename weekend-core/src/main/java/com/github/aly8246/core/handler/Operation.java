@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,10 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Operation {
-private String baseCommand;
-private String operation;
-private String field;
-private String tableName;
+    private String baseCommand;
+    private OperationEnum operation;
+    private String field;
+    private String tableName;
 
-private List<Condition> conditionList = new ArrayList<>();
+    private List<Conditions> conditionsList = new LinkedList<>();
 }

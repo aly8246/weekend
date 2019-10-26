@@ -7,7 +7,7 @@ package com.github.aly8246.core.handler;
  * @description：
  * @version: ：V
  */
-public class JsCommandHandler extends AbstractJsCommand {
+public class JsConditionHandler extends AbstractJsCondition {
 @Override
 public void validCommand(String baseCommand) {
 	super.validCommand(baseCommand);

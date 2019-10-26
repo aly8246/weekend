@@ -1,4 +1,6 @@
-package com.github.aly8246.core.execute;
+package com.github.aly8246.core.dispatcher;
+
+import java.util.function.Consumer;
 
 /**
  * @Author ：南有乔木
@@ -7,7 +9,6 @@ package com.github.aly8246.core.execute;
  * @description：
  * @version: ：V
  */
-public interface Dispatcher {
-
-
+public interface Dispatcher<T> {
+        T exec();
 }

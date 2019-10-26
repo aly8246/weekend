@@ -1,6 +1,8 @@
 package com.github.aly8246.core.query;
 
-import com.github.aly8246.core.handler.Condition;
+import com.github.aly8246.core.handler.Conditions;
+import javafx.scene.shape.Circle;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
@@ -15,8 +17,10 @@ import java.util.List;
 public abstract class AbstractWeekendQuery implements WeekendQuery {
 
 @Override
-public Query run(List<Condition> conditionList) {
-	System.err.println(conditionList);
+public Query run(List<Conditions> conditionsList) {
+	System.err.println(conditionsList);
+	Query query = new Query();
+	query.addCriteria(Criteria.where("id").is("1"));
 	//TODO 组装query
 	return new Query();
 }

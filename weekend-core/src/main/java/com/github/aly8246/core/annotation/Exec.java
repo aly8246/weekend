@@ -1,16 +1,18 @@
 package com.github.aly8246.core.annotation;
 
-import com.github.aly8246.core.handler.Command;
-import com.github.aly8246.core.handler.SqlCommandHandler;
+import com.github.aly8246.core.handler.Condition;
+import com.github.aly8246.core.handler.SqlConditionHandler;
 
 import java.lang.annotation.*;
+import java.util.Collection;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
 public @interface Exec {
-String[] value();
+    String[] value();
 
-Class<? extends Command> handler() default SqlCommandHandler.class;
+    Class<? extends Condition> handler() default SqlConditionHandler.class;
 
+    Class<?> returnType() default Collection.class;
 }
