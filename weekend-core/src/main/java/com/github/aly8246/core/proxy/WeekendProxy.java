@@ -1,6 +1,8 @@
 package com.github.aly8246.core.proxy;
 
 
+import com.github.aly8246.core.dispatcher.DispatcherManager;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 

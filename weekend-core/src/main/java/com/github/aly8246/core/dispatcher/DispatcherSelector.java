@@ -1,7 +1,6 @@
-package com.github.aly8246.core.proxy;
+package com.github.aly8246.core.dispatcher;
 
 import com.github.aly8246.core.annotation.Exec;
-import com.github.aly8246.core.dispatcher.*;
 import com.github.aly8246.core.util.WeekendResultObj;
 
 import java.lang.reflect.Method;
