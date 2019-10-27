@@ -7,15 +7,16 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.lang.reflect.Method;
 
 
-public class SimpleDispatcher<T> extends AbstractDispatcher<T> implements Dispatcher {
+public class SimpleDispatcher<T> extends AbstractDispatcher<T> {
+
     public SimpleDispatcher(Object proxy, Method method, Object[] args, RetClass retClass) {
         super(proxy, method, args, retClass);
     }
 
-
     @Override
-    public T exec() {
-        return super.init();
+    public Object exec() {
+        System.out.println("简单字段调度器执行");
+        return super.exec();
     }
 
     @Override

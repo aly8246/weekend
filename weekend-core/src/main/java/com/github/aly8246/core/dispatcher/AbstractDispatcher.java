@@ -1,19 +1,14 @@
 package com.github.aly8246.core.dispatcher;
 
 import com.github.aly8246.core.annotation.Exec;
-import com.github.aly8246.core.exec.SelectExecutor;
 import com.github.aly8246.core.handler.Condition;
 import com.github.aly8246.core.handler.Operation;
 import com.github.aly8246.core.handler.SqlConditionHandler;
-import com.github.aly8246.core.page.PageResult;
 import com.github.aly8246.core.query.QueryRunner;
 import com.github.aly8246.core.template.BaseTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,21 +19,18 @@ import java.util.regex.Pattern;
  * @description：
  * @version: ：V
  */
-public abstract class AbstractDispatcher<T> {
-    private Object proxy;
-    private Method method;
-    private Object[] args;
+public abstract class AbstractDispatcher<T> implements Dispatcher {
+    protected Object proxy;
+    protected Method method;
+    protected Object[] args;
     protected RetClass retClass;
-    private Exec exec;
+    protected Exec exec;
 
     public AbstractDispatcher(Object proxy, Method method, Object[] args, RetClass retClass) {
         this.proxy = proxy;
         this.method = method;
         this.args = args;
         this.retClass = retClass;
-
-        //step1. 处理Exec注解
-        this.resolveExec(this.method);
     }
 
     //解析查询注解
@@ -46,7 +38,12 @@ public abstract class AbstractDispatcher<T> {
     //基础命令   ->  执行条件类
     //执行条件类 ->  Query对象
     //Query对象 ->  获得最终执行结果
-    public T init() {
+
+    @Override
+    public Object exec() {
+        //step1. 处理Exec注解
+        this.resolveExec(this.method);
+
         //step2. 将模板语法里的模板参数替换成实参,得到 =基础命令=
         String baseCommand = this.completeCommand(this.exec);
 
@@ -58,8 +55,6 @@ public abstract class AbstractDispatcher<T> {
 
         //step5. 将 Query 交给最终的执行器
         return this.switchExecutor(operation, query, method);
-
-        //step6. 可能会有结果集处理器,使用返回Map的执行器，根据参数注解来映射
     }
 
     protected void resolveExec(Method method) {
@@ -84,7 +79,7 @@ public abstract class AbstractDispatcher<T> {
     }
 
 
-    public static String regxListParamClass(String source) {
+    protected static String regxListParamClass(String source) {
         Matcher matcher = Pattern.compile("(?<=java.util.List<).*?(?=>)").matcher(source);
         for (; matcher.find(); ) {
             return matcher.group();
@@ -92,7 +87,7 @@ public abstract class AbstractDispatcher<T> {
         throw new RuntimeException("异常regxListParamClass");
     }
 
-    private Condition getConditionHandler(Exec exec) {
+    protected Condition getConditionHandler(Exec exec) {
         Class<? extends Condition> handler = exec.handler();
         try {
             return handler.newInstance();
@@ -101,5 +96,4 @@ public abstract class AbstractDispatcher<T> {
         }
         return new SqlConditionHandler();
     }
-
 }
