@@ -1,5 +1,6 @@
 package com.github.aly8246.core.handler;
 
+import com.github.aly8246.core.query.CriteriaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,16 +16,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Conditions {
-
-private String type;
 //执行的类型
-private String fieldName;
-//执行的字段名
-private String con;
-//执行的条件
-private String value;
-//执行的值
+private QueryEnum type;
 
-private String other;
+//执行的字段名
+private String fieldName;
+
+//执行的条件
+private CriteriaEnum sign;
+
+//执行的值
+private String value;
+
 //其他
+private String other;
+
+//TODO 如果是or还需要条件分组
+private String group;
+
 }
