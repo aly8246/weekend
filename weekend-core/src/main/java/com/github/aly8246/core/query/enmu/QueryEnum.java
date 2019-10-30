@@ -1,4 +1,4 @@
-package com.github.aly8246.core.query;
+package com.github.aly8246.core.query.enmu;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CriteriaEnum {
+public enum QueryEnum {
 	// 大于
 	GT(">"),
 	// 小于

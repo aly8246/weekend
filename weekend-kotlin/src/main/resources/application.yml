@@ -1,0 +1,7 @@
+server:
+  port: 8247
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://148.70.16.82:27017/weekend-dev

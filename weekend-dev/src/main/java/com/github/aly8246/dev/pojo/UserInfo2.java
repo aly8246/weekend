@@ -17,9 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfo2 {
 
-    private String id;
+private String id;
 
-    private String name;
+private String name;
 
-    private String userMoney;
+private String userMoney;
+
+private int age;
 }

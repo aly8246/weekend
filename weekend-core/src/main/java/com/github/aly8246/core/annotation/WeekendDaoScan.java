@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Documented
 @Import(WeekendProxyRegister.class)
 public @interface WeekendDaoScan {
-    String[] value() default {};
+String[] value() default {};
 }

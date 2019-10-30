@@ -1,6 +1,9 @@
-package com.github.aly8246.core.query;
+package com.github.aly8246.core.query.queryBuilder;
 
+import com.github.aly8246.core.handler.Conditions;
 import org.springframework.data.mongodb.core.query.Query;
+
+import java.util.List;
 
 /**
  * @Author ：南有乔木
@@ -9,6 +12,6 @@ import org.springframework.data.mongodb.core.query.Query;
  * @description：
  * @version: ：V
  */
-public interface CriteriaBuilder {
-Query buildQuery(String key, String value, CriteriaEnum criteriaEnum);
+public interface QueryBuilder {
+Query buildQuery(List<Conditions> conditionsList);
 }

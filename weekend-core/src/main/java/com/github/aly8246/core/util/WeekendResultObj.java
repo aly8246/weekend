@@ -30,8 +30,8 @@ static {
 }
 
 public static Object getInstance(Class<?> aClass) {
-	if (listList.stream().anyMatch(aClass::equals)) return
-			                                                new ArrayList<>();
+	if (aClass == List.class) return new ArrayList<>();
+	if (listList.stream().anyMatch(aClass::equals)) return new ArrayList<>();
 	if (mapList.stream().anyMatch(aClass::equals)) return
 			                                               new HashMap<>();
 	if (setList.stream().anyMatch(aClass::equals)) return

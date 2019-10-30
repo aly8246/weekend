@@ -1,6 +1,6 @@
 package com.github.aly8246.core.handler;
 
-import com.github.aly8246.core.query.CriteriaEnum;
+import com.github.aly8246.core.query.enmu.QueryEnum;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -26,33 +26,41 @@ public Operation run(String baseCommand) {
 	
 	//TODO 获得主表子表和查询条件等等操作
 	Conditions conditions1 = new Conditions();
-	conditions1.setType(QueryEnum.WHERE);
+	conditions1.setType(com.github.aly8246.core.handler.QueryEnum.WHERE);
 	conditions1.setFieldName("userMoney");
-	conditions1.setSign(CriteriaEnum.GT);
-	conditions1.setValue("100");
-	
-	Conditions conditions2 = new Conditions();
-	conditions2.setType(QueryEnum.AND);
-	conditions2.setFieldName("id");
-	conditions2.setSign(CriteriaEnum.GT);
-	conditions2.setValue("200000");
+	conditions1.setSign(QueryEnum.GT);
+	conditions1.setValue(100);
 	
 	Conditions conditions3 = new Conditions();
-	conditions3.setType(QueryEnum.OR);
+	conditions3.setType(com.github.aly8246.core.handler.QueryEnum.OR);
 	conditions3.setFieldName("age");
-	conditions3.setSign(CriteriaEnum.LE);
-	conditions3.setValue("18");
+	conditions3.setSign(QueryEnum.EQ);
+	conditions3.setValue(18);
 	conditions3.setGroup("1");
 	
 	Conditions conditions4 = new Conditions();
-	conditions4.setType(QueryEnum.OR);
+	conditions4.setType(com.github.aly8246.core.handler.QueryEnum.OR);
 	conditions4.setFieldName("age");
-	conditions4.setSign(CriteriaEnum.LE);
-	conditions4.setValue("22");
+	conditions4.setSign(QueryEnum.EQ);
+	conditions4.setValue(22);
 	conditions4.setGroup("1");
 	
+	//年龄是18或者22
+	//AND ( a.login_name LIKE '%${keyword}%' OR a.real_name LIKE '%${keyword}%')
+	//and (age like 18 or age like 22)
+	//一个联合or需要解析成or查询组,但是query里需要
+	/**
+	 if (pageReqParams.getStartTime() != null && pageReqParams.getEndTime() != null) {
+	 ----Criteria criteria = Criteria.where("_id").ne(0L);
+	 ----query.addCriteria(criteria.andOperator(
+	 ------------Criteria.where("collectionTime").gte(pageReqParams.getStartTime()),
+	 ------------Criteria.where("collectionTime").lte(pageReqParams.getEndTime()))
+	 ----);
+	 }
+	 */
 	operation.getConditionsList().add(conditions1);
-	operation.getConditionsList().add(conditions2);
+	operation.getConditionsList().add(conditions3);
+	operation.getConditionsList().add(conditions4);
 	
 	return operation;
 }

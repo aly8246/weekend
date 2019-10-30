@@ -2,11 +2,14 @@ package com.github.aly8246.core.query;
 
 import com.github.aly8246.core.handler.Conditions;
 import com.github.aly8246.core.handler.QueryEnum;
-import org.springframework.data.mongodb.core.query.Criteria;
+import com.github.aly8246.core.query.queryBuilder.AndBuilder;
+import com.github.aly8246.core.query.queryBuilder.OrBuilder;
+import com.github.aly8246.core.query.queryBuilder.QueryBuilder;
 import org.springframework.data.mongodb.core.query.Query;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,17 +35,29 @@ protected Query query(List<Conditions> conditionsList) {
 			                             .stream()
 			                             .filter(e -> e.getType().equals(QueryEnum.WHERE) || e.getType().equals(QueryEnum.AND))
 			                             .collect(Collectors.toList());
-	for (Conditions conditions : queryList) {//处理where和and
-		CriteriaBuilder criteriaBuilder = new AndBuilder(query);
-		query = criteriaBuilder.buildQuery(conditions.getFieldName(), conditions.getValue(), conditions.getSign());
-	}
+	
+	//处理where和and
+	QueryBuilder AndBuilder = new AndBuilder(query);
+	query = AndBuilder.buildQuery(queryList);
 	
 	
 	//处理or
-	//TODO 生成数据
-	List<Conditions> orList = conditionsList.stream().filter(e -> e.getType().equals(QueryEnum.OR)).collect(Collectors.toList());
+	Map<String, List<Conditions>> orList = conditionsList
+			                                       .stream()
+			                                       .filter(e -> e.getType().equals(QueryEnum.OR))
+			                                       .collect(Collectors.groupingBy(Conditions::getGroup));
+	Iterator<Map.Entry<String, List<Conditions>>> orIterator =
+			orList.entrySet().iterator();
+	for (; orIterator.hasNext(); ) {
+		Map.Entry<String, List<Conditions>> next = orIterator.next();
+		List<Conditions> value = next.getValue();
+		QueryBuilder OrBuilder = new OrBuilder(query);
+		query = OrBuilder.buildQuery(value);
+	}
 	
-	//条件构建器，如果是where或者and则一起,如果是排序则是其他构建器
+	//处理sort
+	
+	//处理group
 	
 	return query;
 }

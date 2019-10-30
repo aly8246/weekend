@@ -25,4 +25,6 @@ private String name;
 
 @Mapping(name = "userMoney", value = "user_money")
 private String userMoney;
+
+private int age;
 }

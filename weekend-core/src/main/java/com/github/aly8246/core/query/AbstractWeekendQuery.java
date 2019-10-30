@@ -20,6 +20,5 @@ public Query run(List<Conditions> conditionsList) {
 }
 
 protected abstract Query query(List<Conditions> conditionsList);
-//TODO 得到一个Query对象，根据用户所输入的条件来继续组装query，然后将query交给execute
 
 }
