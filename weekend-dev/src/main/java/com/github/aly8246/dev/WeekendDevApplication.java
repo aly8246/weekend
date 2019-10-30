@@ -44,12 +44,12 @@ public void test() {
 	System.out.println("=================================");
 	List list = testDao.exec5("小黄", "小黑");
 //
-//	List<UserInfo> exec = testDao.exec("小黄", "小黑");
+//	List<UserInfo> command = testDao.command("小黄", "小黑");
 //	UserInfo exec2 = testDao.exec2("小黄", "小黑");
 //	UserInfo2 userInfo2 = testDao.exec3("小黄", "小黑");
 //	List<UserInfo2> userInfo3 = testDao.exec4("小黄", "小黑");
 //	testDao.insert();
-//	System.out.println("带映射的list查询" + exec);
+//	System.out.println("带映射的list查询" + command);
 //	System.err.println("带映射的对象查询" + exec2);
 //
 //	System.out.println("默认映射的list查询" + userInfo3);

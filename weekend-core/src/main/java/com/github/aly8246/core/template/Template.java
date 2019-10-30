@@ -1,7 +1,7 @@
 package com.github.aly8246.core.template;
 
-import com.github.aly8246.core.annotation.Exec;
+import com.github.aly8246.core.annotation.Command;
 
 public interface Template {
-    public String completeCommand(Exec exec);
+    public String completeCommand(Command command);
 }

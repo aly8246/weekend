@@ -1,6 +1,6 @@
 package com.github.aly8246.kotlin.mdo
 
-import com.github.aly8246.core.annotation.Exec
+import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.kotlin.pojo.UserInfo
 
 /**
@@ -11,6 +11,6 @@ import com.github.aly8246.kotlin.pojo.UserInfo
  * @version:   ：V
  */
 interface UserDao {
-    @Exec("select * from user_info")
+    @Command("select * from user_info")
     fun exec(): List<UserInfo>
 }

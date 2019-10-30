@@ -1,7 +1,7 @@
 package com.github.aly8246.core.dispatcher;
 
 import com.github.aly8246.core.annotation.Mapping;
-import com.github.aly8246.core.util.WeekendResultObj;
+import com.github.aly8246.core.util.ResultCase;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
@@ -38,7 +38,7 @@ public class RetClass {
 
     public RetClassEnum classType() {
         if (this.retClassInstance == null) return RetClassEnum.NULL;
-        if (WeekendResultObj.containerCollection(this.retClassInstance.getClass()))
+        if (ResultCase.containerCollection(this.retClassInstance.getClass()))
             return RetClassEnum.COLLECTION;
         if (this.retClassInstance.getClass().equals(Page.class))
             return RetClassEnum.PAGE;

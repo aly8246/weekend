@@ -18,6 +18,7 @@
     <modules>
         <module>weekend-core</module>
         <module>weekend-dev</module>
+        <module>weekend-kotlin</module>
     </modules>
 
     <properties>

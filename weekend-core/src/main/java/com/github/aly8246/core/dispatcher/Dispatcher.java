@@ -10,5 +10,5 @@ import java.util.function.Consumer;
  * @version: ：V
  */
 public interface Dispatcher<T> {
-        T exec();
+    T execute();
 }

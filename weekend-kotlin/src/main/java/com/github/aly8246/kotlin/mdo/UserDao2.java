@@ -1,6 +1,6 @@
 package com.github.aly8246.kotlin.mdo;
 
-import com.github.aly8246.core.annotation.Exec;
+import com.github.aly8246.core.annotation.Command;
 import com.github.aly8246.kotlin.pojo.UserInfo;
 
 import java.util.List;
@@ -13,6 +13,6 @@ import java.util.List;
  * @version: ：V
  */
 public interface UserDao2 {
-@Exec("select * from user_info")
+@Command("select * from user_info")
 List<UserInfo> exec();
 }
