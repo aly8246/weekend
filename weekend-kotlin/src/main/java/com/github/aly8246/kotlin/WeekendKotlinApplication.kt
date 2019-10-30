@@ -2,6 +2,7 @@ package com.github.aly8246.kotlin
 
 import com.github.aly8246.core.annotation.WeekendDaoScan
 import com.github.aly8246.kotlin.mdo.UserDao
+import com.github.aly8246.kotlin.mdo.UserDao2
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
@@ -26,12 +27,16 @@ open class WeekendKotlinApplication {
 
     @Resource
     lateinit var userDao: UserDao
+    @Resource
+    lateinit var userDao2: UserDao2
 
     @Bean
     open fun test() {
         val exec = userDao.exec()
+        val exec2 = userDao2.exec()
         println(exec.size)
         exec.listIterator().forEach { e -> println(e) }
+        exec2.listIterator().forEach { e -> println(e) }
     }
 
 }

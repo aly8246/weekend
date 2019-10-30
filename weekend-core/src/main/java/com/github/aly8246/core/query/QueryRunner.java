@@ -6,6 +6,7 @@ import com.github.aly8246.core.query.queryBuilder.AndBuilder;
 import com.github.aly8246.core.query.queryBuilder.OrBuilder;
 import com.github.aly8246.core.query.queryBuilder.QueryBuilder;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.util.StringUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,7 @@ protected Query query(List<Conditions> conditionsList) {
 	
 	List<Conditions> queryList = conditionsList
 			                             .stream()
+			                             .filter(e -> StringUtils.isEmpty(e.getGroup()))
 			                             .filter(e -> e.getType().equals(QueryEnum.WHERE) || e.getType().equals(QueryEnum.AND))
 			                             .collect(Collectors.toList());
 	
@@ -44,7 +46,7 @@ protected Query query(List<Conditions> conditionsList) {
 	//处理or
 	Map<String, List<Conditions>> orList = conditionsList
 			                                       .stream()
-			                                       .filter(e -> e.getType().equals(QueryEnum.OR))
+			                                       .filter(e -> e.getType().equals(QueryEnum.OR) || !StringUtils.isEmpty(e.getGroup()))
 			                                       .collect(Collectors.groupingBy(Conditions::getGroup));
 	Iterator<Map.Entry<String, List<Conditions>>> orIterator =
 			orList.entrySet().iterator();
