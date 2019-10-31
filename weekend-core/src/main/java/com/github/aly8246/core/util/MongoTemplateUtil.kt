@@ -1,18 +1,20 @@
-package com.github.aly8246.core.util;
+package com.github.aly8246.core.util
 
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.stereotype.Component
 
 
 @Component
-public class MongoTemplateUtil {
-private MongoTemplate mongoTemplate2;
+class MongoTemplateUtil {
+    private var mongoTemplate2: MongoTemplate? = null
 
-@javax.annotation.Resource
-public void setMongoTemplate2(MongoTemplate mongoTemplate) {
-	this.mongoTemplate2 = mongoTemplate;
-	MongoTemplateUtil.mongoTemplate = mongoTemplate;
-}
+    @javax.annotation.Resource
+    fun setMongoTemplate2(mongoTemplate: MongoTemplate) {
+        this.mongoTemplate2 = mongoTemplate
+        MongoTemplateUtil.mongoTemplate = mongoTemplate
+    }
 
-public static MongoTemplate mongoTemplate;
+    companion object {
+        lateinit var mongoTemplate: MongoTemplate
+    }
 }

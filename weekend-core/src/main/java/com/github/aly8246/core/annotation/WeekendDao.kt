@@ -1,14 +1,10 @@
-package com.github.aly8246.core.annotation;
+package com.github.aly8246.core.annotation
 
-import com.github.aly8246.core.proxy.WeekendProxyRegister;
-import org.springframework.context.annotation.Import;
+import com.github.aly8246.core.proxy.WeekendProxyRegister
+import org.springframework.context.annotation.Import
 
-import java.lang.annotation.*;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Documented
-@Import(WeekendProxyRegister.class)
-public @interface WeekendDao {
-    String[] value() default {};
-}
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)
+@MustBeDocumented
+@Import(WeekendProxyRegister::class)
+annotation class WeekendDao(vararg val value: String = [])

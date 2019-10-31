@@ -1,5 +1,6 @@
 package com.github.aly8246.core.exec;
 
+import com.github.aly8246.core.util.MongoTemplateUtil;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.lang.reflect.Method;
@@ -33,7 +34,7 @@ public Object select(Query query, Class<?> returnType, String tableName, Method 
 	//TODO
 	//  step1. 根据returnTpe 来new一个对象
 	//  step2. 使用map返回类的mongoTemplate来查询
-	Map one = mongoTemplate.findOne(query, Map.class, tableName);
+	Map one = MongoTemplateUtil.Companion.getMongoTemplate().findOne(query, Map.class, tableName);
 	System.out.println("查询结果如下，但是我没时间给你转，所以给你返回一个空的实例");
 	one.entrySet().forEach(System.err::println);
 	System.out.println("=====================================================");
@@ -47,7 +48,7 @@ public Object select(Query query, Class<?> returnType, String tableName, Method 
 public List<Object> selectList(Query query, Class<?> returnType, String tableName, Method method) {
 	System.err.println("还未实现映射结果集的方法");
 	
-	List<Map> listMap = mongoTemplate.find(query, Map.class, tableName);
+	List<Map> listMap = MongoTemplateUtil.Companion.getMongoTemplate().find(query, Map.class, tableName);
 	System.out.println("查询结果如下，但是我没时间给你转，所以给你返回null");
 	listMap.forEach(e -> e.entrySet().forEach(System.err::println));
 	System.out.println("=====================================================");

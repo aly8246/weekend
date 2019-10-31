@@ -39,6 +39,7 @@ class OriginalDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : Ini
                     else -> throw RuntimeException("暂时无法处理")
                 }
             }
+            else -> println("aa")
         }
         return null
     }

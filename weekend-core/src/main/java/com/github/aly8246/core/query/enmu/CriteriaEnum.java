@@ -1,8 +1,7 @@
-package com.github.aly8246.core.query.queryBuilder;
+package com.github.aly8246.core.query.enmu;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @Author ：南有乔木
@@ -13,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @AllArgsConstructor
-public enum CriteriaType {
+public enum CriteriaEnum {
 	WHERE("WHERE", "where"),
 	CriteriaBo("NE", "!=");
 private String name;

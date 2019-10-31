@@ -1,52 +1,51 @@
-package com.github.aly8246.core.util;
+package com.github.aly8246.core.util
 
+import java.util.*
 
-import java.util.*;
+object ResultCase {
+    private val listList = ArrayList<Class<*>>()
+    private val mapList = ArrayList<Class<*>>()
+    private val setList = ArrayList<Class<*>>()
+    private val allList = ArrayList<Class<*>>()
 
-public class ResultCase {
-    //是否包含
-    private static List<Class<?>> listList = new ArrayList<>();
-    private static List<Class<?>> mapList = new ArrayList<>();
-    private static List<Class<?>> setList = new ArrayList<>();
-    private static List<Class<?>> allList = new ArrayList<>();
+    init {
+        listList.add(List::class.java)
+        listList.add(ArrayList::class.java)
+        listList.add(LinkedList::class.java)
 
-    static {
-        listList.add(List.class);
-        listList.add(ArrayList.class);
-        listList.add(LinkedList.class);
+        mapList.add(Map::class.java)
+        mapList.add(HashMap::class.java)
+        mapList.add(LinkedHashMap::class.java)
 
-        mapList.add(Map.class);
-        mapList.add(HashMap.class);
-        mapList.add(LinkedHashMap.class);
+        setList.add(Set::class.java)
+        setList.add(TreeSet::class.java)
+        setList.add(HashSet::class.java)
+        setList.add(LinkedHashSet::class.java)
 
-        setList.add(Set.class);
-        setList.add(TreeSet.class);
-        setList.add(HashSet.class);
-        setList.add(LinkedHashSet.class);
-
-        allList.addAll(listList);
-        allList.addAll(mapList);
-        allList.addAll(setList);
+        allList.addAll(listList)
+        allList.addAll(mapList)
+        allList.addAll(setList)
     }
 
-    public static Object getInstance(Class<?> aClass) {
-        if (aClass == List.class) return new ArrayList<>();
-        if (listList.stream().anyMatch(aClass::equals)) return new ArrayList<>();
-        if (mapList.stream().anyMatch(aClass::equals)) return
-                new HashMap<>();
-        if (setList.stream().anyMatch(aClass::equals)) return
-                new HashSet<>();
+    fun getInstance(aClass: Class<*>): Any? {
+        if (aClass == List::class.java) return ArrayList<Any>()
+        if (listList.stream().anyMatch { aClass == it }) return ArrayList<Any>()
+        if (mapList.stream().anyMatch { aClass == it })
+            return HashMap<Any, Any>()
+        if (setList.stream().anyMatch { aClass == it })
+            return HashSet<Any>()
         try {
-            return aClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException ignored) {
+            return aClass.newInstance()
+        } catch (ignored: InstantiationException) {
             //返回结果集为void
+        } catch (ignored: IllegalAccessException) {
         }
-        return null;
+
+        return null
     }
 
-    public static boolean containerCollection(Class<?> aClass) {
-        if (allList.stream().anyMatch(aClass::equals)) return true;
-        return false;
+    fun containerCollection(aClass: Class<*>): Boolean {
+        return allList.stream().anyMatch { aClass == it }
     }
 
 }

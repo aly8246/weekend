@@ -1,13 +1,9 @@
-package com.github.aly8246.core.annotation;
+package com.github.aly8246.core.annotation
 
-import java.lang.annotation.*;
+import java.lang.annotation.Inherited
 
-@Target({ElementType.TYPE, ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FILE, AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
 @Inherited
-@Documented
-public @interface Mapping {
-String[] value();
-
-String[] name();
-}
+@MustBeDocumented
+annotation class Mapping(vararg val value: String, val name: Array<String>)

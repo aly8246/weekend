@@ -1,10 +1,10 @@
-package com.github.aly8246.core.dispatcher;
+package com.github.aly8246.core.dispatcher
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.AllArgsConstructor
+import lombok.Getter
 
 @Getter
 @AllArgsConstructor
-public enum RetClassEnum {
-	COLLECTION, OBJECT, PAGE, NULL;
+enum class RetClassEnum {
+    COLLECTION, OBJECT, PAGE, NULL
 }

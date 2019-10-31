@@ -1,4 +1,4 @@
-package com.github.aly8246.core.util;
+package com.github.aly8246.core.util
 
 /**
  * @Author ：南有乔木
@@ -7,14 +7,12 @@ package com.github.aly8246.core.util;
  * @description：
  * @version: ：V
  */
-public class PrintImpl implements Print {
-@Override
-public void info(String msg) {
-	System.out.println("Weekend  >> ： " + msg);
-}
+class PrintImpl : Print {
+    override fun info(msg: String) {
+        println("Weekend  >> ： $msg")
+    }
 
-@Override
-public void debug(String msg) {
-	System.err.println("Weekend  >> ： " + msg);
-}
+    override fun debug(msg: String) {
+        System.err.println("Weekend  >> ： $msg")
+    }
 }

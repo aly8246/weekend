@@ -1,4 +1,4 @@
-package com.github.aly8246.core.util;
+package com.github.aly8246.core.util
 
 /**
  * @Author ：南有乔木
@@ -7,10 +7,8 @@ package com.github.aly8246.core.util;
  * @description：
  * @version: ：V
  */
-public interface Log {
-public void info(String msg);
+interface Log {
+    fun info(msg: String)
 
-public void debug(String msg);
-
-
+    fun debug(msg: String)
 }
