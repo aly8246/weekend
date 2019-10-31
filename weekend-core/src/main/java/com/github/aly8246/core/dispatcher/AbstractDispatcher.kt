@@ -1,5 +1,8 @@
 package com.github.aly8246.core.dispatcher
 
+import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.handler.Operation
+import org.springframework.data.mongodb.core.query.Query
 import java.lang.reflect.Method
 
 /**
@@ -9,35 +12,35 @@ import java.lang.reflect.Method
  * @description：
  * @version: ：V
  */
-open abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var method: Method, protected var args: Array<Any>?) : Dispatcher<T> {
-
-    open override fun execute(): T {
-        init()
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var method: Method, protected var args: Array<Any>?) : Dispatcher<T> {
+    override fun execute(): T? {
+        return run()
     }
+
     //step0 进入动态代理
 
-    abstract fun init()
+    abstract fun run(): T?
+    //step1 初始化
 
-
-    open abstract fun syntaxCheck()
     //step2 检查命令语法
+    abstract fun syntaxCheck(command: Command): String
 
-    abstract fun template()
     //step3 将字符串拼接和时间模板方法替换成具体值
+    abstract fun template(command: Command): String
 
-    abstract fun handleCommand()
     //step4 将命令处理成条件类
+    abstract fun handleCommand(baseCommand: String): Operation
 
-    abstract fun buildQuery()
     //step5 解析条件类将条件类转换成Query类
+    abstract fun buildQuery(handleCommand: Operation): Query
 
-    abstract fun selectExecutor()
     //step6 根据情况选择不同的执行器
+    abstract fun executor(operation: Operation, query: Query, method: Method): T?
 
-    abstract fun handleLater()
     //step7 分组和统计等等方法的实现
+    abstract fun handlePreview()
 
-    abstract fun handleResult()
     //step8 返回值的处理
+    abstract fun handleResult()
+
 }

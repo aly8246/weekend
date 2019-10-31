@@ -18,10 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Operation {
-    private String baseCommand;
-    private OperationEnum operation;
-    private String field;
-    private String tableName;
+public String baseCommand;
+public OperationEnum operation;
+public String field;
+public String tableName;
 
-    private List<Conditions> conditionsList = new LinkedList<>();
+public List<Conditions> conditionsList = new LinkedList<>();
 }

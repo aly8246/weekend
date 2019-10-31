@@ -2,6 +2,7 @@ package com.github.aly8246.kotlin.mdo
 
 import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.kotlin.pojo.UserInfo
+import com.github.aly8246.kotlin.pojo.UserInfoMapping
 
 /**
  * @Author     ：南有乔木
@@ -13,4 +14,7 @@ import com.github.aly8246.kotlin.pojo.UserInfo
 interface UserDao {
     @Command("select * from user_info")
     fun exec(): List<UserInfo>
+
+    @Command("select * from user_info")
+    fun exec2(): UserInfoMapping
 }

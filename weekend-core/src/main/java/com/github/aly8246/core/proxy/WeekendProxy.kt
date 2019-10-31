@@ -9,14 +9,14 @@ import java.lang.reflect.*
 
 class WeekendProxy<T>(private val target: Class<T>) : InvocationHandler {
     @Throws(Throwable::class)
-    override fun invoke(proxy: Any, method: Method, args: Array<Any>?): Any {
+    override fun invoke(proxy: Any, method: Method, args: Array<Any>?): Any? {
         if (Any::class.java == method.declaringClass)
             return method.invoke(this, args)//class类直接执行
         else if (isDefaultMethod(method))
             return invokeDefaultMethod(proxy, method, args)//默认方法直接执行
 
         //接口方法产生代理
-        return DispatcherFactory(proxy, method, args).produceDispatcher().execute()
+        return DispatcherFactory<T>(proxy, method, args).dispatcher().execute()
     }
 
 

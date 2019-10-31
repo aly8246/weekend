@@ -40,13 +40,13 @@ public Object select(Query query, Class<?> returnType, String tableName, Method 
 	
 	
 	//  step3. 根据执行得到的结果来组装新数据
-	try {
-		return returnType.newInstance();
-	} catch (InstantiationException | IllegalAccessException e) {
-		e.printStackTrace();
-	}
+//	try {
+//		return returnType.newInstance();
+//	} catch (InstantiationException | IllegalAccessException e) {
+//		e.printStackTrace();
+//	}
 	
-	return one;
+	return null;
 	// return super.select(query, returnType, tableName);
 }
 
@@ -55,7 +55,7 @@ public List<Object> selectList(Query query, Class<?> returnType, String tableNam
 	System.err.println("还未实现映射结果集的方法");
 	
 	List<Map> listMap = mongoTemplate.find(query, Map.class, tableName);
-	System.out.println("查询结果如下，但是我没时间给你转，所以给你返回一个空的实例");
+	System.out.println("查询结果如下，但是我没时间给你转，所以给你返回null");
 	listMap.forEach(e -> e.entrySet().forEach(System.err::println));
 	System.out.println("=====================================================");
 

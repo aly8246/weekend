@@ -3,5 +3,7 @@ package com.github.aly8246.core.template;
 import com.github.aly8246.core.annotation.Command;
 
 public interface Template {
-    public String completeCommand(Command command);
+String completeCommand(Command command);
+
+
 }

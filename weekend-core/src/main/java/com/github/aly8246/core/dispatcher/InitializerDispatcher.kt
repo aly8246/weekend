@@ -2,23 +2,47 @@ package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.core.exception.WeekendException
+import com.github.aly8246.core.handler.Condition
+import com.github.aly8246.core.handler.Operation
+import com.github.aly8246.core.handler.SqlConditionHandler
+import com.github.aly8246.core.query.QueryRunner
+import com.github.aly8246.core.template.BaseTemplate
 import com.github.aly8246.core.util.ResultCase
+import org.springframework.data.mongodb.core.query.Query
 import java.lang.reflect.Method
 import java.util.ArrayList
 import java.util.regex.Pattern
 
-open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : AbstractDispatcher<T>(proxy, method, args) {
+open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : AbstractDispatcher<T>(proxy, method, args), DispatcherPolicy<T>, DispatcherInitializer {
+
+    override fun executorPolicy(operation: Operation, query: Query, method: Method): T? {
+        throw WeekendException("未实现executorPolicy")
+    }
+
     protected lateinit var retClass: RetClass
     protected lateinit var command: Command
 
-    override fun init() {
+    final override fun run(): T? {
+        this.retClass = initializer()
+
+        val original = template(this.command)
+
+        val operation = handleCommand(original);
+
+        val query = buildQuery(operation)
+
+        val executor = executor(operation, query, method)
+
+        return executor
+    }
+
+    override fun initializer(): RetClass {
         try {
             command = method.getDeclaredAnnotation(Command::class.java)
         } catch (e: IllegalStateException) {
             throw WeekendException("方法上的 @com.github.aly8246.core.annotation.Command 注解不能为空")
         }
 
-        //返回类型
         val returnType = method.returnType
 
         //推断返回类型
@@ -26,49 +50,38 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         //实际返回类型>如果返回类型为集合,则应该取集合里的类型
         var realityResult: Any? = null
 
-        //默认返回类型
-        if (command.returnType != Collection::class.java) {
+        if (command.returnType.java != Collection::class.java) {
             try {
                 realityResult = returnType.newInstance()
             } catch (e: java.lang.Exception) {
                 realityResult = ArrayList<Any>()
             }
         } else {
-            //简洁的名称
             val canonicalName = returnType.canonicalName
             if (canonicalName != "void")
                 realityResult = try {
-                    //尝试使用生产实例
                     Class.forName(canonicalName).newInstance()
                 } catch (e: Exception) {
-                    //如果是集合接口或者为空则无法成功实例化
                     Class.forName(regxListParamClass(this.method.toGenericString())).newInstance()
                 }
         }
         this.retClass = RetClass(eductionResult, realityResult)
+        return retClass
     }
 
-    override fun syntaxCheck() {
+    override fun syntaxCheck(command: Command): String = BaseTemplate().completeCommand(command)
 
+    override fun template(command: Command): String = BaseTemplate().completeCommand(command)
+
+    override fun handleCommand(baseCommand: String): Operation = buildCondition(this.command, baseCommand)
+
+    override fun buildQuery(handleCommand: Operation): Query = QueryRunner().run(handleCommand.conditionsList)
+
+    override fun executor(operation: Operation, query: Query, method: Method): T? {
+        return this.executorPolicy(operation, query, this.method)
     }
 
-    override fun template() {
-
-    }
-
-    override fun handleCommand() {
-
-    }
-
-    override fun buildQuery() {
-
-    }
-
-    override fun selectExecutor() {
-
-    }
-
-    override fun handleLater() {
+    override fun handlePreview() {
 
     }
 
@@ -80,5 +93,22 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         val matcher = Pattern.compile("(?<=java.util.List<).*?(?=>)").matcher(source)
         while (matcher.find()) return matcher.group()
         throw WeekendException("异常regxListParamClass:$source")
+    }
+
+    private fun getConditionHandler(command: Command): Condition {
+        val handler = command.handler.java
+        try {
+            return handler.newInstance()
+        } catch (e: InstantiationException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        }
+
+        return SqlConditionHandler()
+    }
+
+    protected fun buildCondition(command: Command, baseCommand: String): Operation {
+        return this.getConditionHandler(command).run(baseCommand)
     }
 }

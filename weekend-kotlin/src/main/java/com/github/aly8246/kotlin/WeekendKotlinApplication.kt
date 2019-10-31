@@ -35,6 +35,7 @@ open class WeekendKotlinApplication {
         val exec = userDao.exec()
         val exec2 = userDao2.exec()
         println(exec.size)
+        println(userDao.exec2())
         exec.listIterator().forEach { e -> println(e) }
         exec2.listIterator().forEach { e -> println(e) }
     }
