@@ -48,4 +48,13 @@ class CustomFieldDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : 
         }
     }
 
+    override fun handlePreview(t: T?): T? {
+        println("后续处理还未实现")
+        return super.handlePreview(t)
+    }
+
+    override fun handleResult(t: T?): T? {
+        println("结果集处理还未实现")
+        return super.handleResult(t)
+    }
 }

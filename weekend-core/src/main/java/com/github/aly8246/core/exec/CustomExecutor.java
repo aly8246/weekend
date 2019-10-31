@@ -40,14 +40,7 @@ public Object select(Query query, Class<?> returnType, String tableName, Method 
 	
 	
 	//  step3. 根据执行得到的结果来组装新数据
-//	try {
-//		return returnType.newInstance();
-//	} catch (InstantiationException | IllegalAccessException e) {
-//		e.printStackTrace();
-//	}
-	
 	return null;
-	// return super.select(query, returnType, tableName);
 }
 
 @Override

@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RetClassEnum {
-    COLLECTION, OBJECT, PAGE, NULL;
+	COLLECTION, OBJECT, PAGE, NULL;
 }

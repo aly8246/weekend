@@ -38,9 +38,9 @@ abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var met
     abstract fun executor(operation: Operation, query: Query, method: Method): T?
 
     //step7 分组和统计等等方法的实现
-    abstract fun handlePreview()
+    abstract fun handlePreview(t: T?):T?
 
     //step8 返回值的处理
-    abstract fun handleResult()
+    abstract fun handleResult(t: T?):T?
 
 }

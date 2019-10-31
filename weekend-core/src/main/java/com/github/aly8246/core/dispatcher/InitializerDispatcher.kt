@@ -31,8 +31,11 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
 
         val query = buildQuery(operation)
 
-        val executor = executor(operation, query, method)
+        var executor = executor(operation, query, method)
 
+        //执行处理结果
+        executor = handlePreview(executor)
+        executor = handleResult(executor)
         return executor
     }
 
@@ -81,12 +84,12 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         return this.executorPolicy(operation, query, this.method)
     }
 
-    override fun handlePreview() {
-
+    override fun handlePreview(t: T?): T? {
+        return t
     }
 
-    override fun handleResult() {
-
+    override fun handleResult(t: T?): T? {
+        return t
     }
 
     protected fun regxListParamClass(source: String): String {
