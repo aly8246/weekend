@@ -1,6 +1,5 @@
 package com.github.aly8246.core.dispatcher
 
-import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.core.dispatcher.RetClassEnum.*
 import com.github.aly8246.core.exec.SelectExecutor
 import com.github.aly8246.core.handler.Operation
@@ -8,13 +7,6 @@ import com.github.aly8246.core.handler.OperationEnum.*
 import org.springframework.data.mongodb.core.query.Query
 import java.lang.reflect.Method
 
-/**
- * @Author     ：南有乔木
- * @Email      ：1558146696@qq.com
- * @date       ：Created in 2019/10/31 上午 10:29
- * @description：
- * @version:   ：V
- */
 @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA", "UNCHECKED_CAST")
 class OriginalDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : InitializerDispatcher<T>(proxy, method, args) {
     override fun executorPolicy(operation: Operation, query: Query, method: Method): T? {

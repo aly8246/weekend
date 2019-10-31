@@ -2,6 +2,7 @@ package com.github.aly8246.core.proxy
 
 
 import com.github.aly8246.core.dispatcher.DispatcherFactory
+import com.github.aly8246.core.dispatcher.DispatcherFactoryPolicy
 
 import java.lang.invoke.MethodHandles
 import java.lang.reflect.*
@@ -15,8 +16,9 @@ class WeekendProxy<T>(private val target: Class<T>) : InvocationHandler {
         else if (isDefaultMethod(method))
             return invokeDefaultMethod(proxy, method, args)//默认方法直接执行
 
-        //接口方法产生代理
-        return DispatcherFactory<T>(proxy, method, args).dispatcher().execute()
+        val dispatcherFactoryPolicy = DispatcherFactory<T>()
+        val dispatcherFactory = dispatcherFactoryPolicy.dispatcherFactory(proxy, method, args)
+        return dispatcherFactory.execute()
     }
 
 

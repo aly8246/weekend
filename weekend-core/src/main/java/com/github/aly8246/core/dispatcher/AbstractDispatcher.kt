@@ -5,19 +5,10 @@ import com.github.aly8246.core.handler.Operation
 import org.springframework.data.mongodb.core.query.Query
 import java.lang.reflect.Method
 
-/**
- * @Author ：南有乔木
- * @Email ：1558146696@qq.com
- * @date ：Created in 2019/10/22 下午 02:20
- * @description：
- * @version: ：V
- */
 abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var method: Method, protected var args: Array<Any>?) : Dispatcher<T> {
     override fun execute(): T? {
         return run()
     }
-
-    //step0 进入动态代理
 
     abstract fun run(): T?
     //step1 初始化
@@ -38,9 +29,8 @@ abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var met
     abstract fun executor(operation: Operation, query: Query, method: Method): T?
 
     //step7 分组和统计等等方法的实现
-    abstract fun handlePreview(t: T?):T?
+    abstract fun handlePreview(t: T?): T?
 
     //step8 返回值的处理
-    abstract fun handleResult(t: T?):T?
-
+    abstract fun handleResult(t: T?): T?
 }

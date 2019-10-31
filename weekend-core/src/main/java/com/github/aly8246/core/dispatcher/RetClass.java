@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Data
@@ -19,20 +17,6 @@ private Object realClass;
 public RetClass(Object retClassInstance, Object realClass) {
 	this.retClassInstance = retClassInstance;
 	this.realClass = realClass;
-}
-
-public RetClass(Object retClassInstance) {
-	this.retClassInstance = retClassInstance;
-}
-
-
-public static String regxListParamClass(String source) {
-	System.out.println(source);
-	Matcher matcher = Pattern.compile("(?<=java.util.List<).*?(?=>)").matcher(source);
-	for (; matcher.find(); ) {
-		return matcher.group();
-	}
-	throw new RuntimeException("异常regxListParamClass");
 }
 
 
@@ -63,8 +47,6 @@ public boolean containerMapping() {
 			                           .stream()
 			                           .filter(e -> e.getAnnotation(Mapping.class) != null)
 			                           .collect(Collectors.toList());
-	if (mappingField.size() > 0) return true;
-	
-	return false;
+	return mappingField.size() > 0;
 }
 }
