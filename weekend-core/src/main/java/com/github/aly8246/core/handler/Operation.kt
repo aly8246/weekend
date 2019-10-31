@@ -1,11 +1,10 @@
-package com.github.aly8246.core.handler;
+package com.github.aly8246.core.handler
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor
+import lombok.Data
+import lombok.NoArgsConstructor
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedList
 
 /**
  * @Author ：南有乔木
@@ -14,14 +13,10 @@ import java.util.List;
  * @description：
  * @version: ：V
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Operation {
-public String baseCommand;
-public OperationEnum operation;
-public String field;
-public String tableName;
-
-public List<Conditions> conditionsList = new LinkedList<>();
+class Operation {
+    lateinit var baseCommand: String
+    lateinit var operation: OperationEnum
+    lateinit var field: String
+    lateinit var tableName: String
+    var conditionsList: List<Conditions> = LinkedList()
 }

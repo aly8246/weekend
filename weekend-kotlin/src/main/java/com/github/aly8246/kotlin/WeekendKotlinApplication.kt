@@ -37,7 +37,7 @@ open class WeekendKotlinApplication {
         println(exec.size)
         println(userDao.exec2())
         exec.listIterator().forEach { e -> println(e) }
-        exec2.listIterator().forEach { e -> println(e) }
+      //  exec2.listIterator().forEach { e -> println(e) }
     }
 
 }

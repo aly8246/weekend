@@ -5,7 +5,7 @@ import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.handler.Condition
 import com.github.aly8246.core.handler.Operation
 import com.github.aly8246.core.handler.SqlConditionHandler
-import com.github.aly8246.core.query.QueryRunner
+import com.github.aly8246.core.query.RunAssemblerQuery
 import com.github.aly8246.core.template.BaseTemplate
 import com.github.aly8246.core.util.ResultCase
 import org.springframework.data.mongodb.core.query.Query
@@ -33,7 +33,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
 
         var executor = executor(operation, query, method)
 
-        //执行处理结果
+        //依赖子类来完成
         executor = handlePreview(executor)
         executor = handleResult(executor)
         return executor
@@ -78,7 +78,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
 
     override fun handleCommand(baseCommand: String): Operation = buildCondition(this.command, baseCommand)
 
-    override fun buildQuery(handleCommand: Operation): Query = QueryRunner().run(handleCommand.conditionsList)
+    override fun buildQuery(handleCommand: Operation): Query = RunAssemblerQuery().buildMongoQuery(handleCommand)
 
     override fun executor(operation: Operation, query: Query, method: Method): T? {
         return this.executorPolicy(operation, query, this.method)

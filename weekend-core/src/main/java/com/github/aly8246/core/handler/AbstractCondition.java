@@ -51,8 +51,8 @@ public Operation run(String baseCommand) {
 	Conditions conditions5 = new Conditions();
 	conditions5.setType(com.github.aly8246.core.handler.QueryEnum.AND);
 	conditions5.setFieldName("userMoney");
-	conditions5.setSign(QueryEnum.LT);
-	conditions5.setValue(400);
+	conditions5.setSign(QueryEnum.LE);
+	conditions5.setValue(700);
 	//conditions5.setGroup("1");
 	
 	//年龄是18或者22

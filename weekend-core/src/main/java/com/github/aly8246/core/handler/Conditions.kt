@@ -1,9 +1,9 @@
-package com.github.aly8246.core.handler;
+package com.github.aly8246.core.handler
 
-import com.github.aly8246.core.query.enmu.QueryEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.github.aly8246.core.query.enmu.QueryEnum
+import lombok.AllArgsConstructor
+import lombok.Data
+import lombok.NoArgsConstructor
 
 /**
  * @Author ：南有乔木
@@ -12,28 +12,25 @@ import lombok.NoArgsConstructor;
  * @description：
  * @version: ：V
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Conditions {
-//执行的类型
-private com.github.aly8246.core.handler.QueryEnum type;
 
-//执行的字段名
-private String fieldName;
+class Conditions {
+    //执行的类型
+    lateinit var type: com.github.aly8246.core.handler.QueryEnum
 
-//执行的条件
-private QueryEnum sign;
+    //执行的字段名
+    var fieldName: String = ""
 
-//执行的值
-private Object value;
+    //执行的条件
+    lateinit var sign: QueryEnum
 
-private Class<?> classType;
+    //执行的值
+    lateinit var value: Any
+    lateinit var classType: Class<*>
 
-//其他
-private String other;
+    //其他
+    var other: String = ""
 
-//TODO 如果是or还需要条件分组
-private String group;
+    // 如果是or还需要条件分组
+    var group: String = ""
 
 }
