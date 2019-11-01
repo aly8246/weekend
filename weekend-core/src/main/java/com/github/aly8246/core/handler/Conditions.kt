@@ -1,9 +1,6 @@
 package com.github.aly8246.core.handler
 
-import com.github.aly8246.core.query.enmu.QueryEnum
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.NoArgsConstructor
+import com.github.aly8246.core.query.enmu.OperationEnum
 
 /**
  * @Author ：南有乔木
@@ -21,7 +18,7 @@ class Conditions {
     var fieldName: String = ""
 
     //执行的条件
-    lateinit var sign: QueryEnum
+    lateinit var sign: OperationEnum
 
     //执行的值
     lateinit var value: Any

@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.query.Query
  * @description：
  * @version:   ：V
  */
-class RunAssemblerQuery : InitializerQueryBuilder() {
-    //继续抽象扩展
+class AssemblerQuery : InitializerQueryBuilder() {
+
     override fun runBuild(conditionGroup: ConditionGroup): Query {
         var query = Query()
         val commonConditions = conditionGroup.commonConditions

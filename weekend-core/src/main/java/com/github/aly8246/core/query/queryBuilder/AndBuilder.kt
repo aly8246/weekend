@@ -1,13 +1,12 @@
-package com.github.aly8246.core.query.queryBuilder;
+package com.github.aly8246.core.query.queryBuilder
 
-import com.github.aly8246.core.handler.Conditions;
-import com.github.aly8246.core.query.queryBuilder.basic.CriteriaBuilder;
-import com.github.aly8246.core.query.queryBuilder.basic.OperationSignCriteriaBuilder;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import com.github.aly8246.core.handler.Conditions
+import com.github.aly8246.core.query.queryBuilder.basic.CriteriaBuilder
+import com.github.aly8246.core.query.queryBuilder.basic.OperationSignCriteriaBuilder
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Arrays
 
 
 /**
@@ -17,24 +16,18 @@ import java.util.List;
  * @description：
  * @version: ：V
  */
-public class AndBuilder implements QueryBuilder {
-private Query query;
+class AndBuilder(private val query: Query) : QueryBuilder {
 
-public AndBuilder(Query query) {
-	this.query = query;
-}
+    override fun buildQuery(conditionsList: List<Conditions>): Query {
+        for (conditions in conditionsList) {
+            val fieldName = conditions.fieldName
+            val value = conditions.value
+            val criteriaBuilder = OperationSignCriteriaBuilder()
 
-@Override
-public Query buildQuery(List<Conditions> conditionsList) {
-	for (Conditions conditions : conditionsList) {
-		String fieldName = conditions.getFieldName();
-		Object value = conditions.getValue();
-		CriteriaBuilder criteriaBuilder = new OperationSignCriteriaBuilder();
-		
-		Criteria criteria = criteriaBuilder.build(fieldName, value, conditions.getSign());
-		query.addCriteria(criteria);
-		
-	}
-	return query;
-}
+            val criteria = criteriaBuilder.build(fieldName, value, conditions.sign)
+            query.addCriteria(criteria)
+
+        }
+        return query
+    }
 }

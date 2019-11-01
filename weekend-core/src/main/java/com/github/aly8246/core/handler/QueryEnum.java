@@ -11,5 +11,5 @@ import lombok.Getter;
  */
 @Getter
 public enum QueryEnum {
-	WHERE, AND, OR, ORDER, GROUP
+	WHERE, AND, OR, SORT, GROUP
 }

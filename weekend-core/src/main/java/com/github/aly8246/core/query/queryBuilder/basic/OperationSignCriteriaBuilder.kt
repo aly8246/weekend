@@ -1,9 +1,7 @@
-package com.github.aly8246.core.query.queryBuilder.basic;
+package com.github.aly8246.core.query.queryBuilder.basic
 
-import com.github.aly8246.core.query.enmu.QueryEnum;
-import org.springframework.data.mongodb.core.query.Criteria;
-
-import java.util.Arrays;
+import com.github.aly8246.core.query.enmu.OperationEnum
+import org.springframework.data.mongodb.core.query.Criteria
 
 /**
  * @Author ：南有乔木
@@ -12,33 +10,25 @@ import java.util.Arrays;
  * @description：
  * @version: ：V
  */
-public class OperationSignCriteriaBuilder implements CriteriaBuilder {
-@Override
-public Criteria build(String fieldName, Object value, QueryEnum sign) {
-	Criteria criteria = null;
-	switch (sign) {
-		case GT://  >
-			criteria = Criteria.where(fieldName).gt(value);
-			break;
-		case LT://  <
-			criteria = Criteria.where(fieldName).lt(value);
-			break;
-		case EQ://  =
-			criteria = Criteria.where(fieldName).is(value);
-			break;
-		case GE://  >=
-			criteria = Criteria.where(fieldName).gte(value);
-			break;
-		case LE://  <=
-			criteria = Criteria.where(fieldName).lte(value);
-			break;
-		case NQ:// !=
-			criteria = Criteria.where(fieldName).ne(value);
-			break;
-		case IN:// in...
-			criteria = Criteria.where(fieldName).in(Arrays.asList(value.toString().split(",")));
-			break;
-	}
-	return criteria;
-}
+class OperationSignCriteriaBuilder : CriteriaBuilder {
+    override fun build(fieldName: String, value: Any, sign: OperationEnum): Criteria {
+        var criteria: Criteria? = null
+        when (sign) {
+            OperationEnum.GT//  >
+            -> criteria = Criteria.where(fieldName).gt(value)
+            OperationEnum.LT//  <
+            -> criteria = Criteria.where(fieldName).lt(value)
+            OperationEnum.EQ//  =
+            -> criteria = Criteria.where(fieldName).`is`(value)
+            OperationEnum.GE//  >=
+            -> criteria = Criteria.where(fieldName).gte(value)
+            OperationEnum.LE//  <=
+            -> criteria = Criteria.where(fieldName).lte(value)
+            OperationEnum.NQ// !=
+            -> criteria = Criteria.where(fieldName).ne(value)
+            OperationEnum.IN// in...
+            -> criteria = Criteria.where(fieldName).`in`(listOf(*value.toString().split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
+        }
+        return criteria
+    }
 }

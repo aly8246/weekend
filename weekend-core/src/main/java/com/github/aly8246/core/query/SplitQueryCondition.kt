@@ -1,6 +1,5 @@
 package com.github.aly8246.core.query
 
-import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.handler.Conditions
 import com.github.aly8246.core.handler.Operation
 import com.github.aly8246.core.handler.QueryEnum
@@ -14,7 +13,7 @@ import java.util.stream.Collectors
  * @description：
  * @version:   ：V
  */
-open class BaseAnalysisQueryCondition : AnalysisCondition {
+open class SplitQueryCondition : SplitCondition {
     override fun analysisCommonConditions(operation: Operation): List<Conditions> {
         return operation.conditionsList
                 .stream()
@@ -31,12 +30,18 @@ open class BaseAnalysisQueryCondition : AnalysisCondition {
     }
 
     override fun analysisSortConditions(operation: Operation): List<Conditions> {
-        println("排序组装器还未实现")
-        return emptyList()
+        return operation.conditionsList
+                .stream()
+                .filter { e -> StringUtils.isEmpty(e.group) }
+                .filter { e -> e.type == QueryEnum.SORT }
+                .collect(Collectors.toList<Conditions>())
     }
 
     override fun analysisGroupByConditions(operation: Operation): List<Conditions> {
-        println("分组组装器还未实现")
-        return emptyList()
+        return operation.conditionsList
+                .stream()
+                .filter { e -> StringUtils.isEmpty(e.group) }
+                .filter { e -> e.type == QueryEnum.GROUP }
+                .collect(Collectors.toList<Conditions>())
     }
 }

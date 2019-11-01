@@ -1,6 +1,6 @@
 package com.github.aly8246.core.handler;
 
-import com.github.aly8246.core.query.enmu.QueryEnum;
+import com.github.aly8246.core.query.enmu.OperationEnum;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public Operation run(String baseCommand) {
 	//TODO 是否有连表条件
 	Operation operation = new Operation();
 	operation.setBaseCommand(baseCommand);
-	operation.setOperation(OperationEnum.SELECT);
+	operation.setOperation(com.github.aly8246.core.handler.OperationEnum.SELECT);
 	operation.setField("*");
 	operation.setTableName(Arrays.stream(baseCommand.split(" ")).collect(Collectors.toList()).get(3));
 	
@@ -38,20 +38,20 @@ public Operation run(String baseCommand) {
 	Conditions conditions3 = new Conditions();
 	conditions3.setType(com.github.aly8246.core.handler.QueryEnum.OR);
 	conditions3.setFieldName("age");
-	conditions3.setSign(QueryEnum.EQ);
+	conditions3.setSign(OperationEnum.EQ);
 	conditions3.setValue(18);
 	conditions3.setGroup("1");
 	Conditions conditions4 = new Conditions();
 	conditions4.setType(com.github.aly8246.core.handler.QueryEnum.OR);
 	conditions4.setFieldName("age");
-	conditions4.setSign(QueryEnum.EQ);
+	conditions4.setSign(OperationEnum.EQ);
 	conditions4.setValue(22);
 	conditions4.setGroup("1");
 	
 	Conditions conditions5 = new Conditions();
 	conditions5.setType(com.github.aly8246.core.handler.QueryEnum.AND);
 	conditions5.setFieldName("userMoney");
-	conditions5.setSign(QueryEnum.LE);
+	conditions5.setSign(OperationEnum.LE);
 	conditions5.setValue(700);
 	//conditions5.setGroup("1");
 	

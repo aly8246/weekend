@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CriteriaEnum {
+public enum CommandEnum {
 	WHERE("WHERE", "where"),
 	CriteriaBo("NE", "!=");
 private String name;

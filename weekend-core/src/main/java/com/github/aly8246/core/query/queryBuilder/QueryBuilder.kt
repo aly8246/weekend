@@ -1,9 +1,7 @@
-package com.github.aly8246.core.query.queryBuilder;
+package com.github.aly8246.core.query.queryBuilder
 
-import com.github.aly8246.core.handler.Conditions;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.util.List;
+import com.github.aly8246.core.handler.Conditions
+import org.springframework.data.mongodb.core.query.Query
 
 /**
  * @Author ：南有乔木
@@ -12,6 +10,6 @@ import java.util.List;
  * @description：
  * @version: ：V
  */
-public interface QueryBuilder {
-Query buildQuery(List<Conditions> conditionsList);
+interface QueryBuilder {
+    fun buildQuery(conditionsList: List<Conditions>): Query
 }

@@ -34,13 +34,14 @@ abstract class InitializerQueryBuilder : AbstractQueryBuilder(), ConditionGroupP
         return super.buildMongoQuery(operation)
     }
 
-    override fun commonConditions(operation: Operation): List<Conditions> = BaseAnalysisQueryCondition().analysisCommonConditions(operation)
 
-    override fun groupConditions(operation: Operation): Map<String, List<Conditions>> = BaseAnalysisQueryCondition().analysisGroupConditions(operation)
+    override fun commonConditions(operation: Operation): List<Conditions> = SplitQueryCondition().analysisCommonConditions(operation)
 
-    override fun sortConditions(operation: Operation) = BaseAnalysisQueryCondition().analysisSortConditions(operation)
+    override fun groupConditions(operation: Operation): Map<String, List<Conditions>> = SplitQueryCondition().analysisGroupConditions(operation)
 
-    override fun groupByConditions(operation: Operation) = BaseAnalysisQueryCondition().analysisGroupByConditions(operation)
+    override fun sortConditions(operation: Operation) = SplitQueryCondition().analysisSortConditions(operation)
+
+    override fun groupByConditions(operation: Operation) = SplitQueryCondition().analysisGroupByConditions(operation)
 
     override fun getQuery(query: Query): Query {
         return query

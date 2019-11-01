@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.query.Query
  * @description：
  * @version:   ：V
  */
-abstract class AbstractQueryBuilder : QueryBuilder {
+abstract class AbstractQueryBuilder : QueryBuilderInterface {
     override fun buildMongoQuery(operation: Operation): Query {
 
         //将条件组合

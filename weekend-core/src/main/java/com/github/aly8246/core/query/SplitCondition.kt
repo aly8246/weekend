@@ -10,7 +10,7 @@ import com.github.aly8246.core.handler.Operation
  * @description：
  * @version:   ：V
  */
-interface AnalysisCondition {
+interface SplitCondition {
     fun analysisCommonConditions(operation: Operation): List<Conditions>
 
     fun analysisGroupConditions(operation: Operation): Map<String, List<Conditions>>

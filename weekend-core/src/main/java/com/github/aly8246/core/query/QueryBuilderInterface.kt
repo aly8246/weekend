@@ -10,6 +10,6 @@ import org.springframework.data.mongodb.core.query.Query
  * @description：
  * @version:   ：V
  */
-interface QueryBuilder {
+interface QueryBuilderInterface {
     fun buildMongoQuery(operation: Operation): Query
 }

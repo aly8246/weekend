@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum OperationEnum {
-    INSERT("INSERT"), DELETE("DELETE"), UPDATE("UPDATE"), SELECT("SELECT"), OTHER("OTHER");
-    private String type;
+	INSERT("INSERT"), DELETE("DELETE"), UPDATE("UPDATE"), SELECT("SELECT"), OTHER("OTHER");
+private String type;
 }
