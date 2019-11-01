@@ -12,15 +12,10 @@ class WeekendProxyFactory<T>(private val interfaceType: Class<T>) : FactoryBean<
     override fun getObject(): T? {
         //这里主要是创建接口对应的实例，便于注入到spring容器中
         val daoHandler = WeekendProxy(interfaceType)
-        return Proxy.newProxyInstance(daoHandler.javaClass.classLoader,
-                arrayOf<Class<*>>(interfaceType), daoHandler) as T
+        return Proxy.newProxyInstance(daoHandler.javaClass.classLoader, arrayOf<Class<*>>(interfaceType), daoHandler) as T
     }
 
-    override fun getObjectType(): Class<*>? {
-        return interfaceType
-    }
+    override fun getObjectType(): Class<*>? = interfaceType
 
-    override fun isSingleton(): Boolean {
-        return true
-    }
+    override fun isSingleton(): Boolean = true
 }

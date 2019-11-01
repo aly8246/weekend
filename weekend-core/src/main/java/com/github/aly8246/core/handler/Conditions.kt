@@ -12,7 +12,7 @@ import com.github.aly8246.core.query.enmu.OperationEnum
 
 class Conditions {
     //执行的类型
-    lateinit var type: com.github.aly8246.core.handler.QueryEnum
+    lateinit var type: QueryEnum
 
     //执行的字段名
     var fieldName: String = ""

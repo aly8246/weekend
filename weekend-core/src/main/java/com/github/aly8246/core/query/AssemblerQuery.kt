@@ -18,10 +18,13 @@ class AssemblerQuery : InitializerQueryBuilder() {
     override fun runBuild(conditionGroup: ConditionGroup): Query {
         var query = Query()
         val commonConditions = conditionGroup.commonConditions
-        if (commonConditions.isNotEmpty()) {
-            //根据普通and和or条件来构造query
-            val andBuilder = AndBuilder(query)
-            query = andBuilder.buildQuery(commonConditions)
+        //根据分组and和or条件来构造query
+        when {
+            commonConditions.isNotEmpty() -> {
+                //根据普通and和or条件来构造query
+                val andBuilder = AndBuilder(query)
+                query = andBuilder.buildQuery(commonConditions)
+            }
         }
 
         val groupConditions = conditionGroup.groupConditions

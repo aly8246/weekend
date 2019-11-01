@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar
 import org.springframework.core.annotation.AnnotationAttributes
 import org.springframework.core.io.ResourceLoader
 import org.springframework.core.io.support.ResourcePatternResolver
+import org.springframework.core.io.support.ResourcePatternResolver.*
 import org.springframework.core.io.support.ResourcePatternUtils
 import org.springframework.core.type.AnnotationMetadata
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory
@@ -40,7 +41,7 @@ open class WeekendProxyRegister : ImportBeanDefinitionRegistrar, ResourceLoaderA
         for (aPackage in packages) {
             classSet.addAll(this.scannerPackages(aPackage as String))
         }
-        for (clazz in classSet) {
+        classSet.forEach { clazz ->
             val builder = BeanDefinitionBuilder.genericBeanDefinition(clazz)
             val definition = builder.rawBeanDefinition as GenericBeanDefinition
             definition.constructorArgumentValues.addGenericArgumentValue(clazz)
@@ -58,16 +59,14 @@ open class WeekendProxyRegister : ImportBeanDefinitionRegistrar, ResourceLoaderA
     //com.github.aly8246.dev.mDao
     //to
     //classpath*:com/github/aly8246/dev/mDao/**/*.class
-    private fun covertVasePackage(basePackage: String): String {
-        return ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                basePackage.replace(".", "/") +
-                '/'.toString() +
-                DEFAULT_RESOURCE_PATTERN
-    }
+    private fun covertVasePackage(basePackage: String): String =
+            CLASSPATH_ALL_URL_PREFIX +
+                    basePackage.replace(".", "/") +
+                    '/'.toString() +
+                    DEFAULT_RESOURCE_PATTERN
 
 
     private fun scannerPackages(basePackage: String): Set<Class<*>> {
-
         val set = LinkedHashSet<Class<*>>()
         val packageSearchPath = covertVasePackage(basePackage)
         try {

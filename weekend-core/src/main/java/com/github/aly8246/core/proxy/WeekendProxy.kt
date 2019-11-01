@@ -11,14 +11,16 @@ import java.lang.reflect.*
 class WeekendProxy<T>(private val target: Class<T>) : InvocationHandler {
     @Throws(Throwable::class)
     override fun invoke(proxy: Any, method: Method, args: Array<Any>?): Any? {
-        if (Any::class.java == method.declaringClass)
-            return method.invoke(this, args)//class类直接执行
-        else if (isDefaultMethod(method))
-            return invokeDefaultMethod(proxy, method, args)//默认方法直接执行
+        return when {
+            Any::class.java == method.declaringClass -> method.invoke(this, args)//class类直接执行
+            isDefaultMethod(method) -> invokeDefaultMethod(proxy, method, args)//默认方法直接执行
+            else -> {
+                val dispatcherFactoryPolicy = DispatcherFactory<T>()
+                val dispatcherFactory = dispatcherFactoryPolicy.dispatcherFactory(proxy, method, args)
+                dispatcherFactory.execute()
+            }
+        }
 
-        val dispatcherFactoryPolicy = DispatcherFactory<T>()
-        val dispatcherFactory = dispatcherFactoryPolicy.dispatcherFactory(proxy, method, args)
-        return dispatcherFactory.execute()
     }
 
 
@@ -26,8 +28,8 @@ class WeekendProxy<T>(private val target: Class<T>) : InvocationHandler {
     private fun invokeDefaultMethod(proxy: Any, method: Method, args: Array<Any>?): Any {
         val constructor = MethodHandles.Lookup::class.java
                 .getDeclaredConstructor(Class::class.java, Int::class.javaPrimitiveType)
-        if (!constructor.isAccessible) {
-            constructor.isAccessible = true
+        when {
+            !constructor.isAccessible -> constructor.isAccessible = true
         }
         val declaringClass = method.declaringClass
         return constructor.newInstance(declaringClass,
@@ -36,7 +38,5 @@ class WeekendProxy<T>(private val target: Class<T>) : InvocationHandler {
                 .unreflectSpecial(method, declaringClass).bindTo(proxy).invokeWithArguments(args)
     }
 
-    private fun isDefaultMethod(method: Method): Boolean {
-        return ((((method.modifiers and (Modifier.ABSTRACT or Modifier.PUBLIC or Modifier.STATIC))) == Modifier.PUBLIC) && method.declaringClass.isInterface)
-    }
+    private fun isDefaultMethod(method: Method): Boolean = ((((method.modifiers and (Modifier.ABSTRACT or Modifier.PUBLIC or Modifier.STATIC))) == Modifier.PUBLIC) && method.declaringClass.isInterface)
 }

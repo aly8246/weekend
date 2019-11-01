@@ -53,20 +53,22 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         //实际返回类型>如果返回类型为集合,则应该取集合里的类型
         var realityResult: Any? = null
 
-        if (command.returnType.java != Collection::class.java) {
-            try {
-                realityResult = returnType.newInstance()
+        when {
+            command.returnType.java != Collection::class.java -> realityResult = try {
+                returnType.newInstance()
             } catch (e: java.lang.Exception) {
-                realityResult = ArrayList<Any>()
+                ArrayList<Any>()
             }
-        } else {
-            val canonicalName = returnType.canonicalName
-            if (canonicalName != "void")
-                realityResult = try {
-                    Class.forName(canonicalName).newInstance()
-                } catch (e: Exception) {
-                    Class.forName(regxListParamClass(this.method.toGenericString())).newInstance()
+            else -> {
+                val canonicalName = returnType.canonicalName
+                when {
+                    canonicalName != "void" -> realityResult = try {
+                        Class.forName(canonicalName).newInstance()
+                    } catch (e: Exception) {
+                        Class.forName(regxListParamClass(this.method.toGenericString())).newInstance()
+                    }
                 }
+            }
         }
         this.retClass = RetClass(eductionResult, realityResult)
         return retClass
@@ -92,7 +94,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         return t
     }
 
-    protected fun regxListParamClass(source: String): String {
+    private fun regxListParamClass(source: String): String {
         val matcher = Pattern.compile("(?<=java.util.List<).*?(?=>)").matcher(source)
         while (matcher.find()) return matcher.group()
         throw WeekendException("异常regxListParamClass:$source")

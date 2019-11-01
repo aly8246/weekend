@@ -7,8 +7,10 @@ class BaseTemplate : Template {
 
     override fun completeCommand(command: Command): String {
         val baseCommand = command.value.joinToString("")
-        if (StringUtils.isEmpty(baseCommand)) throw RuntimeException("BaseCommand不能为空")
-        return baseCommand
+        when {
+            StringUtils.isEmpty(baseCommand) -> throw RuntimeException("BaseCommand不能为空")
+            else -> return baseCommand
+        }
     }
     //TODO 先将模板替换成具体参数值
     // args command
