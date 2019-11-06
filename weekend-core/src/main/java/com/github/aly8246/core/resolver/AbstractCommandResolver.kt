@@ -15,7 +15,7 @@ abstract class AbstractCommandResolver : CommandResolver {
         if (!validCommandSyntax) throw WeekendException("命令语法检查不通过,此消息由${sign()}传递")
 
         val resolverCommandOperation = this.resolverCommandOperation(baseCommand)
-        val resolverCommandConditions = this.resolverCommandConditions(baseCommand)
+        val resolverCommandConditions = this.resolverCommandConditions(baseCommand,resolverCommandOperation)
 
         return assemblingOperation(resolverCommandOperation, resolverCommandConditions)
     }
@@ -29,8 +29,10 @@ abstract class AbstractCommandResolver : CommandResolver {
     abstract fun resolverCommandOperation(baseCommand: String): Operation
 
     //解析命令条件
-    abstract fun resolverCommandConditions(baseCommand: String): List<Condition>
+    abstract fun resolverCommandConditions(baseCommand: String, resolverCommandOperation: Operation): List<Condition>
 
     //完结组装
     abstract fun assemblingOperation(operation: Operation, conditionList: List<Condition>): Operation
+
+
 }

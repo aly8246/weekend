@@ -5,12 +5,12 @@ import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.resolver.Operation
 import com.github.aly8246.core.query.AssemblerQuery
 import com.github.aly8246.core.resolver.CommandResolver
-import com.github.aly8246.core.resolver.MySqlCommandResolver
+import com.github.aly8246.core.resolver.mysql.MySqlCommandResolver
 import com.github.aly8246.core.template.BaseTemplate
 import com.github.aly8246.core.util.ResultCase
 import org.springframework.data.mongodb.core.query.Query
 import java.lang.reflect.Method
-import java.util.ArrayList
+import java.util.*
 import java.util.regex.Pattern
 
 open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : AbstractDispatcher<T>(proxy, method, args), DispatcherPolicy<T>, DispatcherInitializer {
@@ -36,6 +36,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         //依赖子类来完成
         executor = handlePreview(executor)
         executor = handleResult(executor)
+
         return executor
     }
 

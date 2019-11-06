@@ -1,5 +1,6 @@
 package com.github.aly8246.core.exec;
 
+
 import com.github.aly8246.core.util.MongoTemplateUtil;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.aly8246.core.util.MongoTemplateUtil.mongoTemplate;
 
 public class CustomExecutor extends AbstractExecutor {
 

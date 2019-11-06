@@ -1,9 +1,8 @@
 package com.github.aly8246.core.annotation
 
-import com.github.aly8246.core.handler.Condition
-import com.github.aly8246.core.handler.SqlConditionHandler
+
 import com.github.aly8246.core.resolver.CommandResolver
-import com.github.aly8246.core.resolver.MySqlCommandResolver
+import com.github.aly8246.core.resolver.mysql.MySqlCommandResolver
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)

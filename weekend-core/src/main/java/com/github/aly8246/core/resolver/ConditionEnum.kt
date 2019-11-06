@@ -8,5 +8,5 @@ package com.github.aly8246.core.resolver
  * @version: ：V
  */
 enum class ConditionEnum(condition: String) {
-    WHERE("WHERE"), AND("AND"), OR("OR"), SORT("GROUP BY")
+    WHERE("WHERE"), AND("AND"), OR("OR"), SORT("ORDER BY"), GROUP("GROUP BY")
 }
