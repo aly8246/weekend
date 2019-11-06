@@ -1,6 +1,7 @@
 package com.github.aly8246.core.query.queryBuilder.basic
 
 import com.github.aly8246.core.query.enmu.OperationEnum
+import com.github.aly8246.core.query.enmu.OperationEnum.*
 import org.springframework.data.mongodb.core.query.Criteria
 
 /**
@@ -14,20 +15,14 @@ class OperationSignCriteriaBuilder : CriteriaBuilder {
     override fun build(fieldName: String, value: Any, sign: OperationEnum): Criteria {
         var criteria: Criteria? = null
         when (sign) {
-            OperationEnum.GT//  >
-            -> criteria = Criteria.where(fieldName).gt(value)
-            OperationEnum.LT//  <
-            -> criteria = Criteria.where(fieldName).lt(value)
-            OperationEnum.EQ//  =
-            -> criteria = Criteria.where(fieldName).`is`(value)
-            OperationEnum.GE//  >=
-            -> criteria = Criteria.where(fieldName).gte(value)
-            OperationEnum.LE//  <=
-            -> criteria = Criteria.where(fieldName).lte(value)
-            OperationEnum.NQ// !=
-            -> criteria = Criteria.where(fieldName).ne(value)
-            OperationEnum.IN// in...
-            -> criteria = Criteria.where(fieldName).`in`(listOf(*value.toString().split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
+            GT -> criteria = Criteria.where(fieldName).gt(value)   //  >
+            LT -> criteria = Criteria.where(fieldName).lt(value)   //  <
+            EQ -> criteria = Criteria.where(fieldName).`is`(value) //  =
+            GE -> criteria = Criteria.where(fieldName).gte(value)  //  >=
+            LE -> criteria = Criteria.where(fieldName).lte(value)  //  <=
+            NQ -> criteria = Criteria.where(fieldName).ne(value)   //  !=
+            // in...
+            IN -> criteria = Criteria.where(fieldName).`in`(listOf(*value.toString().split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
         }
         return criteria
     }

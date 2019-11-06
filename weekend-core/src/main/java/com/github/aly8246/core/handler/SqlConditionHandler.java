@@ -11,7 +11,11 @@ public class SqlConditionHandler extends AbstractSqlCondition {
 
 @Override
 public void validCommand(String baseCommand) {
-	super.validCommand(baseCommand);
+	System.out.println("sql构建条件来验证命令");
 }
 
+@Override
+public Operation operationDetails(String baseCommand) {
+	return super.operationDetails(baseCommand);
+}
 }

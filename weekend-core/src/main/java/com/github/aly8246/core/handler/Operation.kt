@@ -14,9 +14,9 @@ import java.util.LinkedList
  * @version: ：V
  */
 class Operation {
-    lateinit var baseCommand: String
-    lateinit var operation: OperationEnum
-    lateinit var field: String
-    lateinit var tableName: String
-    var conditionsList: List<Conditions> = LinkedList()
+    var baseCommand: String? = null
+    var operation: OperationEnum? = null
+    var field: String? = null
+    var tableName: String? = null
+    var conditionsList: List<Conditions> = mutableListOf()
 }

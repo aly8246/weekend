@@ -6,6 +6,8 @@ import com.github.aly8246.core.handler.Condition
 import com.github.aly8246.core.handler.Operation
 import com.github.aly8246.core.handler.SqlConditionHandler
 import com.github.aly8246.core.query.AssemblerQuery
+import com.github.aly8246.core.resolver.CommandResolver
+import com.github.aly8246.core.resolver.MySqlCommandResolver
 import com.github.aly8246.core.template.BaseTemplate
 import com.github.aly8246.core.util.ResultCase
 import org.springframework.data.mongodb.core.query.Query
@@ -100,7 +102,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         throw WeekendException("异常regxListParamClass:$source")
     }
 
-    private fun getConditionHandler(command: Command): Condition {
+    private fun getConditionHandler(command: Command): CommandResolver {
         val handler = command.handler.java
         try {
             return handler.newInstance()
@@ -110,7 +112,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
             e.printStackTrace()
         }
 
-        return SqlConditionHandler()
+        return MySqlCommandResolver()
     }
 
     protected fun buildCondition(command: Command, baseCommand: String): Operation {

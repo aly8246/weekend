@@ -77,8 +77,7 @@ public Operation run(String baseCommand) {
 }
 
 
-public void validCommand(String baseCommand) {
-	System.out.println("1-AbstractCommand running");
-}
+public abstract void validCommand(String baseCommand);
 
+public abstract Operation operationDetails(String baseCommand);
 }

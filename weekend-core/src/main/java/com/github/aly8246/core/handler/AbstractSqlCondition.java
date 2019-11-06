@@ -11,7 +11,11 @@ public class AbstractSqlCondition extends AbstractCondition {
 
 @Override
 public void validCommand(String baseCommand) {
-	super.validCommand(baseCommand);
+}
+
+@Override
+public Operation operationDetails(String baseCommand) {
+	return null;
 }
 
 }
