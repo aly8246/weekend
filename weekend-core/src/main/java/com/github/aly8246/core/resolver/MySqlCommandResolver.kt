@@ -1,7 +1,5 @@
 package com.github.aly8246.core.resolver
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.handler.Operation
 import com.github.aly8246.core.query.enmu.OperationEnum
 import java.util.*
 import java.util.stream.Collectors
@@ -19,7 +17,7 @@ class MySqlCommandResolver : AbstractCommandResolver() {
     override fun resolverCommandOperation(baseCommand: String): Operation {
         val operation = Operation()
         operation.baseCommand = baseCommand
-        operation.operation = com.github.aly8246.core.handler.OperationEnum.SELECT
+        operation.operation = com.github.aly8246.core.resolver.OperationEnum.SELECT
         operation.field = "*"
         operation.tableName = Arrays
                 .stream(baseCommand.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
@@ -28,22 +26,22 @@ class MySqlCommandResolver : AbstractCommandResolver() {
         return operation
     }
 
-    override fun resolverCommandConditions(baseCommand: String): List<Conditions> {
-        val conditions3 = Conditions()
-        conditions3.type = com.github.aly8246.core.handler.QueryEnum.OR
+    override fun resolverCommandConditions(baseCommand: String): List<Condition> {
+        val conditions3 = Condition()
+        conditions3.type = ConditionEnum.OR
         conditions3.fieldName = "age"
         conditions3.sign = OperationEnum.EQ
         conditions3.value = 18
         conditions3.group = "1"
-        val conditions4 = Conditions()
-        conditions4.type = com.github.aly8246.core.handler.QueryEnum.OR
+        val conditions4 = Condition()
+        conditions4.type = ConditionEnum.OR
         conditions4.fieldName = "age"
         conditions4.sign = OperationEnum.EQ
         conditions4.value = 22
         conditions4.group = "1"
 
-        val conditions5 = Conditions()
-        conditions5.type = com.github.aly8246.core.handler.QueryEnum.AND
+        val conditions5 = Condition()
+        conditions5.type = ConditionEnum.AND
         conditions5.fieldName = "userMoney"
         conditions5.sign = OperationEnum.LE
         conditions5.value = 700
@@ -66,8 +64,8 @@ class MySqlCommandResolver : AbstractCommandResolver() {
         return listOf(conditions3, conditions4, conditions5)
     }
 
-    override fun assemblingOperation(operation: Operation, conditionList: List<Conditions>): Operation {
-        operation.conditionsList = conditionList
+    override fun assemblingOperation(operation: Operation, conditionList: List<Condition>): Operation {
+        operation.conditionList = conditionList
         return operation
     }
 }

@@ -39,7 +39,6 @@ public Object select(Query query, Class<?> returnType, String tableName, Method 
 	one.entrySet().forEach(System.err::println);
 	System.out.println("=====================================================");
 	
-	
 	//  step3. 根据执行得到的结果来组装新数据
 	return null;
 }

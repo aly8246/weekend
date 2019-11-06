@@ -1,7 +1,6 @@
 package com.github.aly8246.core.query.queryBuilder
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.query.queryBuilder.basic.CriteriaBuilder
+import com.github.aly8246.core.resolver.Condition
 import com.github.aly8246.core.query.queryBuilder.basic.OperationSignCriteriaBuilder
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -15,12 +14,12 @@ import org.springframework.data.mongodb.core.query.Query
  */
 class OrBuilder(private val query: Query) : QueryBuilder {
 
-    override fun buildQuery(conditionsList: List<Conditions>): Query {
+    override fun buildQuery(conditionList: List<Condition>): Query {
 
         //条件构建器，如果是where或者and则一起,如果是排序则是其他构建器
-        val criteriaArray = arrayOfNulls<Criteria>(conditionsList.size)
-        for (i in conditionsList.indices) {
-            val conditions = conditionsList[i]
+        val criteriaArray = arrayOfNulls<Criteria>(conditionList.size)
+        for (i in conditionList.indices) {
+            val conditions = conditionList[i]
 
             val fieldName = conditions.fieldName
             val value = conditions.value

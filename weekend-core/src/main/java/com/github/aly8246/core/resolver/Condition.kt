@@ -1,4 +1,4 @@
-package com.github.aly8246.core.handler
+package com.github.aly8246.core.resolver
 
 import com.github.aly8246.core.query.enmu.OperationEnum
 
@@ -10,9 +10,9 @@ import com.github.aly8246.core.query.enmu.OperationEnum
  * @version: ：V
  */
 
-class Conditions {
+class Condition {
     //执行的类型
-    lateinit var type: QueryEnum
+    lateinit var type: ConditionEnum
 
     //执行的字段名
     var fieldName: String = ""

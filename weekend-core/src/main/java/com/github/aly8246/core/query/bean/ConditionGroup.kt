@@ -1,9 +1,6 @@
 package com.github.aly8246.core.query.bean
 
-import com.github.aly8246.core.handler.Conditions
-import lombok.Data
-import lombok.Setter
-import org.springframework.data.mongodb.core.query.Query
+import com.github.aly8246.core.resolver.Condition
 
 /**
  * @Author     ：南有乔木
@@ -13,8 +10,8 @@ import org.springframework.data.mongodb.core.query.Query
  * @version:   ：V
  */
 class ConditionGroup {
-    lateinit var commonConditions: List<Conditions>
-    lateinit var groupConditions: Map<String, List<Conditions>>
-    lateinit var sortConditions: List<Conditions>
-    lateinit var groupByConditions: List<Conditions>
+    lateinit var commonConditions: List<Condition>
+    lateinit var groupCondition: Map<String, List<Condition>>
+    lateinit var sortConditions: List<Condition>
+    lateinit var groupByConditions: List<Condition>
 }

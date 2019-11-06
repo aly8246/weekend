@@ -27,7 +27,7 @@ class AssemblerQuery : InitializerQueryBuilder() {
             }
         }
 
-        val groupConditions = conditionGroup.groupConditions
+        val groupConditions = conditionGroup.groupCondition
         if (groupConditions.isNotEmpty()) {
             val orIterator = groupConditions.entries.iterator()
             while (orIterator.hasNext()) {

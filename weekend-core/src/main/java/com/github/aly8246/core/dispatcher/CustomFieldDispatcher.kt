@@ -2,10 +2,8 @@ package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.dispatcher.RetClassEnum.*
 import com.github.aly8246.core.exec.CustomExecutor
-import com.github.aly8246.core.exec.SelectExecutor
-import com.github.aly8246.core.handler.Operation
-import com.github.aly8246.core.handler.OperationEnum
-import com.github.aly8246.core.handler.OperationEnum.*
+import com.github.aly8246.core.resolver.Operation
+import com.github.aly8246.core.resolver.OperationEnum.*
 import org.springframework.data.mongodb.core.query.Query
 import java.lang.reflect.Method
 

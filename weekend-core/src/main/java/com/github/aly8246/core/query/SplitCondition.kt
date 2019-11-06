@@ -1,7 +1,7 @@
 package com.github.aly8246.core.query
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.handler.Operation
+import com.github.aly8246.core.resolver.Condition
+import com.github.aly8246.core.resolver.Operation
 
 /**
  * @Author     ：南有乔木
@@ -11,11 +11,11 @@ import com.github.aly8246.core.handler.Operation
  * @version:   ：V
  */
 interface SplitCondition {
-    fun analysisCommonConditions(operation: Operation): List<Conditions>
+    fun analysisCommonConditions(operation: Operation): List<Condition>
 
-    fun analysisGroupConditions(operation: Operation): Map<String, List<Conditions>>
+    fun analysisGroupConditions(operation: Operation): Map<String, List<Condition>>
 
-    fun analysisSortConditions(operation: Operation): List<Conditions>
+    fun analysisSortConditions(operation: Operation): List<Condition>
 
-    fun analysisGroupByConditions(operation: Operation): List<Conditions>
+    fun analysisGroupByConditions(operation: Operation): List<Condition>
 }

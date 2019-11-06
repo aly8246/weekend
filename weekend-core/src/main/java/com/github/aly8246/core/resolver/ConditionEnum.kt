@@ -1,6 +1,4 @@
-package com.github.aly8246.core.handler;
-
-import lombok.Getter;
+package com.github.aly8246.core.resolver
 
 /**
  * @Author ：南有乔木
@@ -9,7 +7,6 @@ import lombok.Getter;
  * @description：
  * @version: ：V
  */
-@Getter
-public enum QueryEnum {
-	WHERE, AND, OR, SORT, GROUP
+enum class ConditionEnum(condition: String) {
+    WHERE("WHERE"), AND("AND"), OR("OR"), SORT("GROUP BY")
 }

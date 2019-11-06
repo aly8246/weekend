@@ -2,9 +2,7 @@ package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.core.exception.WeekendException
-import com.github.aly8246.core.handler.Condition
-import com.github.aly8246.core.handler.Operation
-import com.github.aly8246.core.handler.SqlConditionHandler
+import com.github.aly8246.core.resolver.Operation
 import com.github.aly8246.core.query.AssemblerQuery
 import com.github.aly8246.core.resolver.CommandResolver
 import com.github.aly8246.core.resolver.MySqlCommandResolver

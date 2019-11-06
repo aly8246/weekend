@@ -1,7 +1,5 @@
 package com.github.aly8246.core.resolver
 
-import com.github.aly8246.core.handler.Operation
-
 /**
  * @Author     ：南有乔木
  * @Email      ：1558146696@qq.com

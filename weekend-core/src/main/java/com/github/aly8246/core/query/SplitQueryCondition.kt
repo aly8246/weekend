@@ -1,8 +1,8 @@
 package com.github.aly8246.core.query
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.handler.Operation
-import com.github.aly8246.core.handler.QueryEnum
+import com.github.aly8246.core.resolver.Condition
+import com.github.aly8246.core.resolver.Operation
+import com.github.aly8246.core.resolver.ConditionEnum
 import org.springframework.util.StringUtils
 import java.util.stream.Collectors
 
@@ -14,34 +14,34 @@ import java.util.stream.Collectors
  * @version:   ：V
  */
 open class SplitQueryCondition : SplitCondition {
-    override fun analysisCommonConditions(operation: Operation): List<Conditions> {
-        return operation.conditionsList
+    override fun analysisCommonConditions(operation: Operation): List<Condition> {
+        return operation.conditionList
                 .stream()
                 .filter { e -> StringUtils.isEmpty(e.group) }
-                .filter { e -> e.type == QueryEnum.WHERE || e.type == QueryEnum.AND }
-                .collect(Collectors.toList<Conditions>())
+                .filter { e -> e.type == ConditionEnum.WHERE || e.type == ConditionEnum.AND }
+                .collect(Collectors.toList<Condition>())
     }
 
-    override fun analysisGroupConditions(operation: Operation): Map<String, List<Conditions>> {
-        return operation.conditionsList
+    override fun analysisGroupConditions(operation: Operation): Map<String, List<Condition>> {
+        return operation.conditionList
                 .stream()
-                .filter { e -> e.type == QueryEnum.OR || !StringUtils.isEmpty(e.group) }
-                .collect(Collectors.groupingBy<Conditions, String> { it.group })
+                .filter { e -> e.type == ConditionEnum.OR || !StringUtils.isEmpty(e.group) }
+                .collect(Collectors.groupingBy<Condition, String> { it.group })
     }
 
-    override fun analysisSortConditions(operation: Operation): List<Conditions> {
-        return operation.conditionsList
-                .stream()
-                .filter { e -> StringUtils.isEmpty(e.group) }
-                .filter { e -> e.type == QueryEnum.SORT }
-                .collect(Collectors.toList<Conditions>())
-    }
-
-    override fun analysisGroupByConditions(operation: Operation): List<Conditions> {
-        return operation.conditionsList
+    override fun analysisSortConditions(operation: Operation): List<Condition> {
+        return operation.conditionList
                 .stream()
                 .filter { e -> StringUtils.isEmpty(e.group) }
-                .filter { e -> e.type == QueryEnum.GROUP }
-                .collect(Collectors.toList<Conditions>())
+                .filter { e -> e.type == ConditionEnum.SORT }
+                .collect(Collectors.toList<Condition>())
+    }
+
+    override fun analysisGroupByConditions(operation: Operation): List<Condition> {
+        return operation.conditionList
+                .stream()
+                .filter { e -> StringUtils.isEmpty(e.group) }
+                .filter { e -> e.type == ConditionEnum.GROUP }
+                .collect(Collectors.toList<Condition>())
     }
 }

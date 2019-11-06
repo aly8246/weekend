@@ -1,12 +1,8 @@
 package com.github.aly8246.core.query.queryBuilder
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.query.queryBuilder.basic.CriteriaBuilder
+import com.github.aly8246.core.resolver.Condition
 import com.github.aly8246.core.query.queryBuilder.basic.OperationSignCriteriaBuilder
-import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
-
-import java.util.Arrays
 
 
 /**
@@ -18,8 +14,8 @@ import java.util.Arrays
  */
 class AndBuilder(private val query: Query) : QueryBuilder {
 
-    override fun buildQuery(conditionsList: List<Conditions>): Query {
-        for (conditions in conditionsList) {
+    override fun buildQuery(conditionList: List<Condition>): Query {
+        for (conditions in conditionList) {
             val fieldName = conditions.fieldName
             val value = conditions.value
             val criteriaBuilder = OperationSignCriteriaBuilder()

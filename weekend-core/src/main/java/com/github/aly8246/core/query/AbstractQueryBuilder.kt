@@ -1,7 +1,7 @@
 package com.github.aly8246.core.query
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.handler.Operation
+import com.github.aly8246.core.resolver.Condition
+import com.github.aly8246.core.resolver.Operation
 import com.github.aly8246.core.query.bean.ConditionGroup
 import org.springframework.data.mongodb.core.query.Query
 
@@ -31,16 +31,16 @@ abstract class AbstractQueryBuilder : QueryBuilderInterface {
     abstract fun runBuild(conditionGroup: ConditionGroup): Query
 
     //step. 普通and和or
-    abstract fun commonConditions(operation: Operation): List<Conditions>
+    abstract fun commonConditions(operation: Operation): List<Condition>
 
     //step. 组合and和or
-    abstract fun groupConditions(operation: Operation): Map<String, List<Conditions>>
+    abstract fun groupConditions(operation: Operation): Map<String, List<Condition>>
 
     //step. sort
-    abstract fun sortConditions(operation: Operation): List<Conditions>
+    abstract fun sortConditions(operation: Operation): List<Condition>
 
     //step. groupBy
-    abstract fun groupByConditions(operation: Operation): List<Conditions>
+    abstract fun groupByConditions(operation: Operation): List<Condition>
 
 
     abstract fun getQuery(query: Query): Query

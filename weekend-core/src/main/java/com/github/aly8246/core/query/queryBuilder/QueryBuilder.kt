@@ -1,6 +1,6 @@
 package com.github.aly8246.core.query.queryBuilder
 
-import com.github.aly8246.core.handler.Conditions
+import com.github.aly8246.core.resolver.Condition
 import org.springframework.data.mongodb.core.query.Query
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.data.mongodb.core.query.Query
  * @version: ：V
  */
 interface QueryBuilder {
-    fun buildQuery(conditionsList: List<Conditions>): Query
+    fun buildQuery(conditionList: List<Condition>): Query
 }

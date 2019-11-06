@@ -1,7 +1,7 @@
 package com.github.aly8246.core.query
 
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.handler.Operation
+import com.github.aly8246.core.resolver.Condition
+import com.github.aly8246.core.resolver.Operation
 import com.github.aly8246.core.query.bean.ConditionGroup
 import org.springframework.data.mongodb.core.query.Query
 
@@ -10,7 +10,7 @@ abstract class InitializerQueryBuilder : AbstractQueryBuilder(), ConditionGroupP
     override fun conditionGroupPolicy(operation: Operation): ConditionGroup {
         val conditionGroup = ConditionGroup()
         conditionGroup.commonConditions = commonConditions(operation)
-        conditionGroup.groupConditions = groupConditions(operation)
+        conditionGroup.groupCondition = groupConditions(operation)
         conditionGroup.sortConditions = sortConditions(operation)
         return conditionGroup
     }
@@ -35,9 +35,9 @@ abstract class InitializerQueryBuilder : AbstractQueryBuilder(), ConditionGroupP
     }
 
 
-    override fun commonConditions(operation: Operation): List<Conditions> = SplitQueryCondition().analysisCommonConditions(operation)
+    override fun commonConditions(operation: Operation): List<Condition> = SplitQueryCondition().analysisCommonConditions(operation)
 
-    override fun groupConditions(operation: Operation): Map<String, List<Conditions>> = SplitQueryCondition().analysisGroupConditions(operation)
+    override fun groupConditions(operation: Operation): Map<String, List<Condition>> = SplitQueryCondition().analysisGroupConditions(operation)
 
     override fun sortConditions(operation: Operation) = SplitQueryCondition().analysisSortConditions(operation)
 

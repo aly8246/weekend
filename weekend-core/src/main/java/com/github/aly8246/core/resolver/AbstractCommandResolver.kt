@@ -1,8 +1,6 @@
 package com.github.aly8246.core.resolver
 
 import com.github.aly8246.core.exception.WeekendException
-import com.github.aly8246.core.handler.Conditions
-import com.github.aly8246.core.handler.Operation
 
 /**
  * @Author     ：南有乔木
@@ -31,8 +29,8 @@ abstract class AbstractCommandResolver : CommandResolver {
     abstract fun resolverCommandOperation(baseCommand: String): Operation
 
     //解析命令条件
-    abstract fun resolverCommandConditions(baseCommand: String): List<Conditions>
+    abstract fun resolverCommandConditions(baseCommand: String): List<Condition>
 
     //完结组装
-    abstract fun assemblingOperation(operation: Operation, conditionList: List<Conditions>): Operation
+    abstract fun assemblingOperation(operation: Operation, conditionList: List<Condition>): Operation
 }

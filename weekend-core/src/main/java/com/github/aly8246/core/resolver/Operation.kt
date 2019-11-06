@@ -1,10 +1,4 @@
-package com.github.aly8246.core.handler
-
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.NoArgsConstructor
-
-import java.util.LinkedList
+package com.github.aly8246.core.resolver
 
 /**
  * @Author ：南有乔木
@@ -18,5 +12,5 @@ class Operation {
     var operation: OperationEnum? = null
     var field: String? = null
     var tableName: String? = null
-    var conditionsList: List<Conditions> = mutableListOf()
+    var conditionList: List<Condition> = mutableListOf()
 }
