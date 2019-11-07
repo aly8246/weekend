@@ -1,14 +1,18 @@
 package com.github.aly8246.core.resolver.mysql
 
+import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.resolver.*
+import com.github.aly8246.core.util.PrintImpl
 import java.util.stream.Collectors
 import net.sf.jsqlparser.parser.CCJSqlParserUtil
-import net.sf.jsqlparser.statement.Statement
+import net.sf.jsqlparser.schema.Column
 import net.sf.jsqlparser.statement.delete.Delete
 import net.sf.jsqlparser.statement.insert.Insert
 import net.sf.jsqlparser.statement.select.Select
 import net.sf.jsqlparser.statement.update.Update
 import net.sf.jsqlparser.util.TablesNamesFinder
+import net.sf.jsqlparser.statement.select.PlainSelect
+import net.sf.jsqlparser.statement.select.SelectExpressionItem
 
 
 open class MySqlCommandResolver : AbstractCommandResolver() {
@@ -17,42 +21,46 @@ open class MySqlCommandResolver : AbstractCommandResolver() {
     }
 
     override fun validCommandSyntax(baseCommand: String): Boolean {
-        println("语法检查:$baseCommand")
+        try {
+            PrintImpl().debug("语法检查:$baseCommand")
+            CCJSqlParserUtil.parse(baseCommand)
+        } catch (e: Exception) {
+            return false
+        }
+        PrintImpl().debug("检查通过")
         return true
     }
 
     override fun resolverCommandOperation(baseCommand: String): Operation {
-        val statement = CCJSqlParserUtil.parse(baseCommand)
-        val operation = Operation()
-        operation.baseCommand = baseCommand
-        operation.operation = commandOperation(statement)
-        operation.field = "*"
-        operation.tableName = TablesNamesFinder().getTableList(statement).stream().collect(Collectors.joining())
 
+        val statement = CCJSqlParserUtil.parse(baseCommand)
+
+        val operation = Operation()
+
+        operation.tableName = TablesNamesFinder().getTableList(statement).stream().collect(Collectors.toList())[0]
+        operation.baseCommand = baseCommand
+
+        when (statement) {
+            is Select -> {
+                operation.operation = OperationEnum.SELECT
+                operation.operationResolver = SelectCommandResolver()
+                operation.field = (operation.operationResolver as SelectCommandResolver).resolverSelectItem(statement)
+            }
+            is Insert -> {
+                operation.operation = OperationEnum.INSERT
+                operation.operationResolver = InsertCommandResolver()
+                operation.field = (operation.operationResolver as InsertCommandResolver).resolverSelectItem(statement)
+            }
+//            is Update -> operation.operation = OperationEnum.UPDATE
+//            is Delete -> operation.operation = OperationEnum.DELETE
+            else -> throw WeekendException("暂时无法解析的操作:$baseCommand")
+        }
         return operation
     }
 
-    private fun commandOperation(statement: Statement): OperationEnum? {
-        return when (statement) {
-            is Select -> OperationEnum.SELECT
-            is Insert -> OperationEnum.INSERT
-            is Update -> OperationEnum.UPDATE
-            is Delete -> OperationEnum.DELETE
-            else -> OperationEnum.OTHER
-        }
-    }
 
     override fun resolverCommandConditions(baseCommand: String, resolverCommandOperation: Operation): List<Condition> {
-        val selector = when (resolverCommandOperation.operation) {
-            OperationEnum.SELECT -> SelectCommandResolver()
-            OperationEnum.INSERT -> InsertCommandResolver()
-//            OperationEnum.UPDATE -> println("执行更新操作")
-//            OperationEnum.DELETE -> println("执行删除操作")
-//            OperationEnum.OTHER -> println("执行其他操作")
-            else -> return emptyList()
-        }
-
-        return selector.resolverConditions(baseCommand)
+        return resolverCommandOperation.operationResolver?.resolverConditions(baseCommand)!!
     }
 
     override fun assemblingOperation(operation: Operation, conditionList: List<Condition>): Operation {

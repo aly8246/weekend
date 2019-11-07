@@ -1,5 +1,7 @@
 package com.github.aly8246.core.resolver
 
+import net.sf.jsqlparser.statement.Statement
+
 /**
  * @Author     ：南有乔木
  * @Email      ：1558146696@qq.com
@@ -9,4 +11,6 @@ package com.github.aly8246.core.resolver
  */
 interface OperationResolver {
     fun resolverConditions(baseCommand: String): List<Condition>
+
+    fun resolverSelectItem(statement: Statement): MutableList<Field>
 }

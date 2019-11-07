@@ -12,7 +12,8 @@ import com.github.aly8246.kotlin.pojo.UserInfoMapping
  * @version:   ：V
  */
 interface UserDao {
-    @Command("select * from user_info")
+    // @Command("select * from user_info")
+    @Command("select *,u.id as uid,u.name,test from user_info u")
     fun exec(): List<UserInfo>
 
     @Command("select * from user_info")
