@@ -1,6 +1,6 @@
 package com.github.aly8246.core.resolver
 
-import com.github.aly8246.core.query.enmu.OperationEnum
+import com.github.aly8246.core.query.enmu.OperationSignEnum
 
 /**
  * @Author ：南有乔木
@@ -18,10 +18,11 @@ class Condition {
     var fieldName: String = ""
 
     //执行的条件
-    lateinit var sign: OperationEnum
+    lateinit var sign: OperationSignEnum
 
     //执行的值
     lateinit var value: Any
+
     lateinit var classType: Class<*>
 
     //其他

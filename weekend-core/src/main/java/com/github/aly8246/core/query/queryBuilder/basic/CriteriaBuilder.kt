@@ -1,6 +1,6 @@
 package com.github.aly8246.core.query.queryBuilder.basic
 
-import com.github.aly8246.core.query.enmu.OperationEnum
+import com.github.aly8246.core.query.enmu.OperationSignEnum
 import org.springframework.data.mongodb.core.query.Criteria
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.data.mongodb.core.query.Criteria
  * @version: ：V
  */
 interface CriteriaBuilder {
-    fun build(fieldName: String, value: Any, sign: OperationEnum): Criteria
+    fun build(fieldName: String, value: Any, sign: OperationSignEnum): Criteria
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum OperationEnum {
+public enum OperationSignEnum {
 	// 大于
 	GT(">"),
 	// 小于

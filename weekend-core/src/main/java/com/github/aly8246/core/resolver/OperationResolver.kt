@@ -10,7 +10,9 @@ import net.sf.jsqlparser.statement.Statement
  * @version:   ：V
  */
 interface OperationResolver {
-    fun resolverConditions(baseCommand: String): List<Condition>
+    fun resolverConditions(baseCommand: String, resolverCommandOperation: Operation): List<Condition>
 
     fun resolverSelectItem(statement: Statement): MutableList<Field>
+
+
 }

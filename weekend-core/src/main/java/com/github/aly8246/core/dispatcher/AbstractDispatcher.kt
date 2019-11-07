@@ -7,7 +7,6 @@ import java.lang.reflect.Method
 
 abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var method: Method, protected var args: Array<Any>?) : Dispatcher<T> {
     override fun execute(): T? {
-
         return run()
     }
 

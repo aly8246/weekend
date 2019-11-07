@@ -5,14 +5,9 @@ import com.github.aly8246.core.resolver.*
 import com.github.aly8246.core.util.PrintImpl
 import java.util.stream.Collectors
 import net.sf.jsqlparser.parser.CCJSqlParserUtil
-import net.sf.jsqlparser.schema.Column
-import net.sf.jsqlparser.statement.delete.Delete
 import net.sf.jsqlparser.statement.insert.Insert
 import net.sf.jsqlparser.statement.select.Select
-import net.sf.jsqlparser.statement.update.Update
 import net.sf.jsqlparser.util.TablesNamesFinder
-import net.sf.jsqlparser.statement.select.PlainSelect
-import net.sf.jsqlparser.statement.select.SelectExpressionItem
 
 
 open class MySqlCommandResolver : AbstractCommandResolver() {
@@ -39,6 +34,7 @@ open class MySqlCommandResolver : AbstractCommandResolver() {
 
         operation.tableName = TablesNamesFinder().getTableList(statement).stream().collect(Collectors.toList())[0]
         operation.baseCommand = baseCommand
+        operation.statement = statement
 
         when (statement) {
             is Select -> {
@@ -60,7 +56,7 @@ open class MySqlCommandResolver : AbstractCommandResolver() {
 
 
     override fun resolverCommandConditions(baseCommand: String, resolverCommandOperation: Operation): List<Condition> {
-        return resolverCommandOperation.operationResolver?.resolverConditions(baseCommand)!!
+        return resolverCommandOperation.operationResolver?.resolverConditions(baseCommand, resolverCommandOperation)!!
     }
 
     override fun assemblingOperation(operation: Operation, conditionList: List<Condition>): Operation {
