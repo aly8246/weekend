@@ -7,10 +7,7 @@ import com.github.aly8246.core.resolver.ConditionEnum
 import com.sun.org.apache.xpath.internal.operations.NotEquals
 import net.sf.jsqlparser.expression.*
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression
-import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator
-import net.sf.jsqlparser.expression.operators.relational.GreaterThan
-import net.sf.jsqlparser.expression.operators.relational.MinorThan
-import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo
+import net.sf.jsqlparser.expression.operators.relational.*
 import net.sf.jsqlparser.schema.Column
 import net.sf.jsqlparser.statement.select.PlainSelect
 import org.springframework.util.StringUtils
@@ -43,7 +40,6 @@ open class SourceConditionResolver {
         }
     }
 
-
     open fun sourceBuildCondition(plainSelect: PlainSelect): List<Condition> {
         val rootExpression: BinaryExpression = plainSelect.where as BinaryExpression
 
@@ -59,7 +55,7 @@ open class SourceConditionResolver {
         when (expression) {
             is BinaryExpression -> {
                 when (expression) {
-                    is MinorThan, is GreaterThan, is AndExpression, is NotEqualsTo, is NotEquals -> {
+                    is MinorThan, is MinorThanEquals, is GreaterThan, is AndExpression, is EqualsTo, is NotEqualsTo, is NotEquals -> {
                         val condition = Condition()
                         //and  or
                         condition.type = ConditionEnum.AND
@@ -115,10 +111,12 @@ open class SourceConditionResolver {
 //        conditions5.value = 700
 
     // return listOf(conditions3, conditions4, conditions5)
+
     /**
      * 如果节点不是MinorThan这种查询节点
      * 如果节点的左子节点和右子节点都不是查询节点
      */
+
     private fun nodeIsEnd(rootExpression: Expression): Boolean {
         return return when (rootExpression) {
             is BinaryExpression -> {
