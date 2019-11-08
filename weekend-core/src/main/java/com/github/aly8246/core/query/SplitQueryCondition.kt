@@ -23,6 +23,7 @@ open class SplitQueryCondition : SplitCondition {
     }
 
     override fun analysisGroupConditions(operation: Operation): Map<String, List<Condition>> {
+        println(operation)
         return operation.conditionList
                 .stream()
                 .filter { e -> e.type == ConditionEnum.OR || !StringUtils.isEmpty(e.group) }
@@ -30,6 +31,7 @@ open class SplitQueryCondition : SplitCondition {
     }
 
     override fun analysisSortConditions(operation: Operation): List<Condition> {
+        println(operation)
         return operation.conditionList
                 .stream()
                 .filter { e -> StringUtils.isEmpty(e.group) }
@@ -38,6 +40,7 @@ open class SplitQueryCondition : SplitCondition {
     }
 
     override fun analysisGroupByConditions(operation: Operation): List<Condition> {
+        println(operation)
         return operation.conditionList
                 .stream()
                 .filter { e -> StringUtils.isEmpty(e.group) }

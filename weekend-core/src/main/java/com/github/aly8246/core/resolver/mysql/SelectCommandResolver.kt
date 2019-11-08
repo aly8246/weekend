@@ -56,40 +56,14 @@ class SelectCommandResolver : OperationResolver {
     }
 
     override fun resolverConditions(baseCommand: String, resolverCommandOperation: Operation): List<Condition> {
-        val selectCommandResolver = resolverCommandOperation.operationResolver as SelectCommandResolver
         val select = resolverCommandOperation.statement as Select
-
-        println(select)
 
         val plain = select.selectBody as PlainSelect
         val conditionResolver = SourceConditionResolver()
 
         if (plain.where != null)
-            conditionResolver.sourceBuildCondition(plain)
-
-
-        //WHERE userMoney < 700 AND (age = 18 OR age = 22) AND 1 = 1 OR 2 = 2
-        val conditions3 = Condition()
-        conditions3.type = ConditionEnum.AND
-        conditions3.fieldName = "age"
-        conditions3.sign = OperationSignEnum.EQ
-        conditions3.value = 18
-        conditions3.group = "1"
-
-        val conditions4 = Condition()
-        conditions4.type = ConditionEnum.OR
-        conditions4.fieldName = "age"
-        conditions4.sign = OperationSignEnum.EQ
-        conditions4.value = 22
-        conditions4.group = "1"
-
-        val conditions5 = Condition()
-        conditions5.type = ConditionEnum.AND
-        conditions5.fieldName = "userMoney"
-        conditions5.sign = OperationSignEnum.LE
-        conditions5.value = 700
-
-        return listOf(conditions3, conditions4, conditions5)
+            return SourceConditionResolver().sourceBuildCondition(plain)
+        return emptyList()
     }
 
 
