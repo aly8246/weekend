@@ -63,7 +63,10 @@ class SelectCommandResolver : OperationResolver {
 
         val plain = select.selectBody as PlainSelect
         val conditionResolver = SourceConditionResolver()
-        conditionResolver.sourceBuildCondition(plain)
+
+        if (plain.where != null)
+            conditionResolver.sourceBuildCondition(plain)
+
 
         //WHERE userMoney < 700 AND (age = 18 OR age = 22) AND 1 = 1 OR 2 = 2
         val conditions3 = Condition()
