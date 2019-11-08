@@ -23,18 +23,14 @@ class SourceConditionResolver {
             val leftExpression = rootExpression.leftExpression
 
             when (rightExpression) {
-                is EqualsTo -> println("EqualsTo")
-                is AndExpression -> println("AndExpression")
-                is OrExpression -> println("AndExpression")
-                is Parenthesis -> println("Parenthesis")
-                else -> println("报错")
+                is BinaryExpression -> println("BinaryExpression条件判断")
+                is Parenthesis -> println("组合类型")
+                else -> println("未知类型")
             }
             when (leftExpression) {
-                is EqualsTo -> println("EqualsTo")
-                is AndExpression -> println("AndExpression")
-                is OrExpression -> println("AndExpression")
-                is Parenthesis -> println("Parenthesis")
-                else -> println("报错")
+                is BinaryExpression -> println("BinaryExpression条件判断")
+                is Parenthesis -> println("组合类型")
+                else -> println("未知类型")
             }
 
             when {
@@ -57,7 +53,7 @@ class SourceConditionResolver {
     private fun nodeEnd(rootExpression: Expression): Boolean = when (rootExpression) {
         is Parenthesis -> false  //是组合类型
         is Column, is LongValue, is StringValue, is DoubleValue -> true //是基本类型和字段
-        else -> when ((rootExpression as BinaryExpression).leftExpression) { //是BinaryExpression条件判断语句
+        else -> when ((rootExpression as BinaryExpression).leftExpression) { //是BinaryExpression条件判断
             is Parenthesis -> false
             !is BinaryExpression -> false
             else -> true
