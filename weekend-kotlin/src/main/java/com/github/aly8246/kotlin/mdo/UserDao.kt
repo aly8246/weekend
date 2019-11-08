@@ -17,4 +17,11 @@ interface UserDao {
 
     @Command("select * from user_info")
     fun exec2(): UserInfoMapping
+
+    //select * from user_info where name = #{name}
+    //name =小明
+    //to
+    //select * from user_info where name = '小明'
+    @Command("select * from user_info where name = #{name}")
+    fun template(name: String): List<UserInfo>
 }

@@ -16,4 +16,18 @@ class BaseTemplate : Template {
     // args command
     // 完整命令
 
+    //select * from user_info where name = #{name}
+    //name =小明
+    //to
+    //select * from user_info where name = '小明'
+
+    //select * from user_info where name = #{name}?
+    //name = null
+    //to
+    //select * from user_info
+
+    //select * from user_info where id in @{idList}
+    //idList=[1,2,3,4,5]
+    //to
+    //select * from user_info where id in (1,2,3,4,5)
 }
