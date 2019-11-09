@@ -1,6 +1,8 @@
 package com.github.aly8246.core.driver
 
 import com.github.aly8246.core.executor.SimpleExecutor
+import com.mongodb.client.MongoCursor
+import org.bson.Document
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLWarning
@@ -12,6 +14,9 @@ class MongoStatement(
         , resultSetConcurrency: Int
         , resultSetHoldability: Int
 ) : Statement {
+    private lateinit var cursor: MongoCursor<Document>
+    private var closed = false
+
     override fun clearBatch() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -50,18 +55,21 @@ class MongoStatement(
 
     override fun executeQuery(sql: String): ResultSet {
         val simpleExecutor = SimpleExecutor(sql)
-        val select = simpleExecutor.select(sql)
-        return MongoResultSet(select)
+        cursor = simpleExecutor.select(sql, connection as MongoConnection)
+        return MongoResultSet(cursor, connection as MongoConnection, this)
     }
 
     //关闭连接
     override fun close() {
-        connection.close()
+        cursor.close()
+        closed = true
+
+        mongoConnection.close()
     }
 
     //连接是否被关闭
     override fun isClosed(): Boolean {
-        return connection.isClosed
+        return closed
     }
 
     override fun getMaxFieldSize(): Int {

@@ -1,6 +1,7 @@
 package com.github.aly8246.core.executor
 
 import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
+import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
 import net.sf.jsqlparser.parser.CCJSqlParserManager
@@ -11,11 +12,10 @@ import net.sf.jsqlparser.statement.select.Select
 import org.bson.Document
 import java.io.StringReader
 
-class SimpleExecutor(var sql: String) : Executor {
+class SimpleExecutor(sql: String) : Executor {
     private var statement: Statement = CCJSqlParserManager().parse(StringReader(sql.trim()))
 
-    override fun select(sql: String): MongoCursor<Document> {
-        val configuration = configuration
+    override fun select(sql: String, mongoConnection: MongoConnection): MongoCursor<Document> {
 
         val select = statement as Select
         val plainSelect: PlainSelect = select.selectBody as PlainSelect
@@ -24,7 +24,7 @@ class SimpleExecutor(var sql: String) : Executor {
         // val selectField = this.selectField(plainSelect)
         val query = this.resolverCondition(plainSelect.where)
         PrintImpl().debug(query.toString())
-        val collection = configuration.mongoConnection.getCollection(table)
+        val collection = mongoConnection.getCollection(table)
         val find = collection.find(query)
         //todo limit
         return find.cursor()

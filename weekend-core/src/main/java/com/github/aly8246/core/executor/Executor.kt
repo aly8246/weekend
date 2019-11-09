@@ -1,5 +1,6 @@
 package com.github.aly8246.core.executor
 
+import com.github.aly8246.core.driver.MongoConnection
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
 import com.mongodb.client.MongoCursor
@@ -18,7 +19,7 @@ import org.bson.conversions.Bson
 import java.util.regex.Pattern
 
 interface Executor {
-    fun select(sql: String): MongoCursor<Document>
+    fun select(sql: String, mongoConnection: MongoConnection): MongoCursor<Document>
     fun insert(sql: String): Int
     fun update(sql: String): Int
     fun delete(sql: String): Int

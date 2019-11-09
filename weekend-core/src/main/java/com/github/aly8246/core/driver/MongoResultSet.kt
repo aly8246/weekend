@@ -1,7 +1,6 @@
 package com.github.aly8246.core.driver
 
 import com.github.aly8246.core.annotation.Command
-import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
@@ -18,7 +17,7 @@ import java.sql.Date
 import java.util.*
 import java.util.regex.Pattern
 
-class MongoResultSet(var query: MongoCursor<Document>) : ResultSet {
+class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: MongoConnection, var mongoStatement: MongoStatement) : ResultSet {
 
     private lateinit var command: Command
     private lateinit var method: Method
@@ -280,8 +279,7 @@ class MongoResultSet(var query: MongoCursor<Document>) : ResultSet {
     }
 
     override fun close() {
-        configuration.connection.close()
-        configuration.statement.close()
+        mongoStatement.close()
     }
 
     override fun updateFloat(columnIndex: Int, x: Float) {
