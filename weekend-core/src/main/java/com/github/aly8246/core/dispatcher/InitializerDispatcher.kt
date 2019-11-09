@@ -1,24 +1,20 @@
 package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.exception.WeekendException
-import com.github.aly8246.core.resolver.Operation
-import com.github.aly8246.core.query.AssemblerQuery
-import com.github.aly8246.core.resolver.CommandResolver
-import com.github.aly8246.core.resolver.mysql.MySqlCommandResolver
 import com.github.aly8246.core.template.BaseTemplate
+import com.github.aly8246.core.util.MapUtil
+
 import com.github.aly8246.core.util.ResultCase
-import org.springframework.data.mongodb.core.query.Query
+import org.bson.Document
 import java.lang.reflect.Method
+import java.sql.Connection
+import java.sql.Statement
 import java.util.*
 import java.util.regex.Pattern
 
-open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?) : AbstractDispatcher<T>(proxy, method, args), DispatcherPolicy<T>, DispatcherInitializer {
-
-    override fun executorPolicy(operation: Operation, query: Query, method: Method): T? {
-        throw WeekendException("未实现executorPolicy")
-    }
-
+open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, var statement: Statement, connection: Connection) : AbstractDispatcher<T>(proxy, method, args), DispatcherInitializer {
     protected lateinit var retClass: RetClass
     protected lateinit var command: Command
 
@@ -27,17 +23,19 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
 
         val original = template(this.command)
 
-        val operation = handleCommand(original);
+        val executeQuery = statement.executeQuery(original) as MongoResultSet
+        val query = executeQuery.query
+        var list = mutableListOf(Document())
+        list.removeAt(0)
+        while (query.hasNext()) {
+            val next = query.next()
+            list.add(next)
+        }
 
-        val query = buildQuery(operation)
+        println(list)
+        if (list.size == 1) MapUtil.mapToPojo(list[0], retClass.clazz());
 
-        var executor = executor(operation, query, method)
-
-        //依赖子类来完成
-        executor = handlePreview(executor)
-        executor = handleResult(executor)
-
-        return executor
+        return MapUtil.mapToList(list as List<MutableMap<Any?, Any?>>?, retClass.clazz()) as T
     }
 
     override fun initializer(): RetClass {
@@ -79,13 +77,6 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
 
     override fun template(command: Command): String = BaseTemplate().completeCommand(command)
 
-    override fun handleCommand(baseCommand: String): Operation = buildCondition(this.command, baseCommand)
-
-    override fun buildQuery(handleCommand: Operation): Query = AssemblerQuery().buildMongoQuery(handleCommand)
-
-    override fun executor(operation: Operation, query: Query, method: Method): T? {
-        return this.executorPolicy(operation, query, this.method)
-    }
 
     override fun handlePreview(t: T?): T? {
         return t
@@ -101,20 +92,4 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         throw WeekendException("异常regxListParamClass:$source")
     }
 
-    private fun getConditionHandler(command: Command): CommandResolver {
-        val handler = command.handler.java
-        try {
-            return handler.newInstance()
-        } catch (e: InstantiationException) {
-            e.printStackTrace()
-        } catch (e: IllegalAccessException) {
-            e.printStackTrace()
-        }
-
-        return MySqlCommandResolver()
-    }
-
-    protected fun buildCondition(command: Command, baseCommand: String): Operation {
-        return this.getConditionHandler(command).run(baseCommand)
-    }
 }

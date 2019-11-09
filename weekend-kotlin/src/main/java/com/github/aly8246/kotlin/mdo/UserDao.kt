@@ -12,11 +12,12 @@ import com.github.aly8246.kotlin.pojo.UserInfoMapping
  * @version:   ：V
  */
 interface UserDao {
-    @Command("select * from user_info where userMoney <= 700 and (age=22 or age =18) ")
+    // @Command("select * from user_info where userMoney < 700 AND (age = 18 OR age = 22)")
+    @Command("select * from user_info where userMoney <= 700 and age > 20 or ( age = 18 or id!=1)")
     fun exec(): List<UserInfo>
 
     @Command("select * from user_info")
-    fun exec2(): UserInfoMapping
+    fun exec2(): List<UserInfoMapping>
 
     //select * from user_info where name = #{name}
     //name =小明
