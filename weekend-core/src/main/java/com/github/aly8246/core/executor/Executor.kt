@@ -1,40 +1,59 @@
-package com.github.aly8246.core.resolver
+package com.github.aly8246.core.executor
 
-import com.github.aly8246.core.exception.WeekendException
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
-import com.mongodb.client.MongoDatabase
+import com.mongodb.client.MongoCursor
 import net.sf.jsqlparser.expression.*
 import net.sf.jsqlparser.expression.Function
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression
 import net.sf.jsqlparser.expression.operators.relational.*
-import net.sf.jsqlparser.parser.CCJSqlParserManager
 import net.sf.jsqlparser.schema.Column
-import net.sf.jsqlparser.schema.Table
-import net.sf.jsqlparser.statement.select.*
+import net.sf.jsqlparser.statement.select.AllColumns
+import net.sf.jsqlparser.statement.select.PlainSelect
+import net.sf.jsqlparser.statement.select.SelectExpressionItem
+import net.sf.jsqlparser.statement.select.SelectItem
+import org.bson.Document
 import org.bson.conversions.Bson
-import java.io.StringReader
 import java.util.regex.Pattern
 
-class SqlResolverImpl(var database: MongoDatabase) : SqlResolver {
-    override fun resolver(sql: String): SqlResult {
-        val statement = CCJSqlParserManager().parse(StringReader(sql.trim()))
-        val sqlResult = SqlResult()
-        when (statement) {
-            is Select -> {
-                val plainSelect: PlainSelect = statement.selectBody as PlainSelect
-                val table = plainSelect.fromItem as Table
-                sqlResult.collection = database.getCollection(table.name)
-                sqlResult.selectItem = selectField(plainSelect)
-                sqlResult.queryCondition = resolverCondition(plainSelect.where) as Bson
-            }
-            else -> throw WeekendException("暂时无法解析:$statement")
+interface Executor {
+    fun select(sql: String): MongoCursor<Document>
+    fun insert(sql: String): Int
+    fun update(sql: String): Int
+    fun delete(sql: String): Int
+
+    private fun expressionName(expression: Expression): String {
+        return when (expression) {
+            is StringValue -> expression.toString()
+            is Column -> expression.columnName
+            else -> throw  RuntimeException("无法解析的字段")
         }
-        return sqlResult
     }
 
-    private fun selectField(plainSelect: PlainSelect): BasicDBObject {
+    fun expressionValue(expression: Expression): Any? {
+        return when (expression) {
+            is StringValue -> expression.value
+            is LongValue -> expression.value
+            is DoubleValue -> expression.value
+            is DateValue -> expression.value
+            is TimeValue -> expression.value
+            is TimestampValue -> expression.value
+            is NullValue -> null
+            is JdbcParameter -> throw java.lang.RuntimeException("暂时无法解析:$expression")
+            else -> throw java.lang.RuntimeException("暂时无法解析:$expression")
+        }
+    }
+
+    fun resolverCondition(expression: Expression?): Bson {
+        val basicDBObject = BasicDBObject()
+        if (expression == null) return BasicDBObject()
+        //如果是基本类型则直接处理掉
+        resolverConditionTree(expression, basicDBObject)
+        return basicDBObject
+    }
+
+    fun selectField(plainSelect: PlainSelect): BasicDBObject {
         val fields = BasicDBObject()
         plainSelect.selectItems.forEach { e ->
             run {
@@ -54,21 +73,6 @@ class SqlResolverImpl(var database: MongoDatabase) : SqlResolver {
     }
 
 
-    private fun expressionName(expression: Expression): String {
-        return when (expression) {
-            is StringValue -> expression.toString()
-            is Column -> expression.columnName
-            else -> throw  RuntimeException("无法解析的字段")
-        }
-    }
-
-    private fun resolverCondition(expression: Expression?): DBObject {
-        val basicDBObject = BasicDBObject()
-        if (expression == null) return BasicDBObject()
-        resolverConditionTree(expression, basicDBObject)
-        return basicDBObject
-    }
-
     private fun resolverConditionTree(expression: Expression, basicDBObject: BasicDBObject) {
         when (expression) {
             is AndExpression -> {
@@ -76,19 +80,18 @@ class SqlResolverImpl(var database: MongoDatabase) : SqlResolver {
                 resolverConditionTree(expression.rightExpression, basicDBObject)
             }
             is OrExpression -> {
-                //or
                 val orDBObject = arrayOf(BasicDBObject(), BasicDBObject())
                 resolverConditionTree(expression.leftExpression, orDBObject[0])
                 resolverConditionTree(expression.rightExpression, orDBObject[1])
                 basicDBObject["%or"] = orDBObject
             }
-            //是or组合条件
             is Parenthesis -> resolverConditionTree(expression.expression, basicDBObject)
             //是关联查询的大于，大于等于，小于等于等等
             is EqualsTo -> basicDBObject[expressionName(expression.leftExpression)] = expressionValue(expression.rightExpression)
+            is EqualsTo -> appendCondition(basicDBObject, "\$lt", expression)
             is NotEqualsTo -> basicDBObject[expressionName(expression.leftExpression)] = BasicDBObject().put("\$ne", expressionValue(expression.rightExpression))
             is GreaterThan -> appendCondition(basicDBObject, "\$gt", expression)
-            is MinorThan -> appendCondition(basicDBObject, "\$let", expression)
+            is MinorThan -> appendCondition(basicDBObject, "\$lt", expression)
             is GreaterThanEquals -> appendCondition(basicDBObject, "\$gte", expression)
             is MinorThanEquals -> appendCondition(basicDBObject, "\$lte", expression)
             is Between -> {
@@ -137,25 +140,12 @@ class SqlResolverImpl(var database: MongoDatabase) : SqlResolver {
                 if (dbObject != null) {
                     dbObject as BasicDBObject
                     dbObject.append(sign, expressionValue)
+                } else {
+                    val obj: DBObject = BasicDBObject()
+                    obj.put(sign, expressionValue)
+                    basicDBObject[expressionName] = obj
                 }
-                val obj: DBObject = BasicDBObject()
-                obj.put(sign, expressionValue)
-                basicDBObject[expressionName] = obj
             }
-        }
-    }
-
-    private fun expressionValue(expression: Expression): Any? {
-        return when (expression) {
-            is StringValue -> expression.value
-            is LongValue -> expression.value
-            is DoubleValue -> expression.value
-            is DateValue -> expression.value
-            is TimeValue -> expression.value
-            is TimestampValue -> expression.value
-            is NullValue -> null
-            is JdbcParameter -> throw java.lang.RuntimeException("暂时无法解析:$expression")
-            else -> throw java.lang.RuntimeException("暂时无法解析:$expression")
         }
     }
 

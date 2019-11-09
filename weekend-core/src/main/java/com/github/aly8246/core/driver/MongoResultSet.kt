@@ -1,25 +1,174 @@
 package com.github.aly8246.core.driver
 
+import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
+import com.github.aly8246.core.exception.WeekendException
+import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
-import com.mongodb.client.MongoDatabase
 import org.bson.Document
 import java.io.InputStream
 import java.io.Reader
+import java.lang.reflect.Field
+import java.lang.reflect.Method
 import java.math.BigDecimal
 import java.net.URL
 import java.sql.*
 import java.sql.Array
 import java.sql.Date
 import java.util.*
+import java.util.regex.Pattern
 
-class MongoResultSet(var query: MongoCursor<Document>, var database: MongoDatabase) : ResultSet {
+class MongoResultSet(var query: MongoCursor<Document>) : ResultSet {
+
+    private lateinit var command: Command
+    private lateinit var method: Method
+    private var resultClassType: Class<*>? = null
+
+    fun init(command: Command, method: Method) {
+        this.command = command
+        this.method = method
+        val returnType = method.returnType
+        val canonicalName = returnType.canonicalName
+        when {
+            canonicalName != "void" -> resultClassType = try {
+                Class.forName(canonicalName).newInstance().javaClass
+            } catch (e: InstantiationException) {
+                Class.forName(regxListParamClass(method.toGenericString())).newInstance().javaClass
+            } finally {
+                val list = listOf("java.util.List", "java.util.Set", "kotlin.collections.List")
+                when {
+                    list.stream().noneMatch(canonicalName::equals) -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
+                }
+            }
+        }
+    }
+
+    /**
+     * If you want to query a List like 'List<User>'
+     */
+    private fun isList(): Boolean {
+        val returnType = this.method.returnType
+        val javaClass = this.resultClassType
+        return returnType != javaClass
+    }
+
+    /**
+     * If you not need result
+     */
+    private fun isVoid(): Boolean {
+        return resultClassType == null
+    }
+
+
+    private fun regxListParamClass(source: String): String {
+        val matcher = Pattern.compile("(?<=java.util.List<).*?(?=>)").matcher(source)
+        while (matcher.find()) return matcher.group()
+        throw WeekendException("异常regxListParamClass:$source")
+    }
+
     override fun <T : Any?> unwrap(iface: Class<T>?): T {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isWrapperFor(iface: Class<*>?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    /**
+     * return all select
+     */
+    fun getObject(): Any? {
+        val list = mutableListOf(Document())
+        list.removeAt(0)
+
+        while (query.hasNext()) list.add(query.next())
+
+        return when {
+            this.isList() -> {
+                mapToList(list, resultClassType)
+            }
+            this.isVoid() -> {
+                null
+            }
+            else -> {
+                if (list.size >= 1) throw WeekendException("That's too much result,find ${list.size} result in >>  $method")
+                val document = list[0]
+                mapToPojo(document, resultClassType)
+            }
+        }
     }
+
+    fun mapToList(resourceMap: List<Map<*, *>>?, clazz: Class<*>?): List<*> {
+        val returnList: MutableList<Any> = ArrayList()
+        if (resourceMap == null || resourceMap.isEmpty()) {
+            return returnList
+        }
+        for (map in resourceMap) {
+            val mapToPojo = this.mapToPojo(map, clazz)
+            returnList.add(mapToPojo!!)
+        }
+        return returnList
+    }
+
+    fun mapToPojo(map: Map<*, *>?, clazz: Class<*>?): Any? {
+        if (map == null) return null
+        if (clazz == null) throw WeekendException("未知错误")
+        val newInstance = clazz.newInstance()
+        for (key in map.keys) {
+            var field: Field? = null
+            try {
+                field = clazz.getDeclaredField(key as String)
+            } catch (e: NoSuchFieldException) {
+                try {
+                    if (key.toString().substring(0, 1) == "_")
+                        field = clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
+                } catch (e2: NoSuchFieldException) {
+                    PrintImpl().debug("不存在的字段${key.toString()}")
+                    continue
+                }
+            }
+
+            field!!.isAccessible = true
+            when {
+                field.type.name == "java.lang.String" -> {
+                    field.set(newInstance, map[key].toString())
+                }
+                field.type.name == "java.lang.Integer" -> {
+                    field.set(newInstance, map[key].toString().toInt())
+                }
+                field.type.name == "java.lang.Double" -> {
+                    field.set(newInstance, map[key].toString().toDouble())
+                }
+                field.type.name == "java.lang.Long" -> {
+                    field.set(newInstance, map[key].toString().toLong())
+                }
+                field.type.name == "java.lang.Short" -> {
+                    field.set(newInstance, map[key].toString().toShort())
+                }
+                field.type.name == "java.lang.Float" -> {
+                    field.set(newInstance, map[key].toString().toFloat())
+                }
+
+                field.type.name == "int" -> {
+                    field.set(newInstance, map[key].toString().toInt())
+                }
+                field.type.name == "double" -> {
+                    field.set(newInstance, map[key].toString().toDouble())
+                }
+                field.type.name == "long" -> {
+                    field.set(newInstance, map[key].toString().toLong())
+                }
+                field.type.name == "short" -> {
+                    field.set(newInstance, map[key].toString().toShort())
+                }
+                field.type.name == "float" -> {
+                    field.set(newInstance, map[key].toString().toFloat())
+                }
+                else -> field.set(newInstance, map[key])
+            }
+
+        }
+        return newInstance
+    }
+
+    override fun isWrapperFor(iface: Class<*>?): Boolean = false
 
 
     override fun findColumn(columnLabel: String?): Int {
@@ -131,7 +280,8 @@ class MongoResultSet(var query: MongoCursor<Document>, var database: MongoDataba
     }
 
     override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        configuration.connection.close()
+        configuration.statement.close()
     }
 
     override fun updateFloat(columnIndex: Int, x: Float) {
@@ -431,6 +581,7 @@ class MongoResultSet(var query: MongoCursor<Document>, var database: MongoDataba
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+
     override fun getObject(columnIndex: Int): Any {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -448,6 +599,7 @@ class MongoResultSet(var query: MongoCursor<Document>, var database: MongoDataba
     }
 
     override fun <T : Any?> getObject(columnIndex: Int, type: Class<T>?): T {
+
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

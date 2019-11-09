@@ -1,8 +1,10 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.august.coretest.driver.MongoAddress
 import com.mongodb.MongoClient
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import net.sf.jsqlparser.schema.Table
+import org.bson.Document
 import java.sql.*
 import java.util.*
 import java.util.concurrent.Executor
@@ -23,6 +25,14 @@ class MongoConnection() : Connection {
 
     fun database(): MongoDatabase {
         return mongoClient.getDatabase(dbAddress.dbName())
+    }
+
+    fun getCollection(collectionName: String): MongoCollection<Document> {
+        return this.database().getCollection(collectionName)
+    }
+
+    fun getCollection(table: Table): MongoCollection<Document> {
+        return this.database().getCollection(table.name)
     }
 
     override fun prepareStatement(sql: String?, resultSetType: Int, resultSetConcurrency: Int): PreparedStatement {

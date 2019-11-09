@@ -1,12 +1,13 @@
 package com.github.aly8246.core.util
 
 import java.util.*
+import kotlin.reflect.KClass
 
 object ResultCase {
     private val listList = ArrayList<Class<*>>()
     private val mapList = ArrayList<Class<*>>()
     private val setList = ArrayList<Class<*>>()
-    private val allList = ArrayList<Class<*>>()
+    public val allList = ArrayList<Class<*>>()
 
     init {
         listList.add(List::class.java)
@@ -27,7 +28,7 @@ object ResultCase {
         allList.addAll(setList)
     }
 
-    fun getInstance(aClass: Class<*>): Any? {
+    fun getInstance(aClass: Class<*>?): Any? {
         if (aClass == List::class.java) return ArrayList<Any>()
         if (listList.stream().anyMatch { aClass == it }) return ArrayList<Any>()
         if (mapList.stream().anyMatch { aClass == it })
@@ -35,7 +36,7 @@ object ResultCase {
         if (setList.stream().anyMatch { aClass == it })
             return HashSet<Any>()
         try {
-            return aClass.newInstance()
+            return aClass?.newInstance()
         } catch (ignored: InstantiationException) {
             //返回结果集为void
         } catch (ignored: IllegalAccessException) {
@@ -44,8 +45,9 @@ object ResultCase {
         return null
     }
 
-    fun containerCollection(aClass: Class<*>): Boolean {
-        return allList.stream().anyMatch { aClass == it }
+    fun containerCollection(javaClass: Class<*>?): Boolean {
+        return allList.stream().anyMatch { javaClass == it }
     }
+
 
 }

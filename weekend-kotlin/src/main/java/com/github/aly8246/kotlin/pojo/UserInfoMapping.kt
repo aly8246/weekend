@@ -11,12 +11,12 @@ import com.github.aly8246.core.annotation.Mapping
  */
 class UserInfoMapping {
     @Mapping(name = ["aa"], value = ["a"])
-    private lateinit var id: String
+    private var id: String? = null
 
-    private lateinit var name: String
+    private var name: String? = null
 
-    private var userMoney: Double = 0.0
-    private var age: Int = 0
+    private var userMoney: Double? = null
+    private var age: Int? = null
 
 
     constructor(id: String, name: String, userMoney: Double, age: Int) {

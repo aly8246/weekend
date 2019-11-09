@@ -1,13 +1,13 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.core.resolver.SqlResolverImpl
+import com.github.aly8246.core.executor.SimpleExecutor
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLWarning
 import java.sql.Statement
 
 class MongoStatement(
-        var mongoConnection: MongoConnection
+        private var mongoConnection: MongoConnection
         , resultSetType: Int
         , resultSetConcurrency: Int
         , resultSetHoldability: Int
@@ -48,11 +48,10 @@ class MongoStatement(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun executeQuery(sql: String?): ResultSet {
-        val sqlResolverImpl = SqlResolverImpl(mongoConnection.database())
-        val sqlResult = sqlResolverImpl.resolver(sql!!)
-        val cursor = sqlResult.collection.find(sqlResult.queryCondition).cursor()
-        return MongoResultSet(cursor, mongoConnection.database())
+    override fun executeQuery(sql: String): ResultSet {
+        val simpleExecutor = SimpleExecutor(sql)
+        val select = simpleExecutor.select(sql)
+        return MongoResultSet(select)
     }
 
     //关闭连接

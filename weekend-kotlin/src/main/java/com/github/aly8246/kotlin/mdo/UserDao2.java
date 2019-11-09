@@ -14,9 +14,9 @@ import java.util.List;
  * @version: ：V
  */
 public interface UserDao2 {
-@Command("select * from user_info")
-List<UserInfo> exec();
+    @Command("select * from user_info")
+    List<UserInfo> exec();
 
-@Command("select * from user_info")
-UserInfoMapping exec2();
+    @Command("select * from user_info")
+    UserInfoMapping exec2();
 }

@@ -6,4 +6,4 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @MustBeDocumented
-annotation class Command(vararg val value: String, val returnType: KClass<*> = Collection::class)
+annotation class Command(vararg val value: String)

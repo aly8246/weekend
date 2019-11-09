@@ -1,6 +1,7 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.august.coretest.driver.MongoAddress
+import com.github.aly8246.core.configuration.ConfigurationUtil
+import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
 import java.sql.Connection
 import java.sql.Driver
 import java.sql.DriverManager
@@ -11,6 +12,8 @@ import java.util.logging.Logger
 class MongoDriver : Driver {
     override fun connect(url: String, info: Properties?): Connection {
         val mongoAddress = MongoAddress(url)
+        if (configuration.mongoAddress != null)
+            return MongoConnection(configuration.mongoAddress!!)
         return MongoConnection(mongoAddress)
     }
 

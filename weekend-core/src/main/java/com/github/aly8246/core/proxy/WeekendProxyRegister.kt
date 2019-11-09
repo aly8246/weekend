@@ -1,11 +1,14 @@
 package com.github.aly8246.core.proxy
 
 import com.github.aly8246.core.annotation.WeekendDaoScan
+import com.github.aly8246.core.configuration.ConfigurationUtil
 import com.github.aly8246.core.util.PrintImpl
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.beans.factory.support.BeanNameGenerator
 import org.springframework.beans.factory.support.GenericBeanDefinition
+import org.springframework.boot.autoconfigure.AutoConfigureAfter
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.*
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar
@@ -29,6 +32,8 @@ import java.util.*
  * @version: ：V
  */
 @Configuration
+@AutoConfigureAfter(ConfigurationUtil::class)
+@ConditionalOnBean(ConfigurationUtil::class)
 open class WeekendProxyRegister : ImportBeanDefinitionRegistrar, ResourceLoaderAware {
     private var resourcePatternResolver: ResourcePatternResolver? = null
     private var metadataReaderFactory: MetadataReaderFactory? = null
