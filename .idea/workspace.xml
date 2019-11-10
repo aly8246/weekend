@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fa01c216-263d-4e2c-b85c-6c03584c5fec" name="Default Changelist" comment="Merge branch 'mongo-driver'&#10;&#10;# Conflicts:&#10;#&#9;weekend-core/target/classes/META-INF/weekend-core.kotlin_module&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/Command.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/Mapping.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/WeekendDao.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/WeekendDaoScan.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/AbstractDispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/Dispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/DispatcherFactory.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/InitializerDispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/RetClassEnum.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxy.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyFactory.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyRegister$Companion.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyRegister.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/template/BaseTemplate.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/template/Template.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/Log.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/Print.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/PrintImpl.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/ResultCase.class&#10;#&#9;weekend-dev/target/classes/com/github/aly8246/dev/WeekendDevApplication.class&#10;#&#9;weekend-kotlin/target/classes/application.yml&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/WeekendKotlinApplication.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao2.class">
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/Command.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/Mapping.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/WeekendDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/WeekendDaoScan.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/configuration/ConfigurationUtil.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/configuration/Configurations.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/configuration/Datasource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/AbstractDispatcher.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/Dispatcher.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/DispatcherFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/DispatcherFactoryPolicy.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/InitializerDispatcher.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/OriginalDispatcher.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/RetClassEnum.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/driver/MongoAddress.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/driver/MongoConnection.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/driver/MongoDriver.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/driver/MongoResultSet.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/driver/MongoStatement.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exception/WeekendException.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/executor/Executor.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/executor/SimpleExecutor.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/proxy/WeekendProxy.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/proxy/WeekendProxyFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/proxy/WeekendProxyRegister.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/template/BaseTemplate.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/template/Template.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/MapUtil.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/PrintImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/ResultCase.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-core/src/main/resources/META-INF/additional-spring-configuration-metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/mdo/TestMongoDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/pojo/UserInfoMapping.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-core/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/SomeThing.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/Exec.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/Mapping.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/WeekendDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/annotation/WeekendDaoScan.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/criteria/CriteriaType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/criteria/CriteriaUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/AbstractDispatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/CustomDispatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/Dispatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/DispatcherManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/DispatcherSelector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/RetClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/RetClassEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/dispatcher/SimpleDispatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exec/AbstractExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exec/BaseExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exec/CustomExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exec/Executor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exec/InsertExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/exec/SelectExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/AbstractCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/AbstractJsCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/AbstractSqlCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/Condition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/Conditions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/JsConditionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/Operation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/OperationEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/QueryEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/handler/SqlConditionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/note/readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/note/weekedn.pos" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/page/PageResult.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/proxy/WeekendProxy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/proxy/WeekendProxyFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/proxy/WeekendProxyRegister.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/AbstractWeekendQuery.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/QueryRunner.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/WeekendQuery.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/enmu/QueryEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/queryBuilder/AndBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/queryBuilder/OrBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/queryBuilder/QueryBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/queryBuilder/basic/CriteriaBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/query/queryBuilder/basic/OperationSignCriteriaBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/template/BaseTemplate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/template/Template.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/Print.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/MongoTemplateUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/Print.java" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/Log.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/PrintImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/ReturnTypeUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/util/WeekendResultObj.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-dev/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/Test3.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/TestOne.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/WeekendDevApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/WeekendDevApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/dd/B.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/mDao/TestDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/mDao/aaa.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/pojo/UserInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/pojo/UserInfo2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-kotlin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-kotlin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/WeekendKotlinApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/WeekendKotlinApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/mdo/UserDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/mdo/UserDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/mdo/UserDao2.java" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-kotlin/src/main/java/com/github/aly8246/kotlin/mdo/UserDao2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekend-kotlin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/weekend-kotlin/src/main/resources/application.yml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="weekend" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="mongo-driver" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+    <option name="SWAP_SIDES_IN_COMPARE_BRANCHES" value="true" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="C:\Users\30675\.m2\repository" />
+        <option name="userSettingsFile" value="C:\Users\30675\.m2\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1SW76fSgQXCrrIfj63qfZjlvpcA" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/weekend-core/src/main" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.github.aly8246.core.driver" />
+      <recent name="com.github.aly8246.core.resolver.mysql" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\workspace\weekend\weekend-core\src\main" />
+      <recent name="E:\workspace\weekend\weekend-core\src\main\java\com\github\aly8246\core\driver" />
+      <recent name="E:\workspace\weekend\weekend-core\src\main\java\com\github\aly8246\core" />
+      <recent name="E:\workspace\weekend" />
+      <recent name="E:\workspace\weekend\weekend-core\src\main\java\com\github\aly8246\core\note" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.github.aly8246.core.driver" />
+      <recent name="com.github.aly8246.core.dispatcher" />
+      <recent name="com.github.aly8246.core.proxy" />
+      <recent name="com.github.aly8246.dev.pojo" />
+      <recent name="com.github.aly8246.core.exec" />
+    </key>
+    <key name="CreateKotlinClassDialog.RecentsKey">
+      <recent name="com.github.aly8246.core.executor" />
+      <recent name="com.github.aly8246.core.resolver" />
+      <recent name="com.github.aly8246.core.exec" />
+      <recent name="com.github.aly8246.core.dispatcher" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Kotlin.com.github.aly8246.kotlin.WeekendKotlinApplication">
+    <configuration name="WeekendProxyRegister" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.github.aly8246.core2.proxy.WeekendProxyRegister" />
+      <module name="weekend-core (1)" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.aly8246.core2.dispatcher.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in weekend-kotlin" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="weekend-kotlin" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <module name="weekend-core (1)" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.github.aly8246.kotlin.WeekendKotlinApplication" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
+      <module name="weekend-kotlin" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.github.aly8246.kotlin.WeekendKotlinApplication" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <module name="weekend-core (1)" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WeekendDevApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="weekend-dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.github.aly8246.dev.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.aly8246.dev.WeekendDevApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WeekendKotlinApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="weekend-kotlin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.aly8246.kotlin.WeekendKotlinApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.com.github.aly8246.kotlin.WeekendKotlinApplication" />
+        <item itemvalue="Spring Boot.WeekendDevApplication" />
+        <item itemvalue="JUnit.All in weekend-kotlin" />
+        <item itemvalue="Application.WeekendProxyRegister" />
+        <item itemvalue="Kotlin.com.github.aly8246.kotlin.WeekendKotlinApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fa01c216-263d-4e2c-b85c-6c03584c5fec" name="Default Changelist" comment="" />
+      <created>1571667323370</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1571667323370</updated>
+      <workItem from="1571667324529" duration="7625000" />
+      <workItem from="1571675372194" duration="8051000" />
+      <workItem from="1571748130659" duration="1449000" />
+      <workItem from="1571830781483" duration="612000" />
+      <workItem from="1572068257927" duration="29081000" />
+      <workItem from="1572148834548" duration="2483000" />
+      <workItem from="1572445750216" duration="1618000" />
+      <workItem from="1572447376517" duration="7284000" />
+      <workItem from="1572625153370" duration="3197000" />
+      <workItem from="1572690918387" duration="51000" />
+      <workItem from="1572698902630" duration="2037000" />
+      <workItem from="1572702721401" duration="638000" />
+      <workItem from="1572754303718" duration="32000" />
+      <workItem from="1572764955217" duration="1438000" />
+      <workItem from="1572767029592" duration="1687000" />
+      <workItem from="1573219028370" duration="11702000" />
+      <workItem from="1573275466165" duration="6543000" />
+      <workItem from="1573298061348" duration="1248000" />
+      <workItem from="1573300296795" duration="24125000" />
+      <workItem from="1573337745010" duration="879000" />
+      <workItem from="1573359191035" duration="1863000" />
+      <workItem from="1573361074234" duration="2631000" />
+    </task>
+    <task id="LOCAL-00001" summary="pom错误">
+      <created>1571674916596</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1571674916596</updated>
+    </task>
+    <task id="LOCAL-00002" summary="动态代理工厂返回实例化好的接口文件">
+      <created>1571682991928</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1571682991928</updated>
+    </task>
+    <task id="LOCAL-00003" summary="优化扫描接口">
+      <created>1572084501251</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1572084501251</updated>
+    </task>
+    <task id="LOCAL-00004" summary="建立基础调度器">
+      <created>1572084872826</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1572084872826</updated>
+    </task>
+    <task id="LOCAL-00005" summary="优化调度器继承关系">
+      <created>1572154981958</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1572154981958</updated>
+    </task>
+    <task id="LOCAL-00006" summary="kotlin分支">
+      <created>1572454949441</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1572454949441</updated>
+    </task>
+    <task id="LOCAL-00007" summary="or和and条件解构&#10;remark:所有的and为单独条件，如果存在or，则or为一个分组，其中or则直接进行区分是and和or，然后group为同一个">
+      <created>1573220318030</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1573220318030</updated>
+    </task>
+    <task id="LOCAL-00008" summary="模板字符串替换需求建立">
+      <created>1573223251328</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1573223251328</updated>
+    </task>
+    <task id="LOCAL-00009" summary="基础版本">
+      <created>1573318307704</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1573318307704</updated>
+    </task>
+    <task id="LOCAL-00010" summary="支持select简单查询">
+      <created>1573334674075</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1573334674075</updated>
+    </task>
+    <task id="LOCAL-00011" summary="connection和statement属于每个连接，不应该放到全局变量">
+      <created>1573338604473</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1573338604473</updated>
+    </task>
+    <task id="LOCAL-00012" summary="调整项目结构">
+      <created>1573362156950</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1573362156950</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="range">
+                    <value>
+                      <list>
+                        <option value="HEAD..mongo-driver" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_WIDTH">
+                <map>
+                  <entry key="3" value="155" />
+                </map>
+              </option>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="pom错误" />
+    <MESSAGE value="动态代理工厂返回实例化好的接口文件" />
+    <MESSAGE value="优化扫描接口" />
+    <MESSAGE value="建立基础调度器" />
+    <MESSAGE value="优化调度器继承关系" />
+    <MESSAGE value="kotlin分支" />
+    <MESSAGE value="or和and条件解构&#10;remark:所有的and为单独条件，如果存在or，则or为一个分组，其中or则直接进行区分是and和or，然后group为同一个" />
+    <MESSAGE value="模板字符串替换需求建立" />
+    <MESSAGE value="基础版本" />
+    <MESSAGE value="支持select简单查询" />
+    <MESSAGE value="connection和statement属于每个连接，不应该放到全局变量" />
+    <MESSAGE value="调整项目结构" />
+    <MESSAGE value="将mongo-driver切换到主分支" />
+    <MESSAGE value="Merge branch 'mongo-driver'&#10;&#10;# Conflicts:&#10;#&#9;weekend-kotlin/target/classes/application.yml&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/WeekendKotlinApplication.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao2.class" />
+    <MESSAGE value="Merge branch 'mongo-driver'&#10;&#10;# Conflicts:&#10;#&#9;weekend-core/target/classes/META-INF/weekend-core.kotlin_module&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/Command.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/Mapping.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/WeekendDao.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/WeekendDaoScan.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/AbstractDispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/Dispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/DispatcherFactory.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/InitializerDispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/RetClassEnum.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxy.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyFactory.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyRegister$Companion.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyRegister.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/template/BaseTemplate.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/template/Template.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/Log.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/Print.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/PrintImpl.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/ResultCase.class&#10;#&#9;weekend-dev/target/classes/com/github/aly8246/dev/WeekendDevApplication.class&#10;#&#9;weekend-kotlin/target/classes/application.yml&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/WeekendKotlinApplication.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao2.class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'mongo-driver'&#10;&#10;# Conflicts:&#10;#&#9;weekend-core/target/classes/META-INF/weekend-core.kotlin_module&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/Command.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/Mapping.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/WeekendDao.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/annotation/WeekendDaoScan.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/AbstractDispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/Dispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/DispatcherFactory.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/InitializerDispatcher.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/dispatcher/RetClassEnum.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxy.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyFactory.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyRegister$Companion.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/proxy/WeekendProxyRegister.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/template/BaseTemplate.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/template/Template.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/Log.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/Print.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/PrintImpl.class&#10;#&#9;weekend-core/target/classes/com/github/aly8246/core/util/ResultCase.class&#10;#&#9;weekend-dev/target/classes/com/github/aly8246/dev/WeekendDevApplication.class&#10;#&#9;weekend-kotlin/target/classes/application.yml&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/WeekendKotlinApplication.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao.class&#10;#&#9;weekend-kotlin/target/classes/com/github/aly8246/kotlin/mdo/UserDao2.class" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/exec/CustomExecutor.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/dispatcher/RetClass.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/dispatcher/CustomDispatcher.java</url>
+          <line>30</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/proxy/DispatcherSelector.java</url>
+          <line>57</line>
+          <option name="timeStamp" value="79" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/exec/SelectExecutor.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="80" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/dispatcher/SimpleDispatcher.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="82" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/util/WeekendResultObj.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="92" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core2/proxy/DispatcherSelector.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/weekend-dev/src/main/java/com/github/aly8246/dev/WeekendDevApplication.java</url>
+          <line>12</line>
+          <option name="timeStamp" value="107" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/resolver/mysql/SourceConditionResolver.kt</url>
+          <line>51</line>
+          <option name="timeStamp" value="101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/weekend-core/src/main/java/com/github/aly8246/core/resolver/mysql/SourceConditionResolver.kt</url>
+          <line>36</line>
+          <option name="timeStamp" value="105" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JetRunConfigurationType">
+        <watch expression="((Query)query).skip" custom="org.springframework.data.mongodb.core.query.Query" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

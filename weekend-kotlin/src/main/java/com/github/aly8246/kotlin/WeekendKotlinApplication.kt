@@ -32,11 +32,9 @@ open class WeekendKotlinApplication {
 
     @Bean
     open fun test() {
-        val exec = userDao.exec()
-        val exec2 = userDao2.exec()
-        println(exec.size)
-        exec.listIterator().forEach { e -> println(e) }
-        exec2.listIterator().forEach { e -> println(e) }
+        //  println(userDao2.exec2())
+        // println(userDao.exec2())
+        userDao.exec().listIterator().forEach { e -> println(e) }
+        userDao2.exec().listIterator().forEach { e -> println(e) }
     }
-
 }

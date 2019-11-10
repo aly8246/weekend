@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "weekend",
+      "type": "com.github.aly8246.core.configuration.WeekendProperties",
+      "sourceType": "com.github.aly8246.core.configuration.WeekendProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "weekend.base-package",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aly8246.core.configuration.WeekendProperties",
+      "defaultValue": "base-package"
+    },
+    {
+      "name": "weekend.properties",
+      "type": "java.util.Properties",
+      "sourceType": "com.github.aly8246.core.configuration.WeekendProperties"
+    }
+  ],
+  "hints": []
+}

@@ -1,7 +1,8 @@
 package com.github.aly8246.kotlin.mdo
 
-import com.github.aly8246.core.annotation.Exec
+import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.kotlin.pojo.UserInfo
+import com.github.aly8246.kotlin.pojo.UserInfoMapping
 
 /**
  * @Author     ：南有乔木
@@ -11,6 +12,16 @@ import com.github.aly8246.kotlin.pojo.UserInfo
  * @version:   ：V
  */
 interface UserDao {
-    @Exec("select * from user_info")
+    @Command("select * from user_info where userMoney in (500,700) and age=18")
     fun exec(): List<UserInfo>
+
+    @Command("select * from user_info")
+    fun exec2(): List<UserInfoMapping>
+
+    //select * from user_info where name = #{name}
+    //name =小明
+    //to
+    //select * from user_info where name = '小明'
+    @Command("select * from user_info where name = #{name}")
+    fun template(name: String): List<UserInfo>
 }
