@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.aly8246</groupId>
-    <artifactId>weekend</artifactId>
+    <artifactId>weekend-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>weekend</name>
+    <name>weekend-parent</name>
     <description>Demo project for Spring Boot</description>
     <packaging>pom</packaging>
 
