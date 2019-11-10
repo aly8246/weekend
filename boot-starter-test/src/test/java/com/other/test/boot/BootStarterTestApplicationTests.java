@@ -1,13 +1,13 @@
-package com.github.aly8246.dev;
+package com.other.test.boot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WeekendDevApplicationTests {
+class BootStarterTestApplicationTests {
 
-@Test
-void contextLoads() {
-}
+    @Test
+    void contextLoads() {
+    }
 
 }

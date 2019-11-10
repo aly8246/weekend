@@ -1,7 +1,6 @@
 package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.Command
-import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.exception.WeekendException

@@ -1,6 +1,6 @@
 package com.github.aly8246.core.dispatcher
 
-import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
+import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.driver.MongoConnection
 import java.lang.reflect.Method
 import java.sql.Connection
@@ -13,6 +13,6 @@ open class DispatcherFactory<T> : DispatcherFactoryPolicy<T> {
 
         val connection: Connection = DriverManager.getConnection(configuration.datasourceUrl)
 
-        return OriginalDispatcher(proxy, method, args,connection as MongoConnection)
+        return OriginalDispatcher(proxy, method, args, connection as MongoConnection)
     }
 }

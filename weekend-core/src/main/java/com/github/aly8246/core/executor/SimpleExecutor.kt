@@ -1,6 +1,5 @@
 package com.github.aly8246.core.executor
 
-import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor

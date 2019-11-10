@@ -17,8 +17,9 @@
 
     <modules>
         <module>weekend-core</module>
-        <module>weekend-dev</module>
         <module>weekend-kotlin</module>
+        <module>weekend-spring-boot-starter</module>
+        <module>boot-starter-test</module>
     </modules>
 
     <properties>

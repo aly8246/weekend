@@ -1,7 +1,6 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.core.configuration.ConfigurationUtil
-import com.github.aly8246.core.configuration.ConfigurationUtil.Companion.configuration
+import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import java.sql.Connection
 import java.sql.Driver
 import java.sql.DriverManager
