@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="weekend-dev" />
+        <module name="weekend (1)" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="weekend" target="1.8" />
+      <module name="weekend (1)" target="1.8" />
+      <module name="weekend-core" target="1.5" />
+      <module name="weekend-core (1)" target="1.8" />
+      <module name="weekend-dev" target="1.8" />
+      <module name="weekend-kotlin" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="weekend (1)" options="-parameters" />
+      <module name="weekend-core" options="-parameters" />
+      <module name="weekend-core (1)" options="-parameters" />
+      <module name="weekend-dev" options="-parameters" />
+      <module name="weekend-kotlin" options="-parameters" />
+    </option>
+  </component>
+</project>

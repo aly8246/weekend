@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/weekend.iml" filepath="$PROJECT_DIR$/.idea/weekend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weekend-core/weekend (1).iml" filepath="$PROJECT_DIR$/weekend-core/weekend (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/weekend-dev/weekend-dev.iml" filepath="$PROJECT_DIR$/weekend-dev/weekend-dev.iml" />
+    </modules>
+  </component>
+</project>
