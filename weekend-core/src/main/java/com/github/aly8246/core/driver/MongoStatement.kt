@@ -63,7 +63,6 @@ class MongoStatement(
     override fun close() {
         cursor.close()
         closed = true
-
         mongoConnection.close()
     }
 

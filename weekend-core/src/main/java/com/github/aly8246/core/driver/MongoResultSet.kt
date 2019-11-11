@@ -211,7 +211,6 @@ class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnecti
                 field.type.name == "java.lang.Float" -> {
                     field.set(newInstance, mappingMap[key].toString().toFloat())
                 }
-
                 field.type.name == "int" -> {
                     field.set(newInstance, mappingMap[key].toString().toInt())
                 }

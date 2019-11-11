@@ -27,13 +27,12 @@ class RegexTemplate : BaseTemplate() {
         }
     }
 
-    fun processTemplate(template: String?, params: MutableMap<Parameter, Any?>, regx: String): String {
-        var paramMap: MutableMap<String, Any?> = mutableMapOf()
+    private fun processTemplate(template: String?, params: MutableMap<Parameter, Any?>, regx: String): String {
+        val paramMap: MutableMap<String, Any?> = mutableMapOf()
         params.forEach { e ->
-            run {
-                paramMap.put(e.key.name, e.value)
-            }
+            paramMap[e.key.name] = e.value
         }
+        //TODO 如果参数值为空，则去掉本段的参数替换
         val m: Matcher = Pattern.compile(regx).matcher(template)
         val sb = StringBuffer()
         while (m.find()) {
