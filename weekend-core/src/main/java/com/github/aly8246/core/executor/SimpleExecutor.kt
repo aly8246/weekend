@@ -1,5 +1,6 @@
 package com.github.aly8246.core.executor
 
+import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
@@ -22,9 +23,15 @@ class SimpleExecutor(sql: String) : Executor {
 
         // val selectField = this.selectField(plainSelect)
         val query = this.resolverCondition(plainSelect.where)
-        PrintImpl().debug(query.toString())
+
+        if (configuration.showCondition!!) {
+            PrintImpl().debug("table  ${table.name}")
+            PrintImpl().debug("condition  $query")
+        }
+
         val collection = mongoConnection.getCollection(table)
         val find = collection.find(query)
+
         //todo limit
         return find.cursor()
     }

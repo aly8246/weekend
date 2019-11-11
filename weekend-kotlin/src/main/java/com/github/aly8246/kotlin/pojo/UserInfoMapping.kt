@@ -10,7 +10,7 @@ import com.github.aly8246.core.annotation.Mapping
  * @version:   ：V
  */
 class UserInfoMapping {
-    @Mapping(name = ["aa"], value = ["a"])
+    @Mapping(name = ["aa"], dbName = ["a"])
     private var id: String? = null
 
     private var name: String? = null

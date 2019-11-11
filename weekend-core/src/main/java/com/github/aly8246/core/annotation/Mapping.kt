@@ -6,4 +6,4 @@ import java.lang.annotation.Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @Inherited
 @MustBeDocumented
-annotation class Mapping(vararg val value: String, val name: Array<String>)
+annotation class Mapping(vararg val dbName: String, val name: Array<String>)

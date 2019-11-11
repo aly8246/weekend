@@ -17,8 +17,11 @@ open class WeekendAutoConfiguration {
     open fun init() {
         configuration.driverName = datasourceProperties.driverName
         configuration.datasourceUrl = datasourceProperties.uri
+
         if (datasourceProperties.uri == null) throw RuntimeException("The URI must like >> jdbc:mongodb://localhost:27017/weekend")
         val mongoAddress = configuration.datasourceUrl?.let { MongoAddress(it) }
         configuration.mongoAddress = mongoAddress
     }
+
+
 }

@@ -10,7 +10,6 @@ abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var met
 
     abstract fun run(): T?
 
-    abstract fun syntaxCheck(command: Command): String
 
     abstract fun template(command: Command): String
 

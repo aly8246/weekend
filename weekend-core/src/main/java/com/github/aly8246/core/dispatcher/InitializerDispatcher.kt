@@ -5,6 +5,7 @@ import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.template.BaseTemplate
+import com.github.aly8246.core.template.RegexTemplate
 
 import java.lang.reflect.Method
 
@@ -29,8 +30,7 @@ open class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>
         return executeQuery.getObject() as T ?: return null
     }
 
-    override fun syntaxCheck(command: Command): String = BaseTemplate().completeCommand(command)
 
-    override fun template(command: Command): String = BaseTemplate().completeCommand(command)
+    override fun template(command: Command): String = RegexTemplate().completeCommand(command)
 
 }

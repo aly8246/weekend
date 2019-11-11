@@ -1,6 +1,7 @@
 package com.github.aly8246.core.driver
 
 import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
@@ -94,7 +95,7 @@ class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: Mong
         }
     }
 
-    fun mapToList(resourceMap: List<Map<*, *>>?, clazz: Class<*>?): List<*> {
+    private fun mapToList(resourceMap: List<Map<*, *>>?, clazz: Class<*>?): List<*> {
         val returnList: MutableList<Any> = ArrayList()
         if (resourceMap == null || resourceMap.isEmpty()) {
             return returnList
@@ -106,7 +107,7 @@ class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: Mong
         return returnList
     }
 
-    fun mapToPojo(map: Map<*, *>?, clazz: Class<*>?): Any? {
+    private fun mapToPojo(map: Map<*, *>?, clazz: Class<*>?): Any? {
         if (map == null) return null
         if (clazz == null) throw WeekendException("未知错误")
         val newInstance = clazz.newInstance()
@@ -116,10 +117,11 @@ class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: Mong
                 field = clazz.getDeclaredField(key as String)
             } catch (e: NoSuchFieldException) {
                 try {
-                    if (key.toString().substring(0, 1) == "_")
-                        field = clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
+                    //if (key.toString().substring(0, 1) == "_")
+                    field = clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
                 } catch (e2: NoSuchFieldException) {
-                    PrintImpl().debug("不存在的字段${key.toString()}")
+                    if (configuration.nonFieldRemind!!)
+                        PrintImpl().debug("不存在的字段${key.toString()}")
                     continue
                 }
             }

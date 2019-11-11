@@ -6,7 +6,7 @@ import java.util.*
 
 @Service
 @ConfigurationProperties(prefix = "weekend.mongodb")
-class DatasourceProperties {
+open class DatasourceProperties {
     private val properties = Properties()
     open fun getProperties(): Properties {
         return this.properties
@@ -30,4 +30,5 @@ class DatasourceProperties {
         set(value) {
             this.properties.setProperty("driver-name", value)
         }
+
 }

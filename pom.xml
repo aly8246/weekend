@@ -17,12 +17,13 @@
 
     <modules>
         <module>weekend-core</module>
-        <module>weekend-kotlin</module>
         <module>weekend-spring-boot-starter</module>
+        <module>weekend-kotlin</module>
         <module>boot-starter-test</module>
     </modules>
 
     <properties>
+        <project.RELEASE.version>1.0.1.RELEASE</project.RELEASE.version>
         <java.version>1.8</java.version>
         <kotlin.version>1.3.50</kotlin.version>
     </properties>
@@ -31,12 +32,7 @@
             <dependency>
                 <groupId>com.github.aly8246</groupId>
                 <artifactId>weekend-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.aly8246</groupId>
-                <artifactId>weekend-dev</artifactId>
-                <version>${project.version}</version>
+                <version>${project.RELEASE.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
