@@ -74,7 +74,7 @@ interface Executor {
     }
 
 
-    private fun resolverConditionTree(expression: Expression, basicDBObject: BasicDBObject) {
+    private tailrec fun resolverConditionTree(expression: Expression, basicDBObject: BasicDBObject) {
         when (expression) {
             is AndExpression -> {
                 resolverConditionTree(expression.leftExpression, basicDBObject)
@@ -89,7 +89,6 @@ interface Executor {
             is Parenthesis -> resolverConditionTree(expression.expression, basicDBObject)
             //是关联查询的大于，大于等于，小于等于等等
             is EqualsTo -> basicDBObject[expressionName(expression.leftExpression)] = expressionValue(expression.rightExpression)
-            is EqualsTo -> appendCondition(basicDBObject, "\$lt", expression)
             is NotEqualsTo -> basicDBObject[expressionName(expression.leftExpression)] = BasicDBObject().put("\$ne", expressionValue(expression.rightExpression))
             is GreaterThan -> appendCondition(basicDBObject, "\$gt", expression)
             is MinorThan -> appendCondition(basicDBObject, "\$lt", expression)

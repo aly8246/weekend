@@ -24,6 +24,7 @@ open class ConfigurationProperties {
             this.properties.setProperty("non-field-remind", value.toString())
         }
 
+    open fun getNonFieldRemind() {}
     var showCondition: Boolean
         get() {
             try {

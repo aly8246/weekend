@@ -24,7 +24,9 @@ open class DevWeekend {
 
     @Bean
     open fun test() {
-        userDao.exec().listIterator().forEach { e -> println(e) }
-    //    userDao2.exec().listIterator().forEach { e -> println(e) }
+        var moneyList: MutableList<Int> = mutableListOf(500, 700)
+        userDao.exec(22, null, moneyList).listIterator().forEach { e -> println(e) }
+
+        //userDao2.exec().listIterator().forEach { e -> println(e) }
     }
 }

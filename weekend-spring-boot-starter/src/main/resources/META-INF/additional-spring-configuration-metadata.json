@@ -1,0 +1,34 @@
+{
+  "properties": [
+    {
+      "name": "weekend.mongodb.uri",
+      "type": "java.lang.String",
+      "description": "Description for weekend.mongodb.uri.",
+      "sourceType": "com.github.aly8246.auto.configuration.ConfigurationProperties",
+      "sourceMethod": "getProperties()"
+    },
+    {
+      "name": "weekend.mongodb.driver-name",
+      "type": "java.lang.String",
+      "description": "Description for weekend.mongodb.driver-name.",
+      "sourceType": "com.github.aly8246.auto.configuration.ConfigurationProperties",
+      "sourceMethod": "getAccesslog()"
+    },
+    {
+      "name": "weekend.config.non-field-remind",
+      "type": "java.lang.String",
+      "defaultValue": false,
+      "description": "Description for weekend.config.non-field-remind.",
+      "sourceType": "com.github.aly8246.auto.configuration.DatasourceProperties",
+      "sourceMethod": "getAccesslog()"
+    },
+    {
+      "name": "weekend.config.show-condition",
+      "type": "java.lang.String",
+      "defaultValue": false,
+      "description": "Description for weekend.config.show-condition.",
+      "sourceType": "com.github.aly8246.auto.configuration.DatasourceProperties",
+      "sourceMethod": "getAccesslog()"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.Command
 import java.lang.reflect.Method
+import java.lang.reflect.Parameter
 
 abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var method: Method, protected var args: Array<Any>?) : Dispatcher<T> {
     override fun execute(): T? {
@@ -11,6 +12,6 @@ abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var met
     abstract fun run(): T?
 
 
-    abstract fun template(command: Command): String
+    abstract fun template(command: Command, param: MutableMap<Parameter, Any?>): String
 
 }

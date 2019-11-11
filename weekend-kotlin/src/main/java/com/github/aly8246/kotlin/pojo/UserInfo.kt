@@ -1,6 +1,7 @@
 package com.github.aly8246.kotlin.pojo
 
 import com.github.aly8246.core.annotation.Mapping
+import com.github.aly8246.core.annotation.WeekendId
 
 /**
  * @Author     ：南有乔木
@@ -10,19 +11,22 @@ import com.github.aly8246.core.annotation.Mapping
  * @version:   ：V
  */
 class UserInfo {
-    @Mapping(name = ["userId"], dbName = ["id"])
+    @Mapping(name = ["id"], type = String::class)
+    @WeekendId
     var userId: String? = null
 
-    @Mapping(name = ["userName"], dbName = ["name"])
+    @Mapping(name = ["name"], type = String::class)
     var userName: String? = null
     var userMoney: Double? = null
-    var age: Int? = null
+
+    @Mapping(name = ["age"], type = Long::class)
+    var userAge: Int? = null
 
 
     constructor()
 
     override fun toString(): String {
-        return "UserInfo(id='$userId', name='$userName', userMoney=$userMoney, age=$age)"
+        return "UserInfo(id='$userId', name='$userName', userMoney=$userMoney, age=$userAge)"
     }
 
 }

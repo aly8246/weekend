@@ -2,20 +2,22 @@ package com.github.aly8246.core.template
 
 import com.github.aly8246.core.annotation.Command
 import org.springframework.util.StringUtils
+import java.lang.reflect.Parameter
 
 abstract class BaseTemplate : Template {
 
-    override fun completeCommand(command: Command): String {
+    override fun completeCommand(command: Command, param: MutableMap<Parameter, Any?>): String {
         val baseCommand = command.value.joinToString("")
         when {
             StringUtils.isEmpty(baseCommand) -> throw RuntimeException("BaseCommand不能为空")
         }
-        val replaceParam = replaceParam(baseCommand)
+        val replaceParam = replaceParam(baseCommand,param)
         syntaxCheck(replaceParam)
         return replaceParam
     }
 
-    abstract fun replaceParam(sourceCommand: String): String
+    abstract fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String
+
     abstract fun syntaxCheck(command: String)
 
     //TODO 先将模板替换成具体参数值

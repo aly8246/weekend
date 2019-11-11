@@ -1,6 +1,8 @@
 package com.github.aly8246.core.driver
 
 import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.annotation.Mapping
+import com.github.aly8246.core.annotation.WeekendId
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
@@ -18,15 +20,19 @@ import java.sql.Date
 import java.util.*
 import java.util.regex.Pattern
 
-class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: MongoConnection, var mongoStatement: MongoStatement) : ResultSet {
+class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnection: MongoConnection, private var mongoStatement: MongoStatement) : ResultSet {
 
     private lateinit var command: Command
     private lateinit var method: Method
+    private var args: kotlin.Array<Any>? = null
     private var resultClassType: Class<*>? = null
+    private var mappingMap: MutableMap<String, MongoMapping> = mutableMapOf()
+    private var _id: Any? = null
 
-    fun init(command: Command, method: Method) {
+    fun init(command: Command, method: Method, args: kotlin.Array<Any>?) {
         this.command = command
         this.method = method
+        this.args = args
         val returnType = method.returnType
         val canonicalName = returnType.canonicalName
         when {
@@ -41,7 +47,51 @@ class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: Mong
                 }
             }
         }
+
+        val result = this.resolverResult()
+        this.mappingMap = result!!
     }
+
+    private fun resolverResult(): MutableMap<String, MongoMapping>? {
+        if (this.resultClassType == null) return null
+        val declaredFields = resultClassType?.declaredFields
+
+        val mappingList: MutableMap<String, MongoMapping> = mutableMapOf()
+        declaredFields?.forEach { e ->
+            run {
+                val annotations = e.annotations
+                annotations.forEach { annotation ->
+                    run {
+                        when (annotation) {
+                            is Mapping -> {
+                                val mongoMapping = MongoMapping()
+                                var fieldName: String = annotation.name.toList().toString()
+                                fieldName = fieldName.replace("[", "").replace("]", "")
+                                mongoMapping.codeFieldName = e.name
+                                mongoMapping.codeFieldType = e.type
+                                mongoMapping.dbFieldName = fieldName
+                                mongoMapping.dbFieldType = annotation.type.java
+                                mappingList[mongoMapping.dbFieldName] = mongoMapping
+                            }
+                            is WeekendId -> {
+                                _id = e.toString().split(".")[e.toString().split(".").count() - 1]
+                            }
+                            else -> {
+                                val mongoMapping = MongoMapping()
+                                mongoMapping.codeFieldName = e.name
+                                mongoMapping.codeFieldType = e.type
+                                mongoMapping.dbFieldName = e.name
+                                mongoMapping.dbFieldType = e.type
+                                mappingList[mongoMapping.dbFieldName] = mongoMapping
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return mappingList
+    }
+
 
     /**
      * If you want to query a List like 'List<User>'
@@ -75,8 +125,7 @@ class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: Mong
      * return all select
      */
     fun getObject(): Any? {
-        val list = mutableListOf(Document())
-        list.removeAt(0)
+        val list: MutableList<Document> = mutableListOf()
 
         while (query.hasNext()) list.add(query.next())
 
@@ -109,60 +158,76 @@ class MongoResultSet(var query: MongoCursor<Document>, var mongoConnection: Mong
 
     private fun mapToPojo(map: Map<*, *>?, clazz: Class<*>?): Any? {
         if (map == null) return null
+        var mappingMap: MutableMap<Any?, Any?> = map.toMutableMap()
         if (clazz == null) throw WeekendException("未知错误")
         val newInstance = clazz.newInstance()
-        for (key in map.keys) {
-            var field: Field? = null
-            try {
-                field = clazz.getDeclaredField(key as String)
+
+        if (this._id != null) {
+            mappingMap[this._id.toString()] = mappingMap["_id"]
+        }
+        for (key in mappingMap.keys) {
+            var field: Field?
+            field = try {
+                //从newInstance中获取字段，尝试从map中用自己的字段名字来拿
+                clazz.getDeclaredField(key as String)
             } catch (e: NoSuchFieldException) {
                 try {
-                    //if (key.toString().substring(0, 1) == "_")
-                    field = clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
-                } catch (e2: NoSuchFieldException) {
-                    if (configuration.nonFieldRemind!!)
-                        PrintImpl().debug("不存在的字段${key.toString()}")
-                    continue
+                    //尝试从映射拿mapping
+                    val mapping = this.mappingMap[key.toString()]
+                    clazz.getDeclaredField(mapping?.codeFieldName)
+                } catch (e2: NullPointerException) {
+                    try {
+                        //尝试拿隐藏字段
+                        clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
+                    } catch (e2: NoSuchFieldException) {
+                        try {
+                            clazz.getDeclaredField(this._id.toString())
+                        } catch (e3: NoSuchFieldException) {
+                            if (configuration.nonFieldRemind!!)
+                                PrintImpl().debug("不存在的字段${key.toString()}")
+                            continue
+                        }
+                    }
                 }
             }
 
-            field!!.isAccessible = true
+            field.isAccessible = true
             when {
                 field.type.name == "java.lang.String" -> {
-                    field.set(newInstance, map[key].toString())
+                    field.set(newInstance, mappingMap[key].toString())
                 }
                 field.type.name == "java.lang.Integer" -> {
-                    field.set(newInstance, map[key].toString().toInt())
+                    field.set(newInstance, mappingMap[key].toString().toInt())
                 }
                 field.type.name == "java.lang.Double" -> {
-                    field.set(newInstance, map[key].toString().toDouble())
+                    field.set(newInstance, mappingMap[key].toString().toDouble())
                 }
                 field.type.name == "java.lang.Long" -> {
-                    field.set(newInstance, map[key].toString().toLong())
+                    field.set(newInstance, mappingMap[key].toString().toLong())
                 }
                 field.type.name == "java.lang.Short" -> {
-                    field.set(newInstance, map[key].toString().toShort())
+                    field.set(newInstance, mappingMap[key].toString().toShort())
                 }
                 field.type.name == "java.lang.Float" -> {
-                    field.set(newInstance, map[key].toString().toFloat())
+                    field.set(newInstance, mappingMap[key].toString().toFloat())
                 }
 
                 field.type.name == "int" -> {
-                    field.set(newInstance, map[key].toString().toInt())
+                    field.set(newInstance, mappingMap[key].toString().toInt())
                 }
                 field.type.name == "double" -> {
-                    field.set(newInstance, map[key].toString().toDouble())
+                    field.set(newInstance, mappingMap[key].toString().toDouble())
                 }
                 field.type.name == "long" -> {
-                    field.set(newInstance, map[key].toString().toLong())
+                    field.set(newInstance, mappingMap[key].toString().toLong())
                 }
                 field.type.name == "short" -> {
-                    field.set(newInstance, map[key].toString().toShort())
+                    field.set(newInstance, mappingMap[key].toString().toShort())
                 }
                 field.type.name == "float" -> {
-                    field.set(newInstance, map[key].toString().toFloat())
+                    field.set(newInstance, mappingMap[key].toString().toFloat())
                 }
-                else -> field.set(newInstance, map[key])
+                else -> field.set(newInstance, mappingMap[key])
             }
 
         }
