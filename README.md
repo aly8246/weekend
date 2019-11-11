@@ -67,7 +67,6 @@ public interface TestMongoDao {
 直接使用试试
 
 ```java
-
 List<UserInfo> userInfoList = userDao.select();
 userInfoList.forEach(System.err::println)
 ```
@@ -76,6 +75,8 @@ userInfoList.forEach(System.err::println)
 **为什么注入一个接口就能实现查询mongodb呢？**
 那是因为我正在尝试开发一款名为weekend的应用
 
+
+step1. pom依赖
 ```bash
  <dependency>
       <groupId>com.github.aly8246</groupId>
@@ -83,13 +84,22 @@ userInfoList.forEach(System.err::println)
       <version>0.0.1-SNAPSHOT</version>
  </dependency>
 ```
-
+step2.配置文件
 ```yaml
 weekend:
   mongodb:
     uri: jdbc:mongodb://localhost:27017/weekend
     driver-name: com.github.aly8246.core.driver.MongoDriver
 ```
+step3.启动类扫描
+
+```kotlin
+@WeekendDaoScan(
+        "com.github.aly8246.kotlin.mdo",
+        "com.github.aly8246.kotlin.dd"
+)
+```
+
 
 **不幸的是这个应用刚刚起步**
 **Unfortunately, this application is just starting**
