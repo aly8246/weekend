@@ -3,6 +3,7 @@ package com.github.aly8246.core.template
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
 import net.sf.jsqlparser.parser.CCJSqlParserManager
+import org.springframework.boot.SpringApplication
 import java.io.StringReader
 import java.lang.reflect.Parameter
 import java.util.regex.Matcher
@@ -12,8 +13,12 @@ import java.util.regex.Pattern
 class RegexTemplate : BaseTemplate() {
     override fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
         PrintImpl().debug(" $sourceCommand")
-        var command = this.processTemplate(sourceCommand, param, "\\$\\{\\w+}")
-        command = this.processTemplate(command, param, "\\#\\{\\w+}")
+        //替换普通参数
+        var command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
+        command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
+
+        //执行when条件判断
+        command = processConditionTemplate(command, param)
 
         PrintImpl().debug(" $command")
         return command
@@ -27,7 +32,57 @@ class RegexTemplate : BaseTemplate() {
         }
     }
 
-    private fun processTemplate(template: String?, params: MutableMap<Parameter, Any?>, regx: String): String {
+    private fun processConditionTemplate(command: String, params: MutableMap<Parameter, Any?>): String {
+
+        println(command)
+        println(params)
+        "        when(nameType){ " +
+                "    is 1 -> name='小黑'" +
+                "    is 2 -> name='超级管理员'" +
+                "}"
+
+        return command
+    }
+
+    private var str: String = "select * from user_info  " +
+            "where age = #{userAge} " +
+            "and userMoney in #{userMoney} " +
+            " and " +
+            "when(nameType){ " +
+            "    is 1 -> name='小黑'" +
+            "    is 2 -> name='超级管理员'" +
+            "    else -> name='其他洗脚员工'" +
+            "}" + " and " +
+            "when(ageType){ " +
+            "    is 1 -> age = 18" +
+            "    is 2 -> age = 22" +
+            "    else -> age = 30" +
+            "}"
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val regexTemplate = RegexTemplate()
+            //(when)(.*){([\s\S].*.[\s\S].*.[\s\S].*.*)
+            //(when)(.*)\{([\s\S].*){4}\}
+            val sb = StringBuffer()
+            val m: Matcher = Pattern.compile("when.*\\{([\\s\\S].*){4}[\\s\\S].*\\}").matcher(regexTemplate.str)
+            while (m.find()) {
+                println(m.group())
+                println("")
+                m.appendReplacement(sb, "我被替换了！")
+//                for (index in 0..m.groupCount()) {
+//                    println(m.group(index))
+//                    println("=========")
+//                }
+            }
+            m.appendTail(sb)
+
+            println(sb.toString())
+        }
+    }
+
+    private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
         val paramMap: MutableMap<String, Any?> = mutableMapOf()
         params.forEach { e ->
             paramMap[e.key.name] = e.value
@@ -38,12 +93,8 @@ class RegexTemplate : BaseTemplate() {
         while (m.find()) {
             val param: String = m.group()
             when (val value = paramMap[param.substring(2, param.length - 1)]) {
-                is String -> {
-                    if (regx.contains("#")) m.appendReplacement(sb, "'$value'") else m.appendReplacement(sb, value.toString())
-                }
-                is List<*> -> {
-                    m.appendReplacement(sb, "(" + value.toList().joinToString(",") + ")")
-                }
+                is String -> if (regx.contains("#")) m.appendReplacement(sb, "'$value'") else m.appendReplacement(sb, value.toString())
+                is List<*> -> m.appendReplacement(sb, "(" + value.toList().joinToString(",") + ")")
                 else -> m.appendReplacement(sb, value?.toString() ?: "")
             }
         }

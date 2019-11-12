@@ -1,6 +1,5 @@
 package com.github.aly8246.auto.configuration
 
-import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -18,7 +17,7 @@ open class WeekendGlobalConfiguration {
     @PostConstruct
     open fun init() {
         configuration.nonFieldRemind = configurationProperties.nonFieldRemind
-        configuration.showCondition=configurationProperties.showCondition
+        configuration.showCondition = configurationProperties.showCondition
     }
 
 

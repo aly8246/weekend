@@ -130,15 +130,10 @@ class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnecti
         while (query.hasNext()) list.add(query.next())
 
         return when {
-            this.isList() -> {
-                mapToList(list, resultClassType)
-            }
-            this.isVoid() -> {
-                null
-            }
+            this.isList() -> mapToList(list, resultClassType)
+            this.isVoid() -> null
             else -> {
                 list.forEach { e -> PrintImpl().debug(e.toJson()) }
-
                 if (list.size >= 1) throw WeekendException("That's too much result,find ${list.size} result in >>  $method")
                 val document = list[0]
                 mapToPojo(document, resultClassType)
