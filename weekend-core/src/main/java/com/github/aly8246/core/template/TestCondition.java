@@ -11,25 +11,27 @@ import java.util.regex.Pattern;
  * @version: ：V
  */
 public class TestCondition {
-private final static String aa = "select * from user_info  " +
-		                                 "where age = #{userAge} " +
-		                                 "and userMoney in #{userMoney} " +
-		                                 " and " +
-		                                 "when(nameType){ " +
-		                                 "    is 1 -> name='小黑'" +
-		                                 "    is 2 -> name='超级管理员'" +
-		                                 "    else -> name='其他洗脚员工'" +
-		                                 "}" + " and " +
-		                                 "when(ageType){ " +
-		                                 "    is 1 -> age = 18" +
-		                                 "    is 2 -> age = 22" +
-		                                 "    else -> age = 30" +
-		                                 "}";
+    private final static String aa = "select * from user_info where userId=#{userId} and " +
+            "when(moneyType){" +
+            "is 1 -> money_type_name = '人民币}}'" +
+            "   is 2 -> money_type_name = '美元'" +
+            "} or age < 35 and" +
+            "when(moneyType){" +
+            "is 1 -> money_type_name = '人民币}}'" +
+            "   is 2 -> money_type_name = '美元 when(moneyType){" +
+            "is 1 -> money_type_name = '人民币'" +
+            "   is 2 -> money_type_name = '美元'" +
+            "}'" +
+            "} or age < 35 and" +
+            "when(moneyType){" +
+            "is 1 -> money_type_name = '人民币}}'" +
+            "   is 2 -> money_type_name = '美元'" +
+            "} ";
 
-public static void main(String[] args) {
-	Matcher matcher = Pattern.compile("when.*\\{([\\s\\S].*){4}[\\s\\S].*\\}").matcher(aa);
-	while (matcher.find()) {
-		System.out.println(matcher.group());
-	}
-}
+    public static void main(String[] args) {
+        Matcher matcher = Pattern.compile("when\\([a-zA-Z0-9]+\\)\\{*.[\\s\\S]+?\\}\\s+(?!.?')").matcher(aa);
+        while (matcher.find()) {
+            System.out.println(matcher.group());
+        }
+    }
 }

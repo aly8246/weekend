@@ -3,7 +3,6 @@ package com.github.aly8246.core.template
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
 import net.sf.jsqlparser.parser.CCJSqlParserManager
-import org.springframework.boot.SpringApplication
 import java.io.StringReader
 import java.lang.reflect.Parameter
 import java.util.regex.Matcher
