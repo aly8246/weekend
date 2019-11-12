@@ -40,10 +40,10 @@ class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnecti
                 Class.forName(canonicalName).newInstance().javaClass
             } catch (e: InstantiationException) {
                 Class.forName(regxListParamClass(method.toGenericString())).newInstance().javaClass
-            } finally {
                 val list = listOf("java.util.List", "java.util.Set", "kotlin.collections.List")
                 when {
                     list.stream().noneMatch(canonicalName::equals) -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
+                    else -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
                 }
             }
         }
@@ -137,6 +137,8 @@ class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnecti
                 null
             }
             else -> {
+                list.forEach { e -> PrintImpl().debug(e.toJson()) }
+
                 if (list.size >= 1) throw WeekendException("That's too much result,find ${list.size} result in >>  $method")
                 val document = list[0]
                 mapToPojo(document, resultClassType)
