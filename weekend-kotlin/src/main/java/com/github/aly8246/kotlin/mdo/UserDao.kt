@@ -9,11 +9,10 @@ interface UserDao {
     @Command("select * from user_info  " +
             "where age = #{userAge} " +
             "and userMoney in #{userMoney} " +
-            " and " +
             "when(nameType){ " +
-            "    is 1 -> name='小黑'" +
-            "    is 2 -> name='超级管理员'" +
-            "    else -> name='其他洗脚员工'" +
+            "    is 1 -> and name = '增删查';" +
+            "    is 2 -> and name = '超级管理员';" +
+            "    else -> and name = '其他洗脚员工';" +
             "}")
     fun exec(userAge: Int, nameType: Int?, userMoney: MutableList<Int>?): UserInfo
 

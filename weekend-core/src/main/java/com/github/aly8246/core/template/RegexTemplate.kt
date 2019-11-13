@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RegexTemplate : BaseTemplate() {
     override fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
-        PrintImpl().debug(" $sourceCommand")
+        PrintImpl().debug(sourceCommand)
         //替换普通参数
         var command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
         command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
@@ -19,7 +19,7 @@ class RegexTemplate : BaseTemplate() {
         //执行when条件判断
         command = processConditionTemplate(command, param)
 
-        PrintImpl().debug(" $command")
+        PrintImpl().debug(command)
         return command
     }
 
@@ -34,80 +34,55 @@ class RegexTemplate : BaseTemplate() {
     private fun processConditionTemplate(command: String, params: MutableMap<Parameter, Any?>): String {
         val whenCommand = "$command "
 
+        val sb = StringBuffer()
 
+        //获得when
+        val whenRegex: Matcher = Pattern.compile("when\\([a-zA-Z0-9]+\\)\\{*.[\\s\\S]+?\\}\\s+(?!.?')").matcher(whenCommand)
+        while (whenRegex.find()) {
+            //获得参数名
+            var conditionName: String = ""
+            val conditionRegex = Pattern.compile("when\\(*.*\\)").matcher(whenRegex.group())
+            while (conditionRegex.find()) {
+                conditionName = conditionRegex.group().replace("when(", "").replace(")", "")
+            }
+            val paramMap: MutableMap<String, Any?> = this.convertParamMap(params)
+            val any = paramMap[conditionName]
 
-        println(whenCommand)
-
-        return whenCommand
-    }
-
-    private var str: String = "select * from user_info  " +
-            "where age = #{userAge} " +
-            "and userMoney in #{userMoney} " +
-            "when(nameType){ " +
-            "    is 1 -> and name = '小黑';" +
-            "    is 2 -> and name = '超级管理员';" +
-            "    else -> and name = '其他洗脚员工';" +
-            "}" + " " +
-            "when(ageType){ " +
-            "    is 1 -> and age = 18\n" +
-            "    is 2 -> and age = 22\n" +
-            "    else -> and age = 30\n" +
-            "}  "
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val regexTemplate = RegexTemplate()
-            val sb = StringBuffer()
-            //匹配when >>> when\([a-zA-Z0-9]+\)\{*.[\s\S]+?\}\s+(?!.?')
-            //获取参数 >>> when\(*.*\)
-            //取得行   >>> (else|is)\s+\S*\s*->\s+\S+\s+\S+\s+'*.+?'*?;
-            //取得正文 >>> is\s+.\s*->
-            val m: Matcher = Pattern.compile("when\\([a-zA-Z0-9]+\\)\\{*.[\\s\\S]+?\\}\\s+(?!.?')").matcher(regexTemplate.str)
-            while (m.find()) {
-                println(m.group())
-
-                var conditionName: String = ""
-                val c = Pattern.compile("when\\(*.*\\)").matcher(m.group())
-                while (c.find()) {
-                    conditionName = c.group().replace("when(", "").replace(")", "")
-                }
-                var nameType: Int = 2
-                val condition = Pattern.compile("(else|is)\\s+\\S*\\s*->\\s+\\S+\\s+\\S+\\s+'*.+?'*?;").matcher(m.group())
-                while (condition.find()) {
-                    val matcher = Pattern.compile("is\\s+.\\s*->").matcher(condition.group())
-                    while (matcher.find()) {
-                        val conditionValue = matcher.group().replace("is ", "").replace(" ->", "")
-                        if (nameType.toString() == conditionValue) {
-                            // println("查询到条件:" + condition.group())
-                            println("得到字段:" + condition.group().replace(matcher.group(), "").replace(";", ""))
-                        }
+            if (any == null) {
+                PrintImpl().debug("没有传入参数:$conditionName 取消when条件执行语法且不可逆")
+                whenRegex.appendReplacement(sb, "")
+            }
+            var conditionValue: String = any.toString()
+            //获取执行条件
+            val condition = Pattern.compile("(else|is)\\s+\\S*\\s*->\\s+\\S+\\s+\\S+\\s+'*.+?'*?;").matcher(whenRegex.group())
+            while (condition.find()) {
+                val judgeRegex = Pattern.compile("is\\s+.\\s*->").matcher(condition.group())
+                while (judgeRegex.find()) {
+                    val conditionRegex = judgeRegex.group().replace("is ", "").replace(" ->", "")
+                    //满足执行条件
+                    if (conditionValue == conditionRegex) {
+                        val realCondition = condition.group().replace(judgeRegex.group(), "").replace(";", "")
+                        whenRegex.appendReplacement(sb, realCondition)
+                    } else {
+                        //TODO 执行else条件
                     }
                 }
             }
-            m.appendTail(sb)
-
-            //  println(sb.toString())
         }
+        whenRegex.appendTail(sb)
+        return sb.toString()
     }
 
-    private fun acquisitionCondition(): MutableList<String> {
-        var list: MutableList<String> = mutableListOf()
-
-
-
-        return list
-    }
-
-    //发生回溯
-
-
-    private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
+    private fun convertParamMap(params: MutableMap<Parameter, Any?>): MutableMap<String, Any?> {
         val paramMap: MutableMap<String, Any?> = mutableMapOf()
         params.forEach { e ->
             paramMap[e.key.name] = e.value
         }
+        return paramMap
+    }
+
+    private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
+        val paramMap: MutableMap<String, Any?> = this.convertParamMap(params)
         //TODO 如果参数值为空，则去掉本段的参数替换
         val m: Matcher = Pattern.compile(regx).matcher(template)
         val sb = StringBuffer()
