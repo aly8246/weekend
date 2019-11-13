@@ -5,6 +5,7 @@ import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.template.RegexTemplate
+import com.github.aly8246.core.util.PrintImpl
 import java.lang.Exception
 
 import java.lang.reflect.Method
@@ -45,7 +46,7 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         paramMap.entries.forEach { e ->
             run {
                 try {
-                    println(e.key.name + ":" + e.value.toString())
+                    PrintImpl().debug("param >>   " + e.key.name + ":" + e.value.toString())
                 } catch (ex: Exception) {
                 }
             }
@@ -56,5 +57,5 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
 
     abstract fun selectStatement(statement: Statement, command: String): MongoResultSet
 
-    override fun template(command: Command, param: MutableMap<Parameter, Any?>): String = RegexTemplate().completeCommand(command,param)
+    override fun template(command: Command, param: MutableMap<Parameter, Any?>): String = RegexTemplate().completeCommand(command, param)
 }

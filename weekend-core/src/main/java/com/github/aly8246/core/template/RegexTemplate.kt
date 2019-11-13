@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RegexTemplate : BaseTemplate() {
     override fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
-        PrintImpl().debug(sourceCommand)
+        PrintImpl().debug("originalCommand >>   $sourceCommand")
         //替换普通参数
         var command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
         command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
@@ -19,7 +19,7 @@ class RegexTemplate : BaseTemplate() {
         //执行when条件判断
         command = processConditionTemplate(command, param)
 
-        PrintImpl().debug(command)
+        PrintImpl().debug("analyzedCommand >>   $command")
         return command
     }
 
@@ -40,7 +40,7 @@ class RegexTemplate : BaseTemplate() {
         val whenRegex: Matcher = Pattern.compile("when\\([a-zA-Z0-9]+\\)\\{*.[\\s\\S]+?\\}\\s+(?!.?')").matcher(whenCommand)
         while (whenRegex.find()) {
             //获得参数名
-            var conditionName: String = ""
+            var conditionName = ""
             val conditionRegex = Pattern.compile("when\\(*.*\\)").matcher(whenRegex.group())
             while (conditionRegex.find()) {
                 conditionName = conditionRegex.group().replace("when(", "").replace(")", "")
@@ -58,13 +58,26 @@ class RegexTemplate : BaseTemplate() {
             while (condition.find()) {
                 val judgeRegex = Pattern.compile("(else|is)\\s+\\S*\\s*->").matcher(condition.group())
                 while (judgeRegex.find()) {
-                    val conditionRegex = judgeRegex.group().replace("is ", "").replace(" ->", "")
-                    val realCondition = condition.group().replace(judgeRegex.group(), "").replace(";", "")
+                    val judgeValue = judgeRegex.group().replace("is ", "").replace(" ->", "")
+                    var realCondition = condition.group().replace(judgeRegex.group(), "").replace(";", "")
 
-                    if (conditionValue == conditionRegex) {
+                    //[空格]and name = 'xx'
+                    //to
+                    //and name = 'xx'
+                    if (realCondition.startsWith(" ")) realCondition = realCondition.substring(1, realCondition.length)
+
+                    //如果满足is条件
+                    if (conditionValue == judgeValue) {
                         whenRegex.appendReplacement(sb, realCondition)
-                    } else if (conditionRegex == "else") {
-                        whenRegex.appendReplacement(sb, realCondition)
+                        break
+                        //如果条件都不满足
+                    } else if (judgeValue == "else") {
+                        try {
+                            whenRegex.appendReplacement(sb, realCondition)
+                        } catch (ignore: IndexOutOfBoundsException) {
+                            //匹配else的时候发生异常,正常情况
+                        }
+                        break
                     }
                 }
 

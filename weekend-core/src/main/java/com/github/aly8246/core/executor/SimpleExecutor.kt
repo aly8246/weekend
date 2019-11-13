@@ -25,8 +25,8 @@ class SimpleExecutor(sql: String) : Executor {
         val query = this.resolverCondition(plainSelect.where)
 
         if (configuration.showCondition!!) {
-            PrintImpl().debug("table  ${table.name}")
-            PrintImpl().debug("condition  $query")
+            PrintImpl().debug("table >>   ${table.name}")
+            PrintImpl().debug("condition >>   $query")
         }
 
         val collection = mongoConnection.getCollection(table)
