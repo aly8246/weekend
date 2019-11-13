@@ -56,17 +56,18 @@ class RegexTemplate : BaseTemplate() {
             //获取执行条件
             val condition = Pattern.compile("(else|is)\\s+\\S*\\s*->\\s+\\S+\\s+\\S+\\s+'*.+?'*?;").matcher(whenRegex.group())
             while (condition.find()) {
-                val judgeRegex = Pattern.compile("is\\s+.\\s*->").matcher(condition.group())
+                val judgeRegex = Pattern.compile("(else|is)\\s+\\S*\\s*->").matcher(condition.group())
                 while (judgeRegex.find()) {
                     val conditionRegex = judgeRegex.group().replace("is ", "").replace(" ->", "")
-                    //满足执行条件
+                    val realCondition = condition.group().replace(judgeRegex.group(), "").replace(";", "")
+
                     if (conditionValue == conditionRegex) {
-                        val realCondition = condition.group().replace(judgeRegex.group(), "").replace(";", "")
                         whenRegex.appendReplacement(sb, realCondition)
-                    } else {
-                        //TODO 执行else条件
+                    } else if (conditionRegex == "else") {
+                        whenRegex.appendReplacement(sb, realCondition)
                     }
                 }
+
             }
         }
         whenRegex.appendTail(sb)
