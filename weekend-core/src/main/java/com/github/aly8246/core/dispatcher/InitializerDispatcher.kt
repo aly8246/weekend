@@ -1,6 +1,7 @@
 package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.exception.WeekendException
@@ -42,15 +43,15 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
             if (args!![index] != null)
                 paramMap[method.parameters[index]] = args!![index]
         }
-
-        paramMap.entries.forEach { e ->
-            run {
-                try {
-                    PrintImpl().debug("param >>   " + e.key.name + ":" + e.value.toString())
-                } catch (ex: Exception) {
+        if (Configurations.configuration.showParam!!)
+            paramMap.entries.forEach { e ->
+                run {
+                    try {
+                        PrintImpl().debug("param >>   " + e.key.name + ":" + e.value.toString())
+                    } catch (ex: Exception) {
+                    }
                 }
             }
-        }
 
         return paramMap
     }

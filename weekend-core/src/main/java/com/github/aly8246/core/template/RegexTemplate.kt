@@ -1,5 +1,7 @@
 package com.github.aly8246.core.template
 
+import com.github.aly8246.core.configuration.Configurations
+import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
 import net.sf.jsqlparser.parser.CCJSqlParserManager
@@ -11,7 +13,8 @@ import java.util.regex.Pattern
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RegexTemplate : BaseTemplate() {
     override fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
-        PrintImpl().debug("originalCommand >>   $sourceCommand")
+        if (configuration.showCommand!!)
+            PrintImpl().debug("originalCommand >>   $sourceCommand")
         //替换普通参数
         var command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
         command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
@@ -19,7 +22,8 @@ class RegexTemplate : BaseTemplate() {
         //执行when条件判断
         command = processConditionTemplate(command, param)
 
-        PrintImpl().debug("analyzedCommand >>   $command")
+        if (configuration.showCommand!!)
+            PrintImpl().debug("analyzedCommand >>   $command")
         return command
     }
 
@@ -51,6 +55,7 @@ class RegexTemplate : BaseTemplate() {
             if (any == null) {
                 PrintImpl().debug("没有传入参数:$conditionName 取消when条件执行语法且不可逆")
                 whenRegex.appendReplacement(sb, "")
+                break
             }
             var conditionValue: String = any.toString()
             //获取执行条件

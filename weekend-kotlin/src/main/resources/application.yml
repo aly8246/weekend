@@ -7,4 +7,7 @@ weekend:
     driver-name: com.github.aly8246.core.driver.MongoDriver
   config:
     non-field-remind: true
+    show-param: true
+    show-command: true
     show-condition: true
+    show-result: true

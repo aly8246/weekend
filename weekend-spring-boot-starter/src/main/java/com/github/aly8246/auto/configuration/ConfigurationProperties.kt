@@ -24,7 +24,28 @@ open class ConfigurationProperties {
             this.properties.setProperty("non-field-remind", value.toString())
         }
 
-    open fun getNonFieldRemind() {}
+    var showParam: Boolean
+        get() {
+            try {
+                return this.properties.getProperty("show-param")!!.toBoolean()
+            } catch (e: KotlinNullPointerException) {
+            }
+            return false
+        }
+        set(value) {
+            this.properties.setProperty("show-param", value.toString())
+        }
+    var showCommand: Boolean
+        get() {
+            try {
+                return this.properties.getProperty("show-command")!!.toBoolean()
+            } catch (e: KotlinNullPointerException) {
+            }
+            return false
+        }
+        set(value) {
+            this.properties.setProperty("show-command", value.toString())
+        }
     var showCondition: Boolean
         get() {
             try {
@@ -36,4 +57,16 @@ open class ConfigurationProperties {
         set(value) {
             this.properties.setProperty("show-condition", value.toString())
         }
+    var showResult: Boolean
+        get() {
+            try {
+                return this.properties.getProperty("show-result")!!.toBoolean()
+            } catch (e: KotlinNullPointerException) {
+            }
+            return false
+        }
+        set(value) {
+            this.properties.setProperty("show-result", value.toString())
+        }
+
 }

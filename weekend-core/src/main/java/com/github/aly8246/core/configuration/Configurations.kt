@@ -7,7 +7,11 @@ class Configurations {
     var datasourceUrl: String? = null
     var mongoAddress: MongoAddress? = null
     var nonFieldRemind: Boolean? = null
+
+    var showParam: Boolean? = null
+    var showCommand: Boolean? = null
     var showCondition: Boolean? = null
+    var showResult: Boolean? = null
 
     companion object {
         var configuration = Configurations()

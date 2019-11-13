@@ -17,7 +17,11 @@ open class WeekendGlobalConfiguration {
     @PostConstruct
     open fun init() {
         configuration.nonFieldRemind = configurationProperties.nonFieldRemind
+
+        configuration.showParam = configurationProperties.showParam
+        configuration.showCommand = configurationProperties.showCommand
         configuration.showCondition = configurationProperties.showCondition
+        configuration.showResult = configurationProperties.showResult
     }
 
 

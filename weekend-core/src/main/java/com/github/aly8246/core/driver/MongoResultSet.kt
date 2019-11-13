@@ -3,6 +3,7 @@ package com.github.aly8246.core.driver
 import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.annotation.WeekendId
+import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
@@ -130,12 +131,12 @@ class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnecti
         while (query.hasNext()) list.add(query.next())
         if (list.size == 0) return null
 
-
-        list.forEach { e ->
-            run {
-                PrintImpl().debug("queryResult >>   $e")
+        if (configuration.showResult!!)
+            list.forEach { e ->
+                run {
+                    PrintImpl().debug("queryResult >>   $e")
+                }
             }
-        }
         return when {
             this.isList() -> mapToList(list, resultClassType)
             this.isVoid() -> null
