@@ -32,54 +32,76 @@ class RegexTemplate : BaseTemplate() {
     }
 
     private fun processConditionTemplate(command: String, params: MutableMap<Parameter, Any?>): String {
+        val whenCommand = "$command "
 
-        println(command)
-        println(params)
-        "        when(nameType){ " +
-                "    is 1 -> name='小黑'" +
-                "    is 2 -> name='超级管理员'" +
-                "}"
 
-        return command
+
+        println(whenCommand)
+
+        return whenCommand
     }
 
     private var str: String = "select * from user_info  " +
             "where age = #{userAge} " +
             "and userMoney in #{userMoney} " +
-            " and " +
             "when(nameType){ " +
-            "    is 1 -> name='小黑'" +
-            "    is 2 -> name='超级管理员'" +
-            "    else -> name='其他洗脚员工'" +
-            "}" + " and " +
+            "    is 1 -> and name = '小黑';" +
+            "    is 2 -> and name = '超级管理员';" +
+            "    else -> and name = '其他洗脚员工';" +
+            "}" + " " +
             "when(ageType){ " +
-            "    is 1 -> age = 18" +
-            "    is 2 -> age = 22" +
-            "    else -> age = 30" +
-            "}"
+            "    is 1 -> and age = 18\n" +
+            "    is 2 -> and age = 22\n" +
+            "    else -> and age = 30\n" +
+            "}  "
 
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             val regexTemplate = RegexTemplate()
-            //(when)(.*){([\s\S].*.[\s\S].*.[\s\S].*.*)
-            //(when)(.*)\{([\s\S].*){4}\}
             val sb = StringBuffer()
-            val m: Matcher = Pattern.compile("when.*\\{([\\s\\S].*){4}[\\s\\S].*\\}").matcher(regexTemplate.str)
+            //匹配when >>> when\([a-zA-Z0-9]+\)\{*.[\s\S]+?\}\s+(?!.?')
+            //获取参数 >>> when\(*.*\)
+            //取得行   >>> (else|is)\s+\S*\s*->\s+\S+\s+\S+\s+'*.+?'*?;
+            //取得正文 >>> is\s+.\s*->
+            val m: Matcher = Pattern.compile("when\\([a-zA-Z0-9]+\\)\\{*.[\\s\\S]+?\\}\\s+(?!.?')").matcher(regexTemplate.str)
             while (m.find()) {
                 println(m.group())
-                println("")
-                m.appendReplacement(sb, "我被替换了！")
-//                for (index in 0..m.groupCount()) {
-//                    println(m.group(index))
-//                    println("=========")
-//                }
+
+                var conditionName: String = ""
+                val c = Pattern.compile("when\\(*.*\\)").matcher(m.group())
+                while (c.find()) {
+                    conditionName = c.group().replace("when(", "").replace(")", "")
+                }
+                var nameType: Int = 2
+                val condition = Pattern.compile("(else|is)\\s+\\S*\\s*->\\s+\\S+\\s+\\S+\\s+'*.+?'*?;").matcher(m.group())
+                while (condition.find()) {
+                    val matcher = Pattern.compile("is\\s+.\\s*->").matcher(condition.group())
+                    while (matcher.find()) {
+                        val conditionValue = matcher.group().replace("is ", "").replace(" ->", "")
+                        if (nameType.toString() == conditionValue) {
+                            // println("查询到条件:" + condition.group())
+                            println("得到字段:" + condition.group().replace(matcher.group(), "").replace(";", ""))
+                        }
+                    }
+                }
             }
             m.appendTail(sb)
 
-            println(sb.toString())
+            //  println(sb.toString())
         }
     }
+
+    private fun acquisitionCondition(): MutableList<String> {
+        var list: MutableList<String> = mutableListOf()
+
+
+
+        return list
+    }
+
+    //发生回溯
+
 
     private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
         val paramMap: MutableMap<String, Any?> = mutableMapOf()
