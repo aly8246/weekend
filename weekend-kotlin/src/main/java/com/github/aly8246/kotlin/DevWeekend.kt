@@ -28,7 +28,7 @@ open class DevWeekend {
         // userDao.exec(22, null, moneyList).listIterator().forEach { e -> println(e) }
         println(userDao.exec(22, 1, moneyList))
         //userDao2.exec().listIterator().forEach { e -> println(e) }
-
-
+        val insert = userDao.insert()
+        println("新增的行数:$insert")
     }
 }

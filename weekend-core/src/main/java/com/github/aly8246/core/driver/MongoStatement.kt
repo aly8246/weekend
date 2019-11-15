@@ -1,6 +1,7 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.core.executor.SimpleExecutor
+import com.github.aly8246.core.executor.InsertExecutor
+import com.github.aly8246.core.executor.SelectExecutor
 import com.mongodb.client.MongoCursor
 import org.bson.Document
 import java.sql.Connection
@@ -8,7 +9,7 @@ import java.sql.ResultSet
 import java.sql.SQLWarning
 import java.sql.Statement
 
-class MongoStatement(
+open class MongoStatement(
         private var mongoConnection: MongoConnection
         , resultSetType: Int
         , resultSetConcurrency: Int
@@ -16,6 +17,7 @@ class MongoStatement(
 ) : Statement {
     private lateinit var cursor: MongoCursor<Document>
     private var closed = false
+    private lateinit var result: ResultSet
 
     override fun clearBatch() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -54,9 +56,12 @@ class MongoStatement(
     }
 
     override fun executeQuery(sql: String): ResultSet {
-        val simpleExecutor = SimpleExecutor(sql)
-        cursor = simpleExecutor.select(sql, connection as MongoConnection)
-        return MongoResultSet(cursor, connection as MongoConnection, this)
+        val selectExecutor = SelectExecutor(sql)
+        cursor = selectExecutor.select(sql, connection as MongoConnection)
+
+        val mongoResultSet = MongoResultSet(cursor, connection as MongoConnection, this)
+        this.result = mongoResultSet
+        return mongoResultSet
     }
 
     //关闭连接
@@ -144,9 +149,13 @@ class MongoStatement(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun addBatch(sql: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun addBatch(sql: String) {
+        println(sql)
+        val insertExecutor = InsertExecutor(sql)
+        val insert = insertExecutor.insert(sql, connection as MongoConnection)
+        this.result = MongoResultSet(insert)
     }
+
 
     override fun getGeneratedKeys(): ResultSet {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -157,7 +166,7 @@ class MongoStatement(
     }
 
     override fun getResultSet(): ResultSet {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return this.result
     }
 
     override fun setQueryTimeout(seconds: Int) {

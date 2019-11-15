@@ -31,7 +31,8 @@ class RegexTemplate : BaseTemplate() {
         try {
             CCJSqlParserManager().parse(StringReader(command.trim()))
         } catch (e: Exception) {
-            throw WeekendException("Bad Syntax By:$command")
+
+            throw WeekendException("Bad Syntax By:$command    >>  ${e.message}")
         }
     }
 

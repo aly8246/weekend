@@ -20,7 +20,7 @@ import java.util.regex.Pattern
 
 interface Executor {
     fun select(sql: String, mongoConnection: MongoConnection): MongoCursor<Document>
-    fun insert(sql: String): Int
+    fun insert(sql: String, mongoConnection: MongoConnection): Int
     fun update(sql: String): Int
     fun delete(sql: String): Int
 
@@ -72,7 +72,6 @@ interface Executor {
         }
         return fields
     }
-
 
     private tailrec fun resolverConditionTree(expression: Expression, basicDBObject: BasicDBObject) {
         when (expression) {

@@ -16,8 +16,8 @@ interface UserDao {
             "}")
     fun exec(userAge: Int, nameType: Int?, userMoney: MutableList<Int>?): UserInfo
 
-    @Command("select * from user_info")
-    fun exec2(): List<UserInfo>
+    @Command("INSERT INTO user_info(`id`, `name`, `userMoney`, `age`) VALUES ('1', '1', 1, 1)")
+    fun insert(): Int
 
     //from
     //select * from user_info where name = #{name}

@@ -3,7 +3,6 @@ package com.github.aly8246.core.driver
 import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.annotation.WeekendId
-import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
@@ -21,7 +20,22 @@ import java.sql.Date
 import java.util.*
 import java.util.regex.Pattern
 
-class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnection: MongoConnection, private var mongoStatement: MongoStatement) : ResultSet {
+class MongoResultSet() : ResultSet {
+    public var resultRows: Int? = null
+
+    constructor(resultRows: Int) : this() {
+        this.resultRows = resultRows
+    }
+
+    private lateinit var query: MongoCursor<Document>
+    private lateinit var mongoConnection: MongoConnection
+    private lateinit var mongoStatement: MongoStatement
+
+    constructor(query: MongoCursor<Document>, mongoConnection: MongoConnection, mongoStatement: MongoStatement) : this() {
+        this.query = query
+        this.mongoConnection = mongoConnection
+        this.mongoStatement = mongoStatement
+    }
 
     private lateinit var command: Command
     private lateinit var method: Method
@@ -29,6 +43,7 @@ class MongoResultSet(private var query: MongoCursor<Document>, var mongoConnecti
     private var resultClassType: Class<*>? = null
     private var mappingMap: MutableMap<String, MongoMapping> = mutableMapOf()
     private var _id: Any? = null
+
 
     fun init(command: Command, method: Method, args: kotlin.Array<Any>?) {
         this.command = command

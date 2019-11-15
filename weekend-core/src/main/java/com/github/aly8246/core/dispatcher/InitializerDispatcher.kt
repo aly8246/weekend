@@ -3,7 +3,6 @@ package com.github.aly8246.core.dispatcher
 import com.github.aly8246.core.annotation.Command
 import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.driver.MongoConnection
-import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.template.RegexTemplate
 import com.github.aly8246.core.util.PrintImpl
@@ -13,27 +12,23 @@ import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.sql.Statement
 
-@Suppress("UNCHECKED_CAST")
 abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, var mongoConnection: MongoConnection) : AbstractDispatcher<T>(proxy, method, args) {
-    private lateinit var command: Command
+    private lateinit var commandAnnotation: Command
 
     final override fun run(): T? {
         try {
-            command = method.getDeclaredAnnotation(Command::class.java)
+            commandAnnotation = method.getDeclaredAnnotation(Command::class.java)
         } catch (e: IllegalStateException) {
             throw WeekendException("方法上的 @com.github.aly8246.core.annotation.Command 注解不能为空")
         }
 
         val param = resolverParam(method)
 
-        val original = template(this.command, param)
+        val originalCommand = template(this.commandAnnotation, param)
 
         val statement = mongoConnection.createStatement()
 
-        val executeQuery = selectStatement(statement, original)
-        executeQuery.init(command, method, args)
-
-        return executeQuery.getObject() as T ?: return null
+        return selectStatement(statement, originalCommand,this.commandAnnotation)
     }
 
 
@@ -56,7 +51,7 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         return paramMap
     }
 
-    abstract fun selectStatement(statement: Statement, command: String): MongoResultSet
+    abstract fun selectStatement(statement: Statement, command: String, commandAnnotation: Command): T?
 
     override fun template(command: Command, param: MutableMap<Parameter, Any?>): String = RegexTemplate().completeCommand(command, param)
 }

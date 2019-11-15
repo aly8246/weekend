@@ -7,9 +7,11 @@ import java.util.List;
 
 
 public interface UserDao2 {
-    @Command("select * from user_info")
-    List<UserInfo> exec();
+@Command("select * from user_info")
+List<UserInfo> exec();
 
-    @Command("select * from user_info")
-    UserInfo exec2();
+@Command("select * from user_info")
+UserInfo exec2();
+
+
 }
