@@ -73,6 +73,7 @@ userInfoList.forEach(System.err::println)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191110123940153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NDI1MjQz,size_16,color_FFFFFF,t_70)
 
 > Q >>  这个看起来像mybatis使用注解sql来查询mysql数据库，这个和mongodb有什么关系呢？这个注解怎么看起来怪怪的？
+
 > A >>  首先，这个查询出来的数据其实是mongodb里的数据，因为我正在尝试开发一款名为weekend的应用,可以像mybatis一样来查询mongodb，除了一些注解不大一样以外
 
 **需要做什么呢？**
