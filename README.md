@@ -33,7 +33,7 @@ db.user_info.find({
 
 **如果可以使用mysql来简单查询mongodb你又会使用吗**
 
-> 还有这等好事?那我肯定要试试啊
+> Q >  还有这等好事?那我肯定要试试啊
 
 ---
 
@@ -72,9 +72,10 @@ userInfoList.forEach(System.err::println)
 ```
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191110123940153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NDI1MjQz,size_16,color_FFFFFF,t_70)
 
-**为什么注入一个接口就能实现查询mongodb呢？**
-那是因为我正在尝试开发一款名为weekend的应用
+> Q >>  这个看起来像mybatis使用注解sql来查询mysql数据库，这个和mongodb有什么关系呢？这个注解怎么看起来怪怪的？
+> A >>  首先，这个查询出来的数据其实是mongodb里的数据，因为我正在尝试开发一款名为weekend的应用,可以像mybatis一样来查询mongodb，除了一些注解不大一样以外
 
+**需要做什么呢？**
 
 step1. pom依赖
 ```bash
@@ -99,6 +100,10 @@ step3.启动类扫描
         "com.github.aly8246.kotlin.dd"
 )
 ```
+
+step4.写接口和注解sql然后注入接口来查询
+
+
 
 
 **不幸的是这个应用刚刚起步**
