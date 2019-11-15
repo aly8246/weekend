@@ -96,6 +96,10 @@ class RegexTemplate : BaseTemplate() {
     private fun convertParamMap(params: MutableMap<Parameter, Any?>): MutableMap<String, Any?> {
         val paramMap: MutableMap<String, Any?> = mutableMapOf()
         params.forEach { e ->
+            //如果参数中包含一个类
+            //    UserInfo userInfo
+            //    #{userInfo.id}
+            //TODO 应该讲参数拆解并且放到map里   userInfo.id : value
             paramMap[e.key.name] = e.value
         }
         return paramMap
@@ -103,7 +107,6 @@ class RegexTemplate : BaseTemplate() {
 
     private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
         val paramMap: MutableMap<String, Any?> = this.convertParamMap(params)
-        //TODO 如果参数值为空，则去掉本段的参数替换
         val m: Matcher = Pattern.compile(regx).matcher(template)
         val sb = StringBuffer()
         while (m.find()) {
@@ -111,7 +114,10 @@ class RegexTemplate : BaseTemplate() {
             when (val value = paramMap[param.substring(2, param.length - 1)]) {
                 is String -> if (regx.contains("#")) m.appendReplacement(sb, "'$value'") else m.appendReplacement(sb, value.toString())
                 is List<*> -> m.appendReplacement(sb, "(" + value.toList().joinToString(",") + ")")
-                else -> m.appendReplacement(sb, value?.toString() ?: "")
+                else -> {
+                    //TODO 如果参数值为空，则去掉本段的参数替换
+                    m.appendReplacement(sb, value?.toString() ?: "")
+                }
             }
         }
         m.appendTail(sb)

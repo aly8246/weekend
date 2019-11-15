@@ -32,5 +32,4 @@ class OriginalDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongo
             else -> throw WeekendException("暂时不支持的语句 >> $sqlStatement")
         }
     }
-
 }
