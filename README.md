@@ -123,4 +123,4 @@ v. 	过周末; 度周末;
 > The name comes from English Weekend, which means that if you simply use mongodb, then you don't need to learn mongodb's syntax. If you can use mongodb skillfully without learning it, if you can release a weekend time, then my original intention is achieved
 
 ---
-## Thank you for my help!
+## Thanks for I can help everyone!
