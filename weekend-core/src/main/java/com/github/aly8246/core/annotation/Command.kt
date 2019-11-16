@@ -1,6 +1,14 @@
 package com.github.aly8246.core.annotation
 
+import kotlin.reflect.KClass
+
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @MustBeDocumented
-annotation class Command(vararg val value: String)
+annotation class Command(
+        vararg val value: String,
+        val primaryKey: String = "_id",
+
+        //not use
+        val commandEntity: KClass<*> = Command::class
+)

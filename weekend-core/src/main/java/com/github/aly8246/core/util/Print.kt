@@ -12,5 +12,7 @@ interface Print {
 
     fun debug(msg: String)
 
+    fun error(msg: String)
 
+    fun warning(msg: String)
 }

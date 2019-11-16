@@ -22,6 +22,7 @@ open class WeekendGlobalConfiguration {
         configuration.showCommand = configurationProperties.showCommand
         configuration.showCondition = configurationProperties.showCondition
         configuration.showResult = configurationProperties.showResult
+        configuration.dataFormat = configurationProperties.dataFormat
     }
 
 

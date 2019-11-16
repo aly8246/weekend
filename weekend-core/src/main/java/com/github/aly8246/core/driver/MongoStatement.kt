@@ -4,6 +4,7 @@ import com.github.aly8246.core.executor.InsertExecutor
 import com.github.aly8246.core.executor.SelectExecutor
 import com.mongodb.client.MongoCursor
 import org.bson.Document
+import java.lang.reflect.Parameter
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLWarning
@@ -18,7 +19,7 @@ open class MongoStatement(
     private var cursor: MongoCursor<Document>? = null
     private var closed = false
     private lateinit var result: ResultSet
-
+    lateinit var param: MutableMap<Parameter, Any?>
     override fun clearBatch() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -153,7 +154,7 @@ open class MongoStatement(
     override fun addBatch(sql: String) {
         println(sql)
         val insertExecutor = InsertExecutor(sql)
-        val insert = insertExecutor.insert(sql, connection as MongoConnection)
+        val insert = insertExecutor.insert(sql, connection as MongoConnection, this.param)
         this.result = MongoResultSet(insert)
     }
 

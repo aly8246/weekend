@@ -13,6 +13,8 @@ class Configurations {
     var showCondition: Boolean? = null
     var showResult: Boolean? = null
 
+    var dataFormat: String? = null
+
     companion object {
         var configuration = Configurations()
     }

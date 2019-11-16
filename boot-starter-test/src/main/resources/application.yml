@@ -1,6 +1,29 @@
 server:
-  port: 8247
+  port: 8888
 weekend:
   mongodb:
     uri: jdbc:mongodb://148.70.16.82:27017/weekend-dev
     driver-name: com.github.aly8246.core.driver.MongoDriver
+  config:
+    non-field-remind: true
+    show-param: true
+    show-command: true
+    show-condition: true
+    show-result: true
+
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+common:
+  swagger:
+    enabled: true
+    title: weekend在线示例
+    description: weekend是一款可以使用sql语句来查询mongodb的工具,很高兴能够帮到你
+    contactName: 南有乔木
+    contactEmail: 1558146696@qq.com
+    contactUrl: https://github.com/aly8246/weekend
+    version: 1.0

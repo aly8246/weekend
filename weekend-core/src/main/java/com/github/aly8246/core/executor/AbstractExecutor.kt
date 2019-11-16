@@ -19,6 +19,7 @@ import net.sf.jsqlparser.statement.select.SelectItem
 import org.bson.Document
 import org.bson.conversions.Bson
 import java.io.StringReader
+import java.lang.reflect.Parameter
 import java.util.regex.Pattern
 
 /**
@@ -36,8 +37,8 @@ abstract class AbstractExecutor(sql: String) : Executor {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun insert(sql: String, mongoConnection: MongoConnection): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun insert(sql: String, mongoConnection: MongoConnection, param: MutableMap<Parameter, Any?>): Int {
+        return 0
     }
 
     override fun update(sql: String): Int {
@@ -51,7 +52,12 @@ abstract class AbstractExecutor(sql: String) : Executor {
     protected fun expressionName(expression: Expression): String {
         return when (expression) {
             is StringValue -> expression.toString()
-            is Column -> expression.columnName
+            is Column -> {
+                when (expression.columnName) {
+                    "id" -> "_id"
+                    else -> expression.columnName
+                }
+            }
             else -> throw  RuntimeException("无法解析的字段")
         }
     }
@@ -65,6 +71,7 @@ abstract class AbstractExecutor(sql: String) : Executor {
             is TimeValue -> expression.value
             is TimestampValue -> expression.value
             is NullValue -> null
+            is Column -> expression.columnName
             is JdbcParameter -> throw java.lang.RuntimeException("暂时无法解析:$expression")
             else -> throw java.lang.RuntimeException("暂时无法解析:$expression")
         }

@@ -1,30 +1,136 @@
 package com.github.aly8246.core.template
 
-import com.github.aly8246.core.configuration.Configurations
+import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
 import net.sf.jsqlparser.parser.CCJSqlParserManager
 import java.io.StringReader
 import java.lang.reflect.Parameter
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import java.util.stream.Collectors
+import java.util.stream.Collectors.toList
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class RegexTemplate : BaseTemplate() {
+open class RegexTemplate : BaseTemplate() {
     override fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
         if (configuration.showCommand!!)
             PrintImpl().debug("originalCommand >>   $sourceCommand")
-        //替换普通参数
-        var command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
-        command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
+        var command = ""
 
-        //执行when条件判断
-        command = processConditionTemplate(command, param)
+        if (sourceCommand.startsWith("SELECT") || sourceCommand.startsWith("select")) {
+            //替换普通参数
+            command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
+            command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
+            //执行when条件判断
+            command = processConditionTemplate(command, param)
+        } else if (sourceCommand.startsWith("INSERT") || sourceCommand.startsWith("insert")) {
+            //为insert方法处理参数
+            command = this.processInsertValue(sourceCommand, param)
+        }
 
         if (configuration.showCommand!!)
             PrintImpl().debug("analyzedCommand >>   $command")
         return command
+    }
+
+    protected fun processInsertValue(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
+        val convertParamMap = this.convertParamMap(param)
+        if (convertParamMap.size > 1 || convertParamMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
+        var paramName = ""
+        var paramValue: Any? = null
+        val insertColumn = this.insertColumn(sourceCommand)
+
+        convertParamMap.entries.forEach { e ->
+            run {
+                paramName = e.key
+                paramValue = e.value
+            }
+        }
+
+        val sb = StringBuffer()
+        val matcher = Pattern.compile("#\\{$paramName}").matcher(sourceCommand)
+        while (matcher.find()) {
+            //插入的values 无论是单个插入还是批量插入
+            val insertValue = StringBuilder()
+            when (paramValue) {
+                is Collections, is Collection<*> -> {
+                    val arrayList = paramValue as ArrayList<*>
+                    arrayList.forEach { e ->
+                        run {
+                            val buildInsertValue = buildInsertValue(insertColumn, e)
+                            insertValue.append(buildInsertValue).append(",")
+                        }
+                    }
+                    insertValue.deleteCharAt(insertValue.length - 1)
+                }
+                else -> {
+                    insertValue.append(buildInsertValue(insertColumn, paramValue))
+                }
+            }
+            matcher.appendReplacement(sb, insertValue.toString())
+        }
+        matcher.appendTail(sb)
+        return sb.toString()
+    }
+
+    //根据要新增的行.从参数里拿出数据
+    private fun buildInsertValue(columnList: MutableList<String>, paramValue: Any?): String {
+        val paramValueClass = paramValue!!::class.java
+        val declaredFields = paramValueClass.declaredFields
+
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(" (")
+
+        //paramValue是传递的参数类,依次取出参数值
+        //如果参数值在columnList则说明需要,放到map里,为了防止参数位置错乱
+        val valueMap: MutableMap<String, String> = mutableMapOf()
+        columnList.forEach { e ->
+            run {
+                valueMap.put(e, "")
+            }
+        }
+        for (field in declaredFields) {
+            run {
+                val annotationList = field.annotations.toList()
+                val mappingList = annotationList.stream().filter { it is Mapping }.collect(toList())
+                val fieldName = when {
+                    mappingList.size >= 1 -> {
+                        val fieldMappingName = (mappingList[0] as Mapping).name.joinToString { it + "" }
+                        fieldMappingName
+                    }
+                    else -> field.name
+                }
+                //通过反射取到的值,但是不一定是新增的时候需要的值
+                if (columnList.stream().anyMatch { e -> e == fieldName }) {
+
+                    val declaredField = paramValue.javaClass.getDeclaredField(field.name)
+                    declaredField.isAccessible = true
+
+                    when (val value = declaredField.get(paramValue)) {
+                        is String -> valueMap[fieldName] = "'$value'"
+                        is Date -> valueMap[fieldName] = "'" + SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(value.toString())) + "'"
+                        else -> valueMap[fieldName] = "$value"
+                    }
+                }
+            }
+        }
+        stringBuilder.append(valueMap.values.stream().collect(Collectors.joining(",")))
+        stringBuilder.append(")")
+        return stringBuilder.toString()
+    }
+
+    //获取新增的时候需要新增的行
+    protected fun insertColumn(sourceCommand: String): MutableList<String> {
+        val matcher = Pattern.compile("\\(.*?\\)").matcher(sourceCommand)
+        while (matcher.find()) {
+            val group = matcher.group().replace("(", "").replace(")", "").replace("`", "").replace(" ", "")
+            return group.split(',') as MutableList<String>
+        }
+        throw WeekendException("无法解析的sql:$sourceCommand")
     }
 
     override fun syntaxCheck(command: String) {
@@ -54,7 +160,7 @@ class RegexTemplate : BaseTemplate() {
             val any = paramMap[conditionName]
 
             if (any == null) {
-                PrintImpl().debug("没有传入参数:$conditionName 取消when条件执行语法且不可逆")
+                PrintImpl().warning("没有传入参数:$conditionName 取消when条件执行语法且不可逆")
                 whenRegex.appendReplacement(sb, "")
                 break
             }
@@ -113,7 +219,23 @@ class RegexTemplate : BaseTemplate() {
             val param: String = m.group()
             when (val value = paramMap[param.substring(2, param.length - 1)]) {
                 is String -> if (regx.contains("#")) m.appendReplacement(sb, "'$value'") else m.appendReplacement(sb, value.toString())
-                is List<*> -> m.appendReplacement(sb, "(" + value.toList().joinToString(",") + ")")
+                is List<*> -> {
+                    if (value.count() == 0) {
+                        throw WeekendException("查询参数为空,暂时无法处理")
+                    }
+                    when (value[0]) {
+                        is String -> {
+                            val strList: MutableList<String> = mutableListOf();
+                            value.forEach { e ->
+                                run {
+                                    strList.add("'" + (e as String) + "'")
+                                }
+                            }
+                            m.appendReplacement(sb, "(" + strList.joinToString(",") + ")")
+                        }
+                        else -> m.appendReplacement(sb, "(" + value.toList().joinToString(",") + ")")
+                    }
+                }
                 else -> {
                     //TODO 如果参数值为空，则去掉本段的参数替换
                     m.appendReplacement(sb, value?.toString() ?: "")

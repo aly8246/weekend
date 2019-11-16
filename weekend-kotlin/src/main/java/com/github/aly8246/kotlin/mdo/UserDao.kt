@@ -1,7 +1,6 @@
 package com.github.aly8246.kotlin.mdo
 
 import com.github.aly8246.core.annotation.Command
-import com.github.aly8246.kotlin.pojo.User
 import com.github.aly8246.kotlin.pojo.UserInfo
 
 
@@ -15,11 +14,16 @@ interface UserDao {
 //            "    is 2 -> and name = '超级管理员';" +
 //            "    else -> and name = '其他洗脚员工';" +
 //            "}")
-    @Command("select * from user_info limit 1,3")
-    fun exec(userAge: Int?, nameType: Int?, userMoney: MutableList<Int>?): List<User>
+    // @Command("select * from user_info limit 1,3")
+    @Command("select * from user_info")
+    fun exec(userAge: Int?, nameType: Int?, userMoney: MutableList<Int>?): List<UserInfo>
 
-    @Command("INSERT INTO user_info(`id`, `name`, `userMoney`, `age`) VALUES ('1', '1', 1, 1)")
-    fun insert(): Int
+    @Command("INSERT INTO user_info(`id`, `name`, `userMoney`, `age`) VALUES #{u}")
+    fun insert(u: MutableList<UserInfo>): Int
+
+    @Command("INSERT INTO user_info" +
+            "(`id`, `name`, `userMoney`, `age`) VALUES #{userList}")
+    fun insertList(userList: MutableList<UserInfo>?): Int
 
     //from
     //select * from user_info where name = #{name}

@@ -40,7 +40,6 @@ class SelectExecutor(sql: String) : AbstractExecutor(sql), Executor {
             find.limit(rowCount.toString().toInt())
         }
 
-
         return find.cursor()
     }
 }

@@ -78,7 +78,7 @@ open class WeekendProxyRegister : ImportBeanDefinitionRegistrar, ResourceLoaderA
                     val clazz: Class<*>
                     try {
                         clazz = Class.forName(className)
-                        PrintImpl().debug("Inject  $className")
+                        PrintImpl().info("Inject  $className")
                         set.add(clazz)
                     } catch (e: ClassNotFoundException) {
                         e.printStackTrace()

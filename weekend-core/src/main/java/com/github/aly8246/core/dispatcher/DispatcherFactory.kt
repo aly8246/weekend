@@ -12,7 +12,7 @@ open class DispatcherFactory<T> : DispatcherFactoryPolicy<T> {
     override fun dispatcherFactory(proxy: Any, method: Method, args: Array<Any>?): Dispatcher<T> {
         try {
             Class.forName(configuration.driverName)
-        } catch (e: NullPointerException) {
+        } catch (e: ClassNotFoundException) {
             throw WeekendException("配置文件加载失败，要在配置文件加载之前使用必须手动注入初始化配置,或者在配置文件初始化以后再注入bean")
         }
 

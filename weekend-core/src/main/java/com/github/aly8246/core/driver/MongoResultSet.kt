@@ -17,11 +17,12 @@ import java.net.URL
 import java.sql.*
 import java.sql.Array
 import java.sql.Date
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
 class MongoResultSet() : ResultSet {
-    public var resultRows: Int? = null
+    var resultRows: Int? = null
 
     constructor(resultRows: Int) : this() {
         this.resultRows = resultRows
@@ -212,43 +213,49 @@ class MongoResultSet() : ResultSet {
             }
 
             field.isAccessible = true
-            when {
-                field.type.name == "java.lang.String" -> {
-                    field.set(newInstance, mappingMap[key].toString())
+            try {
+                when {
+                    field.type.name == "java.lang.String" -> {
+                        field.set(newInstance, mappingMap[key].toString())
+                    }
+                    field.type.name == "java.lang.Integer" -> {
+                        field.set(newInstance, mappingMap[key].toString().toInt())
+                    }
+                    field.type.name == "java.lang.Double" -> {
+                        field.set(newInstance, mappingMap[key].toString().toDouble())
+                    }
+                    field.type.name == "java.lang.Long" -> {
+                        field.set(newInstance, mappingMap[key].toString().toLong())
+                    }
+                    field.type.name == "java.lang.Short" -> {
+                        field.set(newInstance, mappingMap[key].toString().toShort())
+                    }
+                    field.type.name == "java.lang.Float" -> {
+                        field.set(newInstance, mappingMap[key].toString().toFloat())
+                    }
+                    field.type.name == "java.util.Date" -> {
+                        field.set(newInstance, SimpleDateFormat(configuration.dataFormat!!).parse(mappingMap[key].toString()))
+                    }
+                    field.type.name == "int" -> {
+                        field.set(newInstance, mappingMap[key].toString().toInt())
+                    }
+                    field.type.name == "double" -> {
+                        field.set(newInstance, mappingMap[key].toString().toDouble())
+                    }
+                    field.type.name == "long" -> {
+                        field.set(newInstance, mappingMap[key].toString().toLong())
+                    }
+                    field.type.name == "short" -> {
+                        field.set(newInstance, mappingMap[key].toString().toShort())
+                    }
+                    field.type.name == "float" -> {
+                        field.set(newInstance, mappingMap[key].toString().toFloat())
+                    }
+                    else -> field.set(newInstance, mappingMap[key])
                 }
-                field.type.name == "java.lang.Integer" -> {
-                    field.set(newInstance, mappingMap[key].toString().toInt())
-                }
-                field.type.name == "java.lang.Double" -> {
-                    field.set(newInstance, mappingMap[key].toString().toDouble())
-                }
-                field.type.name == "java.lang.Long" -> {
-                    field.set(newInstance, mappingMap[key].toString().toLong())
-                }
-                field.type.name == "java.lang.Short" -> {
-                    field.set(newInstance, mappingMap[key].toString().toShort())
-                }
-                field.type.name == "java.lang.Float" -> {
-                    field.set(newInstance, mappingMap[key].toString().toFloat())
-                }
-                field.type.name == "int" -> {
-                    field.set(newInstance, mappingMap[key].toString().toInt())
-                }
-                field.type.name == "double" -> {
-                    field.set(newInstance, mappingMap[key].toString().toDouble())
-                }
-                field.type.name == "long" -> {
-                    field.set(newInstance, mappingMap[key].toString().toLong())
-                }
-                field.type.name == "short" -> {
-                    field.set(newInstance, mappingMap[key].toString().toShort())
-                }
-                field.type.name == "float" -> {
-                    field.set(newInstance, mappingMap[key].toString().toFloat())
-                }
-                else -> field.set(newInstance, mappingMap[key])
+            } catch (e: NumberFormatException) {
+                field.set(newInstance, null)
             }
-
         }
         return newInstance
     }

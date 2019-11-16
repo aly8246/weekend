@@ -69,4 +69,15 @@ open class ConfigurationProperties {
             this.properties.setProperty("show-result", value.toString())
         }
 
+    var dataFormat: String
+        get() {
+            try {
+                return this.properties.getProperty("data-format")!!.toString()
+            } catch (e: KotlinNullPointerException) {
+            }
+            return "yyyy-MM-dd HH:mm:ss"
+        }
+        set(value) {
+            this.properties.setProperty("data-format", value.toString())
+        }
 }

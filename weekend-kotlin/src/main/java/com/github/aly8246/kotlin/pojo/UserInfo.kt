@@ -17,10 +17,16 @@ class UserInfo {
 
     @Mapping(name = ["name"], type = String::class)
     var userName: String? = null
+
     var userMoney: Double? = null
 
     @Mapping(name = ["age"], type = Long::class)
     var userAge: Int? = null
+
+    var clazz: String? = null
+
+    @Mapping(name = ["ttt"], type = Long::class)
+    var time: String? = null
 
     override fun toString(): String {
         return "UserInfo(id='$userId', name='$userName', userMoney=$userMoney, age=$userAge)"

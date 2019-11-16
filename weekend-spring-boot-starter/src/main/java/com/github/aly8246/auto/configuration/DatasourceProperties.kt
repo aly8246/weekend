@@ -30,5 +30,4 @@ open class DatasourceProperties {
         set(value) {
             this.properties.setProperty("driver-name", value)
         }
-
 }
