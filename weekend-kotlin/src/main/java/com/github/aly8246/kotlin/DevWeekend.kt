@@ -26,7 +26,8 @@ open class DevWeekend {
     open fun test() {
         var moneyList: MutableList<Int> = mutableListOf(500, 700)
         // userDao.exec(22, null, moneyList).listIterator().forEach { e -> println(e) }
-        println(userDao.exec(22, 1, moneyList))
+        // println(userDao.exec(22, 1, moneyList))
+        userDao.exec(null, null, null).forEach { e -> println(e) }
         //userDao2.exec().listIterator().forEach { e -> println(e) }
         val insert = userDao.insert()
         println("新增的行数:$insert")

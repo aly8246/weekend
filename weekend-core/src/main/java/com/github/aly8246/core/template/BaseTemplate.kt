@@ -11,7 +11,7 @@ abstract class BaseTemplate : Template {
         when {
             StringUtils.isEmpty(baseCommand) -> throw RuntimeException("BaseCommand不能为空")
         }
-        val replaceParam = replaceParam(baseCommand,param)
+        val replaceParam = replaceParam(baseCommand, param)
         syntaxCheck(replaceParam)
         return replaceParam
     }
@@ -19,11 +19,6 @@ abstract class BaseTemplate : Template {
     abstract fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String
 
     abstract fun syntaxCheck(command: String)
-
-    //TODO 先将模板替换成具体参数值
-    // args command
-    // 完整命令
-
     //select * from user_info where name = #{name}
     //name =小明
     //to

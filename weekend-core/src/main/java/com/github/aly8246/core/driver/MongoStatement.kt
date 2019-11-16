@@ -15,7 +15,7 @@ open class MongoStatement(
         , resultSetConcurrency: Int
         , resultSetHoldability: Int
 ) : Statement {
-    private lateinit var cursor: MongoCursor<Document>
+    private var cursor: MongoCursor<Document>? = null
     private var closed = false
     private lateinit var result: ResultSet
 
@@ -59,16 +59,17 @@ open class MongoStatement(
         val selectExecutor = SelectExecutor(sql)
         cursor = selectExecutor.select(sql, connection as MongoConnection)
 
-        val mongoResultSet = MongoResultSet(cursor, connection as MongoConnection, this)
+        val mongoResultSet = MongoResultSet(cursor!!, connection as MongoConnection, this)
         this.result = mongoResultSet
         return mongoResultSet
     }
 
     //关闭连接
     override fun close() {
-        cursor.close()
+        cursor?.close()
         closed = true
         mongoConnection.close()
+        this.resultSet.close()
     }
 
     //连接是否被关闭

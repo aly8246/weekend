@@ -28,7 +28,9 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
 
         val statement = mongoConnection.createStatement()
 
-        return selectStatement(statement, originalCommand,this.commandAnnotation)
+        val selectStatement = selectStatement(statement, originalCommand, this.commandAnnotation)
+        statement.close()
+        return selectStatement
     }
 
 

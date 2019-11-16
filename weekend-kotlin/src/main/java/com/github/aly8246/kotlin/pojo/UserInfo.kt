@@ -22,9 +22,6 @@ class UserInfo {
     @Mapping(name = ["age"], type = Long::class)
     var userAge: Int? = null
 
-
-    constructor()
-
     override fun toString(): String {
         return "UserInfo(id='$userId', name='$userName', userMoney=$userMoney, age=$userAge)"
     }

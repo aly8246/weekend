@@ -1,20 +1,22 @@
 package com.github.aly8246.kotlin.mdo
 
 import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.kotlin.pojo.User
 import com.github.aly8246.kotlin.pojo.UserInfo
 
 
 interface UserDao {
     //@Command("select * from user_info where userMoney in #{userMoney} and age = #{userAge}")
-    @Command("select * from user_info  " +
-            "where age = #{userAge} " +
-            "and userMoney in #{userMoney} " +
-            "when(nameType){ " +
-            "    is 1 -> and name = '增删查';" +
-            "    is 2 -> and name = '超级管理员';" +
-            "    else -> and name = '其他洗脚员工';" +
-            "}")
-    fun exec(userAge: Int, nameType: Int?, userMoney: MutableList<Int>?): UserInfo
+//    @Command("select id,name from user_info  " +
+//            "where age = #{userAge} " +
+//            "and userMoney in #{userMoney} " +
+//            "when(nameType){ " +
+//            "    is 1 -> and name = '增删查';" +
+//            "    is 2 -> and name = '超级管理员';" +
+//            "    else -> and name = '其他洗脚员工';" +
+//            "}")
+    @Command("select * from user_info limit 1,3")
+    fun exec(userAge: Int?, nameType: Int?, userMoney: MutableList<Int>?): List<User>
 
     @Command("INSERT INTO user_info(`id`, `name`, `userMoney`, `age`) VALUES ('1', '1', 1, 1)")
     fun insert(): Int

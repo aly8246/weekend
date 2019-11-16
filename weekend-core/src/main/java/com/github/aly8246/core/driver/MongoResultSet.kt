@@ -53,17 +53,18 @@ class MongoResultSet() : ResultSet {
         val canonicalName = returnType.canonicalName
         when {
             canonicalName != "void" -> resultClassType = try {
+                //如果是集合则会创建实例失败
                 Class.forName(canonicalName).newInstance().javaClass
             } catch (e: InstantiationException) {
+                //取集合中的泛型的实际类型为返回值
                 Class.forName(regxListParamClass(method.toGenericString())).newInstance().javaClass
-                val list = listOf("java.util.List", "java.util.Set", "kotlin.collections.List")
-                when {
-                    list.stream().noneMatch(canonicalName::equals) -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
-                    else -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
-                }
             }
         }
-
+//                val list = listOf("java.util.List", "java.util.Set", "kotlin.collections.List")
+//                when {
+//                    list.stream().noneMatch(canonicalName::equals) -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
+//                    else -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
+//                }
         val result = this.resolverResult()
         this.mappingMap = result!!
     }
@@ -364,7 +365,6 @@ class MongoResultSet() : ResultSet {
     }
 
     override fun close() {
-        mongoStatement.close()
     }
 
     override fun updateFloat(columnIndex: Int, x: Float) {
