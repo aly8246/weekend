@@ -3,6 +3,7 @@ package com.github.aly8246.core.template
 import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
+import com.github.aly8246.core.util.BasicDataTypeUtil
 import com.github.aly8246.core.util.PrintImpl
 import net.sf.jsqlparser.parser.CCJSqlParserManager
 import java.io.StringReader
@@ -26,8 +27,8 @@ open class RegexTemplate : BaseTemplate() {
                 || sourceCommand.startsWith("UPDATE") || sourceCommand.startsWith("update") || sourceCommand.startsWith("Update")
         ) {
             //替换普通参数
-            command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
-            command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
+            command = this.processSimpleTemplate(sourceCommand, param, "\$\\{.*?\\}")
+            command = this.processSimpleTemplate(command, param, "\\#\\{.*?\\}")
             //执行when条件判断
             command = processConditionTemplate(command, param)
         } else if (sourceCommand.startsWith("INSERT") || sourceCommand.startsWith("insert") || sourceCommand.startsWith("Insert")) {
@@ -35,13 +36,25 @@ open class RegexTemplate : BaseTemplate() {
             command = this.processInsertValue(sourceCommand, param)
         }
 
+        command = this.processNullParam(command)
         if (configuration.showCommand!!)
             PrintImpl().debug("analyzedCommand >>   $command")
         return command
     }
 
-    protected fun processInsertValue(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
-        val convertParamMap = this.convertParamMap(param)
+    protected fun processNullParam(command: String): String {
+        val matcher = Pattern.compile("(set|where|and)\\s+\\S+\\s+\\S+\\s+##NULL_PARAM##").matcher(command)
+        val sb = StringBuffer()
+        while (matcher.find()) {
+            PrintImpl().warning("存在参数为空的字段，强制取消执行条件 >> ${matcher.group()}")
+            matcher.appendReplacement(sb, "")
+        }
+        matcher.appendTail(sb)
+        return sb.toString()
+    }
+
+    private fun processInsertValue(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
+        val convertParamMap = this.convertParamMap(param, false)
         if (convertParamMap.size > 1 || convertParamMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
         var paramName = ""
         var paramValue: Any? = null
@@ -127,7 +140,7 @@ open class RegexTemplate : BaseTemplate() {
     }
 
     //获取新增的时候需要新增的行
-    protected fun insertColumn(sourceCommand: String): MutableList<String> {
+    private fun insertColumn(sourceCommand: String): MutableList<String> {
         val matcher = Pattern.compile("\\(.*?\\)").matcher(sourceCommand)
         while (matcher.find()) {
             val group = matcher.group().replace("(", "").replace(")", "").replace("`", "").replace(" ", "")
@@ -140,8 +153,7 @@ open class RegexTemplate : BaseTemplate() {
         try {
             CCJSqlParserManager().parse(StringReader(command.trim()))
         } catch (e: Exception) {
-
-            throw WeekendException("Bad Syntax By:$command    >>  ${e.message}")
+            throw WeekendException("Bad Syntax By >> $command    >>  ${e.message}")
         }
     }
 
@@ -159,11 +171,11 @@ open class RegexTemplate : BaseTemplate() {
             while (conditionRegex.find()) {
                 conditionName = conditionRegex.group().replace("when(", "").replace(")", "")
             }
-            val paramMap: MutableMap<String, Any?> = this.convertParamMap(params)
+            val paramMap: MutableMap<String, Any?> = this.convertParamMap(params, true)
             val any = paramMap[conditionName]
 
             if (any == null) {
-                PrintImpl().warning("没有传入参数:$conditionName 取消when条件执行语法且不可逆")
+                PrintImpl().warning("没有传入参数:$conditionName 取消when条件执行")
                 whenRegex.appendReplacement(sb, "")
                 break
             }
@@ -202,26 +214,52 @@ open class RegexTemplate : BaseTemplate() {
         return sb.toString()
     }
 
-    private fun convertParamMap(params: MutableMap<Parameter, Any?>): MutableMap<String, Any?> {
-        val paramMap: MutableMap<String, Any?> = mutableMapOf()
+    // resolverClass 是否解析类里面的字段，新增的时候不需要解析
+    private fun convertParamMap(params: MutableMap<Parameter, Any?>, resolverClass: Boolean): MutableMap<String, Any?> {
+        val resultParamMap: MutableMap<String, Any?> = mutableMapOf()
         params.forEach { e ->
             //如果参数中包含一个类
             //    UserInfo userInfo
             //    #{userInfo.id}
-            //TODO 应该讲参数拆解并且放到map里   userInfo.id : value
-            paramMap[e.key.name] = e.value
+            if (resolverClass)
+                if (!BasicDataTypeUtil.isBasicDataType(e.key)) {
+                    val className = toLowerCaseFirstOne(e.key.type.simpleName)
+
+                    val valueInstance = e.value!!::class.java
+                    val declaredFields = valueInstance.declaredFields
+
+                    for (field in declaredFields) {
+                        val declaredField = valueInstance.getDeclaredField(field.name)
+                        declaredField.isAccessible = true
+                        val entityValue = declaredField.get(e.value)
+                        if (entityValue != null) {
+                            resultParamMap["$className.${field.name}"] = entityValue
+                        }
+                    }
+                }
+            resultParamMap[e.key.name] = e.value
         }
-        return paramMap
+        return resultParamMap
+    }
+
+    private fun toLowerCaseFirstOne(str: String): String {
+        if (str[0].isLowerCase()) {
+            return str
+        }
+        return java.lang.StringBuilder().append(str[0].toLowerCase()).append(str.substring((1))).toString()
     }
 
     private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
-        val paramMap: MutableMap<String, Any?> = this.convertParamMap(params)
+        val paramMap: MutableMap<String, Any?> = this.convertParamMap(params, true)
         val m: Matcher = Pattern.compile(regx).matcher(template)
         val sb = StringBuffer()
         while (m.find()) {
             val param: String = m.group()
             when (val value = paramMap[param.substring(2, param.length - 1)]) {
-                is String -> if (regx.contains("#")) m.appendReplacement(sb, "'$value'") else m.appendReplacement(sb, value.toString())
+                is String -> {
+                    if (regx.contains("#")) m.appendReplacement(sb, "'$value'")
+                    else m.appendReplacement(sb, value.toString())
+                }
                 is List<*> -> {
                     if (value.count() == 0) {
                         throw WeekendException("查询参数为空,暂时无法处理")
@@ -240,8 +278,10 @@ open class RegexTemplate : BaseTemplate() {
                     }
                 }
                 else -> {
-                    //TODO 如果参数值为空，则去掉本段的参数替换
-                    m.appendReplacement(sb, value?.toString() ?: "")
+                    if (value == null) {
+                        m.appendReplacement(sb, "##NULL_PARAM##")
+                    } else
+                        m.appendReplacement(sb, value.toString())
                 }
             }
         }

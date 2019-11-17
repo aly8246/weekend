@@ -13,6 +13,8 @@ public interface TestService {
 
     User selectById(String id);
 
+    User selectByUser(User user);
+
     List<User> selectByNameIn(List<String> nameList);
 
     List<User> selectAllOrderByAge(Integer type);
@@ -24,5 +26,8 @@ public interface TestService {
     int deleteByIdIn(List<String> idList);
 
     int updateNameByIdIs(String id, String name);
+
+    int updateByUser(User user);
+
 
 }

@@ -34,6 +34,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    public User selectByUser(User user) {
+        return testDao.selectByUser(user);
+    }
+
+    @Override
     public List<User> selectByNameIn(List<String> nameList) {
         return testDao.selectByNameIn(nameList);
     }
@@ -61,5 +66,10 @@ public class TestServiceImpl implements TestService {
     @Override
     public int updateNameByIdIs(String id, String name) {
         return testDao.updateNameByIdIs(id, name);
+    }
+
+    @Override
+    public int updateByUser(User user) {
+        return testDao.updateByUser(user);
     }
 }

@@ -2,7 +2,6 @@ package com.other.test.boot.enitiy;
 
 import com.github.aly8246.core.annotation.Mapping;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.nashorn.internal.objects.annotations.Property;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -9,13 +9,16 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
 @RequestMapping("user/")
 @Api(tags = "用户管理")
+@Validated
 @RequiredArgsConstructor
 public class TestController {
     private final TestService testService;
@@ -54,6 +57,14 @@ public class TestController {
     public Result<User> selectById(@PathVariable("id") String id) {
         User user = testService.selectById(id);
         return Result.success(user);
+    }
+
+    @GetMapping("userEntity/")
+    @ApiOperation("查询指定用户[根据id，但是是创建了一个实体去查询]")
+    public Result<User> selectByUser(String userId) {
+        User user = new User();
+        user.setId(userId);
+        return Result.success(testService.selectByUser(user));
     }
 
     @GetMapping("byNameIn/")
@@ -106,6 +117,14 @@ public class TestController {
     })
     public Result updateByIdIs(String userId, String userName) {
         int i = testService.updateNameByIdIs(userId, userName);
+        String msg = "更新了:" + i + "行记录";
+        return Result.success(msg, null);
+    }
+
+    @PutMapping("byUser")
+    @ApiOperation("更新一个用户的名称[根据实体类]")
+    public Result updateByUser(@RequestBody @Validated User user) {
+        int i = testService.updateByUser(user);
         String msg = "更新了:" + i + "行记录";
         return Result.success(msg, null);
     }

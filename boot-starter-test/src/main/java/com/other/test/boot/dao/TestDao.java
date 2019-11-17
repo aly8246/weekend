@@ -22,6 +22,9 @@ public interface TestDao {
     @Command("select * from user where id = #{id}")
     User selectById(String id);
 
+    @Command("select * from user where id = #{user.id}")
+    User selectByUser(User user);
+
     @Command("select * from user where name in #{nameList}")
     List<User> selectByNameIn(List<String> nameList);
 
@@ -46,5 +49,10 @@ public interface TestDao {
 
     @Command("update user set name = #{name} where id = #{id}")
     int updateNameByIdIs(String id, String name);
+
+    @Command("update user set name = #{user.name} where id = #{user.id}")
+    int updateByUser(User user);
+
+
 }
 

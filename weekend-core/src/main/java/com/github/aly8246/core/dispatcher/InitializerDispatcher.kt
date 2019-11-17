@@ -5,13 +5,13 @@ import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.template.RegexTemplate
+import com.github.aly8246.core.util.BasicDataTypeUtil.isBasicDataType
 import com.github.aly8246.core.util.PrintImpl
 import java.lang.Exception
+import java.lang.StringBuilder
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
-import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.Statement
 
 abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, var mongoConnection: MongoConnection) : AbstractDispatcher<T>(proxy, method, args) {
