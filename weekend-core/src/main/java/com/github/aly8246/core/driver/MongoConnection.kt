@@ -26,7 +26,6 @@ class MongoConnection() : Connection {
         } else {
             this.mongoClient = MongoClient(dbAddress)
         }
-
         this.dbAddress = dbAddress
     }
 
