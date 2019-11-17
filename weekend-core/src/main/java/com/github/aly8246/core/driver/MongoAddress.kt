@@ -13,7 +13,6 @@ open class MongoAddress(host: String) : ServerAddress(resolverUrl(host)) {
     }
 }
 
-//TODO  jdbc:mongodb://root:123456@148.70.16.82:27017/weekend-dev
 // jdbc:mongodb://148.70.16.82/weekend-dev
 // to
 // 148.70.16.82

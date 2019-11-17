@@ -1,5 +1,6 @@
 package com.github.aly8246.auto.configuration
 
+import com.github.aly8246.core.exception.WeekendException
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Service
 import java.util.*
@@ -29,5 +30,27 @@ open class DatasourceProperties {
         }
         set(value) {
             this.properties.setProperty("driver-name", value)
+        }
+    var username: String
+        get() {
+            return try {
+                this.properties.getProperty("username")
+            } catch (e: IllegalStateException) {
+                ""
+            }
+        }
+        set(value) {
+            this.properties.setProperty("username", value)
+        }
+    var password: String
+        get() {
+            return try {
+                this.properties.getProperty("password")
+            } catch (e: IllegalStateException) {
+                ""
+            }
+        }
+        set(value) {
+            this.properties.setProperty("password", value)
         }
 }

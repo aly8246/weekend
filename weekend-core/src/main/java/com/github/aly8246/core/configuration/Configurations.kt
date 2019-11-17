@@ -5,6 +5,9 @@ import com.github.aly8246.core.driver.MongoAddress
 class Configurations {
     var driverName: String? = null
     var datasourceUrl: String? = null
+    var username: String? = null
+    var password: String? = null
+
     var mongoAddress: MongoAddress? = null
     var nonFieldRemind: Boolean? = null
 
