@@ -107,7 +107,7 @@ step1. pom依赖
           <plugin>
               <groupId>org.jetbrains.kotlin</groupId>
               <artifactId>kotlin-maven-plugin</artifactId>
-              <version>${kotlin.version}</version>
+              <version>1.3.50</version>
               <executions>
                   <execution>
                       <id>compile</id>
