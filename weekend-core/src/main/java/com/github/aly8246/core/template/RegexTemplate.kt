@@ -21,13 +21,16 @@ open class RegexTemplate : BaseTemplate() {
             PrintImpl().debug("originalCommand >>   $sourceCommand")
         var command = ""
 
-        if (sourceCommand.startsWith("SELECT") || sourceCommand.startsWith("select")) {
+        if (sourceCommand.startsWith("SELECT") || sourceCommand.startsWith("select") || sourceCommand.startsWith("Select")
+                || sourceCommand.startsWith("DELETE") || sourceCommand.startsWith("delete") || sourceCommand.startsWith("Delete")
+                || sourceCommand.startsWith("UPDATE") || sourceCommand.startsWith("update") || sourceCommand.startsWith("Update")
+        ) {
             //替换普通参数
             command = this.processSimpleTemplate(sourceCommand, param, "\\$\\{\\w+}")
             command = this.processSimpleTemplate(command, param, "\\#\\{\\w+}")
             //执行when条件判断
             command = processConditionTemplate(command, param)
-        } else if (sourceCommand.startsWith("INSERT") || sourceCommand.startsWith("insert")) {
+        } else if (sourceCommand.startsWith("INSERT") || sourceCommand.startsWith("insert") || sourceCommand.startsWith("Insert")) {
             //为insert方法处理参数
             command = this.processInsertValue(sourceCommand, param)
         }

@@ -36,5 +36,15 @@ public interface TestDao {
 
     @Command("select * from user limit #{start},#{end}")
     List<User> selectByPage(Integer start, Integer end);
+
+
+    @Command("delete from user where id = #{id}")
+    int deleteById(String id);
+
+    @Command("delete from user where id in #{idList}")
+    int deleteByIdIn(List<String> idList);
+
+    @Command("update user set name = #{name} where id = #{id}")
+    int updateNameByIdIs(String id, String name);
 }
 

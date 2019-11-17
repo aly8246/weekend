@@ -18,4 +18,11 @@ public interface TestService {
     List<User> selectAllOrderByAge(Integer type);
 
     List<User> selectByPage(Integer start, Integer end);
+
+    int deleteById(String id);
+
+    int deleteByIdIn(List<String> idList);
+
+    int updateNameByIdIs(String id, String name);
+
 }

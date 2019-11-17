@@ -3,32 +3,33 @@ package com.github.aly8246.core.executor
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.util.PrintImpl
-import com.mongodb.DBCursor
 import com.mongodb.client.MongoCursor
-import com.mongodb.client.internal.MongoBatchCursorAdapter
 import net.sf.jsqlparser.schema.Table
+import net.sf.jsqlparser.statement.Statement
 import net.sf.jsqlparser.statement.select.PlainSelect
 import net.sf.jsqlparser.statement.select.Select
 import org.bson.Document
 
 @Suppress("CAST_NEVER_SUCCEEDS")
-class SelectExecutor(sql: String) : AbstractExecutor(sql), Executor {
-    override fun select(sql: String, mongoConnection: MongoConnection): MongoCursor<Document> {
-        val select = statement as Select
-        val plainSelect: PlainSelect = select.selectBody as PlainSelect
-        val table = plainSelect.fromItem as Table
+class SelectExecutor(sql: String, mongoConnection: MongoConnection) : AbstractExecutor(sql, mongoConnection) {
+    protected lateinit var select: Select
+    protected lateinit var plainSelect: PlainSelect
+    protected lateinit var table: Table
 
+    override fun select(sql: String): MongoCursor<Document> {
         val selectField = this.selectField(plainSelect)
-        val query = this.resolverCondition(plainSelect.where)
+
+        val condition = this.resolverCondition(plainSelect.where)
         val orderBy = this.resolverOrderBy(plainSelect)
         if (configuration.showCondition!!) {
             PrintImpl().debug("table     >>   ${table.name}")
-            PrintImpl().debug("condition >>   $query")
+            PrintImpl().debug("condition >>   $condition")
             PrintImpl().debug("field     >>   $selectField")
         }
 
-        val collection = mongoConnection.getCollection(table)
-        val find = collection.find(query)
+
+        val collection = this.collection
+        val find = collection.find(condition)
 
         find.projection(selectField)
         find.sort(orderBy)
@@ -41,5 +42,16 @@ class SelectExecutor(sql: String) : AbstractExecutor(sql), Executor {
         }
 
         return find.cursor()
+    }
+
+    private fun preSelect(statement: Statement) {
+        select = statement as Select
+        plainSelect = select.selectBody as PlainSelect
+        table = plainSelect.fromItem as Table
+    }
+
+    override fun tableName(statement: Statement): String {
+        this.preSelect(statement)
+        return table.name
     }
 }

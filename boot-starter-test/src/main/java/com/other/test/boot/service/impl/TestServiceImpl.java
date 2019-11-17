@@ -47,4 +47,19 @@ public class TestServiceImpl implements TestService {
     public List<User> selectByPage(Integer start, Integer end) {
         return testDao.selectByPage(start, end);
     }
+
+    @Override
+    public int deleteById(String id) {
+        return testDao.deleteById(id);
+    }
+
+    @Override
+    public int deleteByIdIn(List<String> idList) {
+        return testDao.deleteByIdIn(idList);
+    }
+
+    @Override
+    public int updateNameByIdIs(String id, String name) {
+        return testDao.updateNameByIdIs(id, name);
+    }
 }

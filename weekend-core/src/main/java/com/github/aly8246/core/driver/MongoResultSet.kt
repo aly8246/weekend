@@ -61,16 +61,13 @@ class MongoResultSet() : ResultSet {
                 Class.forName(regxListParamClass(method.toGenericString())).newInstance().javaClass
             }
         }
-//                val list = listOf("java.util.List", "java.util.Set", "kotlin.collections.List")
-//                when {
-//                    list.stream().noneMatch(canonicalName::equals) -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
-//                    else -> throw WeekendException("Bad Result Class >> $canonicalName . Missing NoArgConstructor")
-//                }
         val result = this.resolverResult()
         this.mappingMap = result!!
+
     }
 
     private fun resolverResult(): MutableMap<String, MongoMapping>? {
+
         if (this.resultClassType == null) return null
         val declaredFields = resultClassType?.declaredFields
 
@@ -143,6 +140,7 @@ class MongoResultSet() : ResultSet {
      * return all select
      */
     fun getObject(): Any? {
+
         val list: MutableList<Document> = mutableListOf()
 
         while (query.hasNext()) list.add(query.next())
@@ -154,6 +152,7 @@ class MongoResultSet() : ResultSet {
                     PrintImpl().debug("queryResult >>   $e")
                 }
             }
+
         return when {
             this.isList() -> mapToList(list, resultClassType)
             this.isVoid() -> null

@@ -26,29 +26,34 @@ open class DevWeekend {
 
     @Bean
     open fun test() {
-        var moneyList: MutableList<Int> = mutableListOf(500, 700)
-        userDao.exec(22, 1, moneyList).listIterator().forEach { e -> println(e) }
-        //    println(userDao.exec(22, 1, moneyList))
-       // userDao.exec(22, 1, moneyList).forEach { e -> println(e) }
-       // userDao2.exec().listIterator().forEach { e -> println(e) }
 
-        val userInfo = UserInfo()
-        userInfo.userId = System.currentTimeMillis().toString()
-        userInfo.userName = "小高"
-        // userInfo.userMoney = 800.00
-        // userInfo.userAge = 22
-        userInfo.clazz = "aaaa"
-        userInfo.time = "bbbb"
-        val userInfo2 = UserInfo()
-        userInfo2.userId = System.currentTimeMillis().toString() + "Custom"
-        userInfo2.userName = "小五"
-        userInfo2.userMoney = 820.00
-        userInfo2.userAge = 11
-        userInfo2.clazz = "aaaa"
-        userInfo2.time = "bbbb"
-        var list: MutableList<UserInfo> = mutableListOf(userInfo, userInfo2)
-
-       // val insert = userDao.insert(list)
-      //  println("新增的行数:$insert")
     }
+//
+//    @Bean
+//    open fun test() {
+//        var moneyList: MutableList<Int> = mutableListOf(500, 700)
+//        userDao.exec(22, 1, moneyList).listIterator().forEach { e -> println(e) }
+//        //    println(userDao.exec(22, 1, moneyList))
+//       // userDao.exec(22, 1, moneyList).forEach { e -> println(e) }
+//       // userDao2.exec().listIterator().forEach { e -> println(e) }
+//
+//        val userInfo = UserInfo()
+//        userInfo.userId = System.currentTimeMillis().toString()
+//        userInfo.userName = "小高"
+//        // userInfo.userMoney = 800.00
+//        // userInfo.userAge = 22
+//        userInfo.clazz = "aaaa"
+//        userInfo.time = "bbbb"
+//        val userInfo2 = UserInfo()
+//        userInfo2.userId = System.currentTimeMillis().toString() + "Custom"
+//        userInfo2.userName = "小五"
+//        userInfo2.userMoney = 820.00
+//        userInfo2.userAge = 11
+//        userInfo2.clazz = "aaaa"
+//        userInfo2.time = "bbbb"
+//        var list: MutableList<UserInfo> = mutableListOf(userInfo, userInfo2)
+//
+//       // val insert = userDao.insert(list)
+//      //  println("新增的行数:$insert")
+//    }
 }

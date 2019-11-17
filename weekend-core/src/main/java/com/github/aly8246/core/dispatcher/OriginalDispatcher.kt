@@ -6,7 +6,6 @@ import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.driver.MongoStatement
 import com.github.aly8246.core.exception.WeekendException
 import net.sf.jsqlparser.parser.CCJSqlParserManager
-import net.sf.jsqlparser.schema.Column
 import net.sf.jsqlparser.statement.delete.Delete
 import net.sf.jsqlparser.statement.insert.Insert
 import net.sf.jsqlparser.statement.select.Select
@@ -55,8 +54,16 @@ class OriginalDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongo
                 val mongoResultSet = statement.resultSet as MongoResultSet
                 return mongoResultSet.resultRows as T ?: return null
             }
-            is Update -> throw WeekendException("还未实现更新语句")
-            is Delete -> throw WeekendException("还未实现删除语句")
+            is Update -> {
+                statement.executeUpdate(command)
+                val mongoResultSet = statement.resultSet as MongoResultSet
+                return mongoResultSet.resultRows as T ?: return null
+            }
+            is Delete -> {
+                statement.execute(command)
+                val mongoResultSet = statement.resultSet as MongoResultSet
+                return mongoResultSet.resultRows as T ?: return null
+            }
             else -> throw WeekendException("暂时不支持的语句 >> $sqlStatement")
         }
     }

@@ -6,8 +6,8 @@ import org.bson.Document
 import java.lang.reflect.Parameter
 
 interface Executor {
-    fun select(sql: String, mongoConnection: MongoConnection): MongoCursor<Document>
-    fun insert(sql: String, mongoConnection: MongoConnection, param: MutableMap<Parameter, Any?>): Int
+    fun select(sql: String): MongoCursor<Document>
+    fun insert(sql: String, param: MutableMap<Parameter, Any?>): Int
     fun update(sql: String): Int
     fun delete(sql: String): Int
 }

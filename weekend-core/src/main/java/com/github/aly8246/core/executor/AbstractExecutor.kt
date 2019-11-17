@@ -29,15 +29,19 @@ import java.util.regex.Pattern
  * @description：
  * @version:   ：V
  */
-abstract class AbstractExecutor(sql: String) : Executor {
+abstract class AbstractExecutor(sql: String, mongoConnection: MongoConnection) : Executor {
     private val orderBy: Int = 1
     private val orderByDesc: Int = -1
     protected var statement: Statement = CCJSqlParserManager().parse(StringReader(sql.trim()))
-    override fun select(sql: String, mongoConnection: MongoConnection): MongoCursor<Document> {
+    val collection = mongoConnection.getCollection(this.tableName(statement))
+
+    abstract fun tableName(statement: Statement): String
+
+    override fun select(sql: String): MongoCursor<Document> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun insert(sql: String, mongoConnection: MongoConnection, param: MutableMap<Parameter, Any?>): Int {
+    override fun insert(sql: String, param: MutableMap<Parameter, Any?>): Int {
         return 0
     }
 

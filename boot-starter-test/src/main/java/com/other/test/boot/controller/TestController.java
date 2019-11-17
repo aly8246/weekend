@@ -82,5 +82,31 @@ public class TestController {
         return Result.success(userList);
     }
 
+    @DeleteMapping("{id}")
+    @ApiOperation("删除一个用户")
+    public Result deleteById(@PathVariable("id") String id) {
+        int i = testService.deleteById(id);
+        String msg = "删除了:" + i + "行记录";
+        return Result.success(msg, null);
+    }
 
+    @DeleteMapping("idIn/")
+    @ApiOperation("删除多个用户[根据id]")
+    public Result deleteByIdIn(@RequestParam(value = "idList") List<String> idList) {
+        int i = testService.deleteByIdIn(idList);
+        String msg = "删除了:" + i + "行记录";
+        return Result.success(msg, null);
+    }
+
+    @PutMapping
+    @ApiOperation("更新一个用户的名称[根据id]")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id"),
+            @ApiImplicitParam(name = "userName", value = "用户名称")
+    })
+    public Result updateByIdIs(String userId, String userName) {
+        int i = testService.updateNameByIdIs(userId, userName);
+        String msg = "更新了:" + i + "行记录";
+        return Result.success(msg, null);
+    }
 }

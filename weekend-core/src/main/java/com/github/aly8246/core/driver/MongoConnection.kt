@@ -12,6 +12,7 @@ import java.util.concurrent.Executor
 class MongoConnection() : Connection {
     private lateinit var mongoClient: MongoClient
     private lateinit var dbAddress: MongoAddress
+    private var autoCommit: Boolean = true
 
     constructor(dbAddress: MongoAddress) : this() {
         //连接mongodb
@@ -56,11 +57,9 @@ class MongoConnection() : Connection {
     }
 
     override fun rollback() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun rollback(savepoint: Savepoint?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getHoldability(): Int {
@@ -83,7 +82,7 @@ class MongoConnection() : Connection {
     }
 
     override fun setAutoCommit(autoCommit: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (!autoCommit) this.autoCommit = autoCommit
     }
 
     override fun abort(executor: Executor?) {

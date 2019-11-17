@@ -10,12 +10,15 @@ import java.lang.Exception
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
+import java.sql.Connection
+import java.sql.DriverManager
 import java.sql.Statement
 
 abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, var mongoConnection: MongoConnection) : AbstractDispatcher<T>(proxy, method, args) {
     protected lateinit var commandAnnotation: Command
 
     final override fun run(): T? {
+
         try {
             commandAnnotation = method.getDeclaredAnnotation(Command::class.java)
         } catch (e: IllegalStateException) {
@@ -31,7 +34,9 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         val statement = mongoConnection.createStatement()
 
         val selectStatement = selectStatement(statement, originalCommand, this.commandAnnotation, param)
+
         statement.close()
+
         return selectStatement
     }
 

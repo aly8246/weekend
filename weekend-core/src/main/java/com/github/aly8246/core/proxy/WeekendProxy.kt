@@ -17,15 +17,15 @@ class WeekendProxy<T>(private val target: Class<T>) : InvocationHandler {
             isDefaultMethod(method) -> invokeDefaultMethod(proxy, method, args)//默认方法直接执行
             else -> {
                 val startTime = System.currentTimeMillis()
-                PrintImpl().info("weekend startup!")
+                PrintImpl().info("Weekend startup!")
                 val dispatcherFactoryPolicy = DispatcherFactory<T>()
                 val dispatcherFactory = dispatcherFactoryPolicy.dispatcherFactory(proxy, method, args)
 
                 val result = dispatcherFactory.execute()
-                PrintImpl().info("weekend query success!")
+                PrintImpl().info("Weekend query success!")
                 val endTime = System.currentTimeMillis()
                 val seconds = (endTime - startTime) / 1000f
-                PrintImpl().info("spend time: $seconds seconds.")
+                PrintImpl().info("Weekend Spend time: $seconds seconds.")
                 return result
             }
         }
