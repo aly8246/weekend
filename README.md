@@ -80,11 +80,76 @@ userInfoList.forEach(System.err::println)
 
 step1. pom依赖
 ```bash
- <dependency>
-      <groupId>com.github.aly8246</groupId>
-      <artifactId>weekend</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
- </dependency>
+<dependencies>
+	 <dependency>
+	      <groupId>com.github.aly8246</groupId>
+	      <artifactId>weekend</artifactId>
+	      <version>1.1.0.RELEASE</version>
+	 </dependency>
+	 <dependency>
+	       <groupId>org.jetbrains.kotlin</groupId>
+	       <artifactId>kotlin-stdlib-jdk8</artifactId>
+	       <version>1.3.50</version>
+	  </dependency>
+	  <dependency>
+	       <groupId>org.jetbrains.kotlin</groupId>
+	       <artifactId>kotlin-test</artifactId>
+	       <version>1.3.50</version>
+	       <scope>test</scope>
+	   </dependency>
+    </dependencies>
+<build>
+    <plugins>
+          <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+              <groupId>org.jetbrains.kotlin</groupId>
+              <artifactId>kotlin-maven-plugin</artifactId>
+              <version>${kotlin.version}</version>
+              <executions>
+                  <execution>
+                      <id>compile</id>
+                      <phase>compile</phase>
+                      <goals>
+                          <goal>compile</goal>
+                      </goals>
+                  </execution>
+                  <execution>
+                      <id>test-compile</id>
+                      <phase>test-compile</phase>
+                      <goals>
+                          <goal>test-compile</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                  <jvmTarget>1.8</jvmTarget>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <id>compile</id>
+                      <phase>compile</phase>
+                      <goals>
+                          <goal>compile</goal>
+                      </goals>
+                  </execution>
+                  <execution>
+                      <id>testCompile</id>
+                      <phase>test-compile</phase>
+                      <goals>
+                          <goal>testCompile</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
+      </plugins>
+ </build>
 ```
 step2.配置文件
 ```yaml
@@ -92,6 +157,8 @@ weekend:
   mongodb:
     uri: jdbc:mongodb://localhost:27017/weekend
     driver-name: com.github.aly8246.core.driver.MongoDriver
+    username: root
+    password: 123456
 ```
 step3.启动类扫描
 
@@ -113,6 +180,9 @@ step4.写接口和注解sql然后注入接口来查询
 But it doesn't matter. All the infrastructure is basically complete. Next, it only takes time to maintain and develop
 
 
+[已经有了第一个可以正常crud的版本](https://github.com/aly8246/weekend/tree/master/boot-starter-test)  <-点此查看示例源码
+
+
 **weekend**
 n. 	星期六和星期日; 周末; 星期六和星期日(或略长一点的)休息时间;
 v. 	过周末; 度周末;
@@ -124,3 +194,5 @@ v. 	过周末; 度周末;
 
 ---
 ## Thanks for I can help everyone!
+
+起初使用java进行开发，可是后来由于某些原因，我转向kotlin，不过java和kotlin都是我的最爱，成年人就应该全都要!
