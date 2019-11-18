@@ -1,3 +1,9 @@
+## weekend
+
+> 一款轻量级mongodb持久层工具[暂时不能叫框架]，像mybatis查询mysql一样，组合动态sql查询mongodb
+
+[在线示例，使用weekend实现的基本crud操作](http://148.70.16.82:9999/doc.html) <<--**点此查看在线示例**
+
 ## 什么是mongodb
 > MongoDB 是一个基于分布式文件存储的数据库。由 C++ 语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。
 > MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的
@@ -194,5 +200,6 @@ v. 	过周末; 度周末;
 
 ---
 ## Thanks for I can help everyone!
+
 
 起初使用java进行开发，可是后来由于某些原因，我转向kotlin，不过java和kotlin都是我的最爱，成年人就应该全都要!
