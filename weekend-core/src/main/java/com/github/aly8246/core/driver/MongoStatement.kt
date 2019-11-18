@@ -18,6 +18,7 @@ open class MongoStatement(
         , resultSetConcurrency: Int
         , resultSetHoldability: Int
 ) : Statement {
+
     private var cursor: MongoCursor<Document>? = null
     private var closed = false
     private lateinit var result: ResultSet

@@ -40,7 +40,6 @@ class SelectExecutor(sql: String, mongoConnection: MongoConnection) : AbstractEx
             val rowCount = plainSelect.limit.rowCount
             find.limit(rowCount.toString().toInt())
         }
-
         return find.cursor()
     }
 

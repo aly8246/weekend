@@ -46,7 +46,7 @@
     </scm>
     <properties>
         <kotlin.version>1.3.50</kotlin.version>
-        <project.RELEASE.version>1.1.0.RELEASE</project.RELEASE.version>
+        <project.RELEASE.version>1.2.0.RELEASE</project.RELEASE.version>
     </properties>
 
     <dependencies>
