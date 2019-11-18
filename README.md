@@ -1,3 +1,9 @@
+## weekend
+
+> 一款轻量级mongodb持久层工具[暂时不能叫框架]，像mybatis查询mysql一样，组合动态sql查询mongodb
+
+[在线示例，使用weekend实现的基本crud操作](http://148.70.16.82:9999/doc.html) <<--**点此查看在线示例**
+
 ## 什么是mongodb
 > MongoDB 是一个基于分布式文件存储的数据库。由 C++ 语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。
 > MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的
@@ -33,7 +39,7 @@ db.user_info.find({
 
 **如果可以使用mysql来简单查询mongodb你又会使用吗**
 
-> 还有这等好事?那我肯定要试试啊
+> Q >  还有这等好事?那我肯定要试试啊
 
 ---
 
@@ -72,17 +78,84 @@ userInfoList.forEach(System.err::println)
 ```
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191110123940153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NDI1MjQz,size_16,color_FFFFFF,t_70)
 
-**为什么注入一个接口就能实现查询mongodb呢？**
-那是因为我正在尝试开发一款名为weekend的应用
+> Q >>  这个看起来像mybatis使用注解sql来查询mysql数据库，这个和mongodb有什么关系呢？这个注解怎么看起来怪怪的？
 
+> A >>  首先，这个查询出来的数据其实是mongodb里的数据，因为我正在尝试开发一款名为weekend的应用,可以像mybatis一样来查询mongodb，除了一些注解不大一样以外
+
+**需要做什么呢？**
 
 step1. pom依赖
 ```bash
- <dependency>
-      <groupId>com.github.aly8246</groupId>
-      <artifactId>weekend</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
- </dependency>
+<dependencies>
+	 <dependency>
+	      <groupId>com.github.aly8246</groupId>
+	      <artifactId>weekend</artifactId>
+	      <version>1.1.0.RELEASE</version>
+	 </dependency>
+	 <dependency>
+	       <groupId>org.jetbrains.kotlin</groupId>
+	       <artifactId>kotlin-stdlib-jdk8</artifactId>
+	       <version>1.3.50</version>
+	  </dependency>
+	  <dependency>
+	       <groupId>org.jetbrains.kotlin</groupId>
+	       <artifactId>kotlin-test</artifactId>
+	       <version>1.3.50</version>
+	       <scope>test</scope>
+	   </dependency>
+    </dependencies>
+<build>
+    <plugins>
+          <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+              <groupId>org.jetbrains.kotlin</groupId>
+              <artifactId>kotlin-maven-plugin</artifactId>
+              <version>1.3.50</version>
+              <executions>
+                  <execution>
+                      <id>compile</id>
+                      <phase>compile</phase>
+                      <goals>
+                          <goal>compile</goal>
+                      </goals>
+                  </execution>
+                  <execution>
+                      <id>test-compile</id>
+                      <phase>test-compile</phase>
+                      <goals>
+                          <goal>test-compile</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                  <jvmTarget>1.8</jvmTarget>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <id>compile</id>
+                      <phase>compile</phase>
+                      <goals>
+                          <goal>compile</goal>
+                      </goals>
+                  </execution>
+                  <execution>
+                      <id>testCompile</id>
+                      <phase>test-compile</phase>
+                      <goals>
+                          <goal>testCompile</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
+      </plugins>
+ </build>
 ```
 step2.配置文件
 ```yaml
@@ -90,6 +163,8 @@ weekend:
   mongodb:
     uri: jdbc:mongodb://localhost:27017/weekend
     driver-name: com.github.aly8246.core.driver.MongoDriver
+    username: root
+    password: 123456
 ```
 step3.启动类扫描
 
@@ -100,11 +175,18 @@ step3.启动类扫描
 )
 ```
 
+step4.写接口和注解sql然后注入接口来查询
+
+
+
 
 **不幸的是这个应用刚刚起步**
 **Unfortunately, this application is just starting**
 但是没有关系，所有的基础设施基本上已经完善，接下来只需要花时间去维护和开发
 But it doesn't matter. All the infrastructure is basically complete. Next, it only takes time to maintain and develop
+
+
+[已经有了第一个可以正常crud的版本](https://github.com/aly8246/weekend/tree/master/boot-starter-test)  <-点此查看示例源码
 
 
 **weekend**
@@ -117,4 +199,7 @@ v. 	过周末; 度周末;
 > The name comes from English Weekend, which means that if you simply use mongodb, then you don't need to learn mongodb's syntax. If you can use mongodb skillfully without learning it, if you can release a weekend time, then my original intention is achieved
 
 ---
-## Thank you for my help!
+## Thanks for I can help everyone!
+
+
+起初使用java进行开发，可是后来由于某些原因，我转向kotlin，不过java和kotlin都是我的最爱，成年人就应该全都要!
