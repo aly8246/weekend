@@ -1,6 +1,8 @@
 package com.github.aly8246.core.base
 
 import com.github.aly8246.core.annotation.BaseMethod
+import com.github.aly8246.core.page.Page
+import com.github.aly8246.core.page.PageResult
 import java.io.Serializable
 
 

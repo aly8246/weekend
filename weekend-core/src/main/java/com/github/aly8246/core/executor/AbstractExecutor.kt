@@ -3,6 +3,7 @@ package com.github.aly8246.core.executor
 import com.github.aly8246.core.driver.MongoConnection
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
+import com.mongodb.client.FindIterable
 import com.mongodb.client.MongoCursor
 import net.sf.jsqlparser.expression.*
 import net.sf.jsqlparser.expression.Function
@@ -37,7 +38,7 @@ abstract class AbstractExecutor(sql: String, mongoConnection: MongoConnection) :
 
     abstract fun tableName(statement: Statement): String
 
-    override fun select(sql: String): MongoCursor<Document> {
+    override fun select(sql: String): FindIterable<Document> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -62,7 +63,10 @@ abstract class AbstractExecutor(sql: String, mongoConnection: MongoConnection) :
                     else -> expression.columnName
                 }
             }
-            else -> throw  RuntimeException("无法解析的字段")
+            is Function -> {
+                throw RuntimeException("无法解析的字段[Function]:$expression")
+            }
+            else -> throw RuntimeException("无法解析的字段:$expression")
         }
     }
 

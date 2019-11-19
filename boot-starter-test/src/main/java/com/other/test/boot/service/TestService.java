@@ -1,7 +1,7 @@
 package com.other.test.boot.service;
 
-import com.github.aly8246.core.base.Page;
-import com.github.aly8246.core.base.PageResult;
+import com.github.aly8246.core.page.Page;
+import com.github.aly8246.core.page.PageResult;
 import com.other.test.boot.enitiy.User;
 
 import java.util.List;

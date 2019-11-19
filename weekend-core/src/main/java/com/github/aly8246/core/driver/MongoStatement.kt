@@ -6,6 +6,7 @@ import com.github.aly8246.core.executor.SelectExecutor
 import com.github.aly8246.core.executor.UpdateExecutor
 import com.mongodb.client.MongoCursor
 import org.bson.Document
+import java.lang.Exception
 import java.lang.reflect.Parameter
 import java.sql.Connection
 import java.sql.ResultSet
@@ -60,7 +61,7 @@ open class MongoStatement(
     override fun executeQuery(sql: String): ResultSet {
         //val startTime = System.currentTimeMillis()
         val selectExecutor = SelectExecutor(sql, connection as MongoConnection)
-        cursor = selectExecutor.select(sql)
+        cursor = selectExecutor.select(sql).cursor()
         // val endTime = System.currentTimeMillis()
         //  val seconds = (endTime - startTime) / 1000f
         // PrintImpl().info(" executeQuery.cursor spend time: $seconds seconds.")
@@ -74,8 +75,16 @@ open class MongoStatement(
     override fun close() {
         cursor?.close()
         closed = true
-        mongoConnection.close()
-        this.resultSet.close()
+        try {
+            mongoConnection.close()
+        } catch (e: Exception) {
+
+        }
+        try {
+            this.resultSet.close()
+        } catch (e: Exception) {
+
+        }
     }
 
     //连接是否被关闭

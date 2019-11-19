@@ -11,12 +11,12 @@ import java.lang.reflect.Method
  * @version:   ：V
  */
 class BaseCommandContext<T> {
-    var baseDaoStrategy: BaseDaoStrategy<T>
-    var signature: String
+    private var baseDaoStrategy: BaseDaoStrategy<T>
+    var strategySignature: String
 
     constructor(baseDaoStrategy: BaseDaoStrategy<T>) {
         this.baseDaoStrategy = baseDaoStrategy
-        this.signature = baseDaoStrategy::class.java.toGenericString()
+        strategySignature = baseDaoStrategy::class.java.simpleName
     }
 
     fun create(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>): String {

@@ -1,22 +1,19 @@
-package com.github.aly8246.core.base;
+package com.github.aly8246.core.page
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonInclude.Include
+import lombok.AllArgsConstructor
+import lombok.Data
+import lombok.NoArgsConstructor
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PageResult<T> {
-
-private Integer total;
-private Integer totalPage;
-private Integer page;
-private Integer pageSize;
-private List<T> data;
+@JsonInclude(Include.NON_EMPTY)
+class PageResult<T> {
+    var total: Int? = null
+    var totalPage: Int? = null
+    var page: Int? = null
+    var pageSize: Int? = null
+    var data: List<T>? = null
 }
