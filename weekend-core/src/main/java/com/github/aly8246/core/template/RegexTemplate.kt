@@ -5,6 +5,7 @@ import com.github.aly8246.core.configuration.Configurations.Companion.configurat
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.BasicDataTypeUtil
 import com.github.aly8246.core.util.PrintImpl
+import com.github.aly8246.core.util.WordUtil
 import net.sf.jsqlparser.parser.CCJSqlParserManager
 import java.io.StringReader
 import java.lang.reflect.Parameter
@@ -223,7 +224,7 @@ open class RegexTemplate : BaseTemplate() {
             //    #{userInfo.id}
             if (resolverClass)
                 if (!BasicDataTypeUtil.isBasicDataType(e.key)) {
-                    val className = toLowerCaseFirstOne(e.key.type.simpleName)
+                    val className = WordUtil.toLowerCaseFirstOne(e.key.type.simpleName)
 
                     val valueInstance = e.value!!::class.java
                     val declaredFields = valueInstance.declaredFields

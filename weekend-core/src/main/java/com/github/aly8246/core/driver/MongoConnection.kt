@@ -1,7 +1,7 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
+import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.MongoClient
 import com.mongodb.MongoCredential
 import com.mongodb.client.MongoCollection
@@ -148,6 +148,7 @@ class MongoConnection() : Connection {
 
     override fun close() {
         this.mongoClient.close()
+        PrintImpl().info("Weekend connection closed")
     }
 
     override fun isClosed(): Boolean {

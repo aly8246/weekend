@@ -1,10 +1,11 @@
 package com.github.aly8246.core.driver
 
-import com.github.aly8246.core.annotation.Command
+import com.github.aly8246.core.annotation.BaseMethod
 import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.annotation.WeekendId
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
+import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolver
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
 import org.bson.Document
@@ -38,7 +39,6 @@ class MongoResultSet() : ResultSet {
         this.mongoStatement = mongoStatement
     }
 
-    private lateinit var command: Command
     private lateinit var method: Method
     private var args: kotlin.Array<Any>? = null
     private var resultClassType: Class<*>? = null
@@ -46,24 +46,32 @@ class MongoResultSet() : ResultSet {
     private var _id: Any? = null
 
 
-    fun init(command: Command, method: Method, args: kotlin.Array<Any>?) {
-        this.command = command
+    fun init(method: Method, args: kotlin.Array<Any>?, target: Class<*>) {
         this.method = method
         this.args = args
-        val returnType = method.returnType
-        val canonicalName = returnType.canonicalName
-        when {
-            canonicalName != "void" -> resultClassType = try {
-                //如果是集合则会创建实例失败
-                Class.forName(canonicalName).newInstance().javaClass
-            } catch (e: InstantiationException) {
-                //取集合中的泛型的实际类型为返回值
-                Class.forName(regxListParamClass(method.toGenericString())).newInstance().javaClass
+        var returnType = method.returnType
+
+
+        val baseMethod = method.getDeclaredAnnotation(BaseMethod::class.java)
+
+        //是基础方法
+        if (baseMethod != null) {
+            resultClassType = CollectionEntityResolver().returnClass(target)
+        } else {
+            val canonicalName = returnType.canonicalName
+            when {
+                canonicalName != "void" -> resultClassType = try {
+                    //如果是集合则会创建实例失败
+                    Class.forName(canonicalName).newInstance().javaClass
+                } catch (e: InstantiationException) {
+                    //取集合中的泛型的实际类型为返回值
+                    Class.forName(regxListParamClass(method.toGenericString())).newInstance().javaClass
+                }
             }
         }
+
         val result = this.resolverResult()
         this.mappingMap = result!!
-
     }
 
     private fun resolverResult(): MutableMap<String, MongoMapping>? {
@@ -114,6 +122,11 @@ class MongoResultSet() : ResultSet {
     private fun isList(): Boolean {
         val returnType = this.method.returnType
         val javaClass = this.resultClassType
+
+        //如果是object则证明是BaseDao的接口返回的泛型参数
+        val baseMethod = method.getDeclaredAnnotation(BaseMethod::class.java)
+        if (returnType.name == "java.lang.Object" && baseMethod != null) return false
+
         return returnType != javaClass
     }
 
@@ -123,7 +136,6 @@ class MongoResultSet() : ResultSet {
     private fun isVoid(): Boolean {
         return resultClassType == null
     }
-
 
     private fun regxListParamClass(source: String): String {
         val matcher = Pattern.compile("(?<=java.util.List<).*?(?=>)").matcher(source)
@@ -157,9 +169,9 @@ class MongoResultSet() : ResultSet {
             this.isList() -> mapToList(list, resultClassType)
             this.isVoid() -> null
             else -> {
-                if (list.size > 1) throw WeekendException("That's too much result,find ${list.size} result in >>  $method")
-                val document = list[0]
-                mapToPojo(document, resultClassType)
+                val resultList = mapToList(list, resultClassType)
+                if (resultList.size > 1) throw WeekendException("That's too much result,find ${list.size} result in >>  $method")
+                resultList[0]
             }
         }
     }

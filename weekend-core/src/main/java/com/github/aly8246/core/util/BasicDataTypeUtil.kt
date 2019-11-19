@@ -1,28 +1,28 @@
-package com.github.aly8246.core.util;
+package com.github.aly8246.core.util
 
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Parameter
+import java.util.ArrayList
+import java.util.function.Predicate
 
-public class BasicDataTypeUtil {
-    private static List<String> basicTypeList = new ArrayList<>();
+object BasicDataTypeUtil {
+    private val basicTypeList = ArrayList<String>()
 
-    static {
-        basicTypeList.add("java.lang.String");
-        basicTypeList.add("java.lang.Integer");
-        basicTypeList.add("java.lang.Double");
-        basicTypeList.add("java.lang.Long");
-        basicTypeList.add("java.lang.Short");
-        basicTypeList.add("java.lang.Float");
-        basicTypeList.add("java.util.Date");
-        basicTypeList.add("int");
-        basicTypeList.add("double");
-        basicTypeList.add("long");
-        basicTypeList.add("short");
-        basicTypeList.add("float");
+    init {
+        basicTypeList.add("java.lang.String")
+        basicTypeList.add("java.lang.Integer")
+        basicTypeList.add("java.lang.Double")
+        basicTypeList.add("java.lang.Long")
+        basicTypeList.add("java.lang.Short")
+        basicTypeList.add("java.lang.Float")
+        basicTypeList.add("java.util.Date")
+        basicTypeList.add("int")
+        basicTypeList.add("double")
+        basicTypeList.add("long")
+        basicTypeList.add("short")
+        basicTypeList.add("float")
     }
 
-    public static boolean isBasicDataType(Parameter parameter) {
-        return basicTypeList.stream().anyMatch(parameter.getParameterizedType().getTypeName()::equals);
+    fun isBasicDataType(parameter: Parameter): Boolean {
+        return basicTypeList.stream().anyMatch({ parameter.parameterizedType.typeName == it })
     }
 }
