@@ -6,25 +6,26 @@ import com.github.aly8246.core.page.PageResult
 import java.io.Serializable
 
 
-interface BaseDao<T> {
+interface BaseDao<X> {
 
     @BaseMethod
-    fun selectById(id: Serializable): T
+    fun selectById(id: Serializable): X
 
     @BaseMethod
     fun insert(): Int
 
     @BaseMethod
-    fun selectAll(): List<T>
+    fun selectAll(): List<X>
 
     @BaseMethod
-    fun selectAll(sql: String): T
+    fun selectAll(sql: String, queryObject: Any): List<X>
 
     @BaseMethod
-    fun selectPage(page: Page): PageResult<T>
+    @com.github.aly8246.core.annotation.Page
+    fun selectPage(page: Page): PageResult<X>
 
     @BaseMethod
-    fun selectPage(page: Page, sql: String): PageResult<T>
-
+    @com.github.aly8246.core.annotation.Page
+    fun selectPage(page: Page, sql: String, queryObject: Any): PageResult<X>
 
 }

@@ -47,5 +47,6 @@ int updateNameByIdIs(String id, String name);
 
 @Command("update user set name = #{user.name} where id = #{user.id}")
 int updateByUser(User user);
+
 }
 

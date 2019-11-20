@@ -30,10 +30,6 @@ class BaseDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongoC
         return strategy.create(proxy, method, args, mongoConnection, target)
     }
 
-    private fun needOpenPage(): Boolean {
-        return this.strategySignature == SelectPageStrategy::class.java.simpleName
-    }
-
     override fun transmitOriginalCommand(originalCommand: String) {
         this.originalCommand = originalCommand
     }
@@ -61,51 +57,12 @@ class BaseDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongoC
         //创建statement
         val statement = mongoConnection.createStatement()
 
-        val executorResult: T?
-        executorResult = when {
-            this.needOpenPage() -> startPage(statement, originalCommand, param)
-            else -> selectStatement(statement, originalCommand, param, statement)
-        }
+        //获得查询结果
+        val executorResult = selectStatement(statement, originalCommand, param, statement)
 
+        //关闭连接
         statement.close()
 
         return executorResult
-    }
-
-    private fun startPage(statement: Statement, originalCommand: String, param: MutableMap<Parameter, Any?>): T? {
-        var sqlStm = CCJSqlParserManager().parse(StringReader(originalCommand.trim()))
-        if (sqlStm !is Select) {
-            throw WeekendException("分页异常")
-        }
-        var plainSelect = sqlStm.selectBody as PlainSelect
-
-        plainSelect.selectItems.removeAll(plainSelect.selectItems)
-        plainSelect.selectItems.add(SelectExpressionItem(Column("_id")))
-
-        val pageExecutor = SelectExecutor(plainSelect.toString(), mongoConnection)
-
-        val select = pageExecutor.select(plainSelect.toString())
-        val count = select.count()
-
-        println(count)
-        //method的0号参数就是page对象
-        val page = args!![0] as Page
-
-
-        val selectStatement = selectStatement(statement, originalCommand, param, statement)
-
-        println(selectStatement)
-        //TODO 生成查询数量sql执行
-
-        //得到了总记录数
-
-        //TODO 根据分页条件来再生成带分页条件的sql
-        println(page.page)
-        println(page.pageSize)
-        val pageResult = PageResult<T>()
-        pageResult.data = selectStatement as List<T>
-        pageResult.page = page.page
-        pageResult.pageSize = page.pageSize
-        return pageResult as T
     }
 }

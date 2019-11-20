@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiModelProperty
 
 
 class Page {
-    @ApiModelProperty(value = "第几页[默认1]", example = "1")
-    var page: Int? = null
+    @ApiModelProperty(value = "第几页[默认1]", example = "1", required = false)
+    var page: Int = 1
 
-    @ApiModelProperty(value = "每页大小[默认10]", example = "10")
-    var pageSize: Int? = null
+    @ApiModelProperty(value = "每页大小[默认10]", example = "10", required = false)
+    var pageSize: Int = 10
 }
