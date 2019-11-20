@@ -2,6 +2,7 @@ package com.github.aly8246.core.dispatcher.pageDaoHandler
 
 
 import com.github.aly8246.core.dispatcher.InitializerDispatcher
+import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolver
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.executor.SelectExecutor
@@ -21,7 +22,16 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
     protected lateinit var originalCommand: String
     protected lateinit var strategySignature: String
     override fun resolverBaseCommand(method: Method): String {
-        return "select * from user"
+        return ResolverBaseCommand(method, args, target).resolverBaseCommand()
+    }
+
+    open class ResolverBaseCommand<T>(var method: Method, var args: Array<Any>?, var target: Class<T>) : CollectionEntityResolver() {
+
+        fun resolverBaseCommand(): String {
+            val collectionName = this.collectionName(this.target)
+            val userSqlCommand = args?.get(1)
+            return "select * from $collectionName $userSqlCommand"
+        }
     }
 
     override fun transmitOriginalCommand(originalCommand: String) {

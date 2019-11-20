@@ -27,14 +27,17 @@ open class RegexTemplate : BaseTemplate() {
                 || sourceCommand.startsWith("DELETE") || sourceCommand.startsWith("delete") || sourceCommand.startsWith("Delete")
                 || sourceCommand.startsWith("UPDATE") || sourceCommand.startsWith("update") || sourceCommand.startsWith("Update")
         ) {
+            val paramMap: MutableMap<String, Any?> = this.convertParamMap(param, true)
+
             //替换普通参数
-            command = this.processSimpleTemplate(sourceCommand, param, "\$\\{.*?\\}")
-            command = this.processSimpleTemplate(command, param, "\\#\\{.*?\\}")
+            command = this.processSimpleTemplate(sourceCommand, paramMap, "\$\\{.*?\\}")
+            command = this.processSimpleTemplate(command, paramMap, "\\#\\{.*?\\}")
             //执行when条件判断
-            command = processConditionTemplate(command, param)
+            command = processConditionTemplate(command, paramMap)
         } else if (sourceCommand.startsWith("INSERT") || sourceCommand.startsWith("insert") || sourceCommand.startsWith("Insert")) {
+            val paramMap: MutableMap<String, Any?> = this.convertParamMap(param, false)
             //为insert方法处理参数
-            command = this.processInsertValue(sourceCommand, param)
+            command = this.processInsertValue(sourceCommand, paramMap)
         }
 
         command = this.processNullParam(command)
@@ -54,14 +57,14 @@ open class RegexTemplate : BaseTemplate() {
         return sb.toString()
     }
 
-    private fun processInsertValue(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
-        val convertParamMap = this.convertParamMap(param, false)
-        if (convertParamMap.size > 1 || convertParamMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
+    private fun processInsertValue(sourceCommand: String, paramMap: MutableMap<String, Any?>): String {
+        if (paramMap.size > 1 || paramMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
+
         var paramName = ""
         var paramValue: Any? = null
         val insertColumn = this.insertColumn(sourceCommand)
 
-        convertParamMap.entries.forEach { e ->
+        paramMap.entries.forEach { e ->
             run {
                 paramName = e.key
                 paramValue = e.value
@@ -158,11 +161,10 @@ open class RegexTemplate : BaseTemplate() {
         }
     }
 
-    private fun processConditionTemplate(command: String, params: MutableMap<Parameter, Any?>): String {
+    private fun processConditionTemplate(command: String, paramMap: MutableMap<String, Any?>): String {
         val whenCommand = "$command "
 
         val sb = StringBuffer()
-
         //获得when
         val whenRegex: Matcher = Pattern.compile("when\\([a-zA-Z0-9]+\\)\\{*.[\\s\\S]+?\\}\\s+(?!.?')").matcher(whenCommand)
         while (whenRegex.find()) {
@@ -172,15 +174,14 @@ open class RegexTemplate : BaseTemplate() {
             while (conditionRegex.find()) {
                 conditionName = conditionRegex.group().replace("when(", "").replace(")", "")
             }
-            val paramMap: MutableMap<String, Any?> = this.convertParamMap(params, true)
-            val any = paramMap[conditionName]
 
+            val any = paramMap[conditionName]
             if (any == null) {
                 PrintImpl().warning("没有传入参数:$conditionName 取消when条件执行")
                 whenRegex.appendReplacement(sb, "")
                 break
             }
-            var conditionValue: String = any.toString()
+            val conditionValue: String = any.toString()
             //获取执行条件
             val condition = Pattern.compile("(else|is)\\s+\\S*\\s*->\\s+\\S+\\s+\\S+\\s+'*.+?'*?;").matcher(whenRegex.group())
             while (condition.find()) {
@@ -219,26 +220,39 @@ open class RegexTemplate : BaseTemplate() {
     private fun convertParamMap(params: MutableMap<Parameter, Any?>, resolverClass: Boolean): MutableMap<String, Any?> {
         val resultParamMap: MutableMap<String, Any?> = mutableMapOf()
         params.forEach { e ->
-            //如果参数中包含一个类
-            //    UserInfo userInfo
-            //    #{userInfo.id}
-            if (resolverClass)
-                if (!BasicDataTypeUtil.isBasicDataType(e.key)) {
-                    val className = WordUtil.toLowerCaseFirstOne(e.key.type.simpleName)
-
-                    val valueInstance = e.value!!::class.java
-                    val declaredFields = valueInstance.declaredFields
-
-                    for (field in declaredFields) {
-                        val declaredField = valueInstance.getDeclaredField(field.name)
-                        declaredField.isAccessible = true
-                        val entityValue = declaredField.get(e.value)
-                        if (entityValue != null) {
-                            resultParamMap["$className.${field.name}"] = entityValue
+            //如果要解析是类的参数
+            if (resolverClass) {
+                when {
+                    //数组参数
+                    e.key.parameterizedType.typeName == "java.lang.Object[]" -> {
+                        val paramArray = e.value as Array<Object>
+                        for (index in paramArray.indices) {
+                            resultParamMap["param${index + 1}"] = paramArray[index]
                         }
                     }
+                    //非基本类型:参数的key为一个类
+                    !BasicDataTypeUtil.isBasicDataType(e.key) -> {
+                        //val className = WordUtil.toLowerCaseFirstOne(e.key.type.simpleName)
+                        val valueInstance = e.value!!::class.java
+                        val declaredFields = valueInstance.declaredFields
+
+                        for (field in declaredFields) {
+                            //class com.other.test.boot.enitiy.User.id
+                            //User 转小写才是类名
+                            var name = field.toString().split(".")[field.toString().split(".").size - 2]
+                            name = WordUtil.toLowerCaseFirstOne(name)
+
+                            val declaredField = valueInstance.getDeclaredField(field.name)
+                            declaredField.isAccessible = true
+                            val entityValue = declaredField.get(e.value)
+                            if (entityValue != null && entityValue != "") {
+                                resultParamMap["$name.${field.name}"] = entityValue
+                            }
+                        }
+                        resultParamMap[e.key.name] = e.value
+                    }
                 }
-            resultParamMap[e.key.name] = e.value
+            }
         }
         return resultParamMap
     }
@@ -250,8 +264,7 @@ open class RegexTemplate : BaseTemplate() {
         return java.lang.StringBuilder().append(str[0].toLowerCase()).append(str.substring((1))).toString()
     }
 
-    private fun processSimpleTemplate(template: String, params: MutableMap<Parameter, Any?>, regx: String): String {
-        val paramMap: MutableMap<String, Any?> = this.convertParamMap(params, true)
+    private fun processSimpleTemplate(template: String, paramMap: MutableMap<String, Any?>, regx: String): String {
         val m: Matcher = Pattern.compile(regx).matcher(template)
         val sb = StringBuffer()
         while (m.find()) {

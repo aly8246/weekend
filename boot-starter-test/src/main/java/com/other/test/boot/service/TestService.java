@@ -31,6 +31,8 @@ int updateNameByIdIs(String id, String name);
 
 int updateByUser(User user);
 
-PageResult<User> selectPage(Page page);
+PageResult<User> selectPage(Page page, String name);
+
+PageResult<User> selectPageByParam(Page page, String name);
 
 }

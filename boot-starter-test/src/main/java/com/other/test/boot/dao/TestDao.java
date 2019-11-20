@@ -3,7 +3,6 @@ package com.other.test.boot.dao;
 import com.github.aly8246.core.annotation.Command;
 import com.github.aly8246.core.page.PageResult;
 import com.other.test.boot.enitiy.User;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
