@@ -6,6 +6,7 @@ import com.github.aly8246.core.annotation.Page
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.dispatcher.baseDaoHandler.BaseDaoDispatcher
 import com.github.aly8246.core.dispatcher.pageDaoHandler.PageDaoDispatcher
+import com.github.aly8246.core.dispatcher.pageDaoHandler.UserCustomPageDaoDispatcher
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.proxy.WeekendProxy
@@ -45,6 +46,9 @@ open class DispatcherFactory<T>(private val weekendProxy: WeekendProxy<T>) : Dis
 
             //用户使用通用分页方法
             command == null && baseMethod != null && page != null -> PageDaoDispatcher(proxy, method, args, connection as MongoConnection, target)
+
+            //用户自定义分页方法
+            command != null && baseMethod == null && page != null -> UserCustomPageDaoDispatcher(proxy, method, args, connection as MongoConnection, target)
 
             else -> throw WeekendException("不是通用方法或者没有@Command注解")
         }

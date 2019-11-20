@@ -1,6 +1,7 @@
 package com.other.test.boot.dao;
 
 import com.github.aly8246.core.annotation.Command;
+import com.github.aly8246.core.page.PageResult;
 import com.other.test.boot.enitiy.User;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +36,6 @@ List<User> selectAllOrderByAge(Integer type);
 @Command("select * from user limit #{start},#{end}")
 List<User> selectByPage(Integer start, Integer end);
 
-
 @Command("delete from user where id = #{id}")
 int deleteById(String id);
 
@@ -47,6 +47,11 @@ int updateNameByIdIs(String id, String name);
 
 @Command("update user set name = #{user.name} where id = #{user.id}")
 int updateByUser(User user);
+
+@Command("update user set name = #{user.name} where id = #{user.id}")
+@com.github.aly8246.core.annotation.Page
+PageResult<User> customPage();
+
 
 }
 

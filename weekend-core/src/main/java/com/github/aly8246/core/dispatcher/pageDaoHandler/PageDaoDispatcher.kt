@@ -17,7 +17,7 @@ import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 
 @Suppress("UNCHECKED_CAST")
-class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>) : InitializerDispatcher<T>(proxy, method, args, mongoConnection, target) {
+open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>) : InitializerDispatcher<T>(proxy, method, args, mongoConnection, target) {
     protected lateinit var originalCommand: String
     protected lateinit var strategySignature: String
     override fun resolverBaseCommand(method: Method): String {
