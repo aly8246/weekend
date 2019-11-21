@@ -61,7 +61,7 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         return startPage(originalCommand, param)
     }
 
-    private fun startPage(originalCommand: String, param: MutableMap<Parameter, Any?>): T? {
+    private fun startPage(originalCommand: String, param: MutableMap<String, Any?>): T? {
         val statement = mongoConnection.createStatement()
 
         var sqlStm = CCJSqlParserManager().parse(StringReader(originalCommand.trim()))

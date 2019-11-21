@@ -23,7 +23,7 @@ open class MongoStatement(
     private var cursor: MongoCursor<Document>? = null
     private var closed = false
     private lateinit var result: ResultSet
-    lateinit var param: MutableMap<Parameter, Any?>
+    lateinit var param: MutableMap<String, Any?>
 
     override fun clearBatch() {
     }

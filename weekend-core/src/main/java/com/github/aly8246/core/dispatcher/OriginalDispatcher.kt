@@ -52,11 +52,11 @@ open class OriginalDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, 
     }
 
     //提供给子类重写,使子类可以重写template来选择模板引擎
-    override fun template(baseCommand: String, param: MutableMap<Parameter, Any?>): String {
+    override fun template(baseCommand: String, param: MutableMap<String, Any?>): String {
         return super.template(baseCommand, param)
     }
 
-    override fun selectStatement(statement: Statement, command: String, param: MutableMap<Parameter, Any?>, statement1: Statement): T? {
+    override fun selectStatement(statement: Statement, command: String, param: MutableMap<String, Any?>, statement1: Statement): T? {
         return super.selectStatement(statement, command, param, statement)
     }
 }

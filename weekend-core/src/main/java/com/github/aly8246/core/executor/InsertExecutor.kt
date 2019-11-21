@@ -29,7 +29,7 @@ open class InsertExecutor(sql: String, mongoConnection: MongoConnection) : Abstr
     protected lateinit var insert: Insert
     protected lateinit var table: Table
 
-    override fun insert(sql: String, param: MutableMap<Parameter, Any?>): Int {
+    override fun insert(sql: String, param: MutableMap<String, Any?>): Int {
         super.insert(sql, param)
 
         val collection = this.collection

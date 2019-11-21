@@ -11,7 +11,7 @@ abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var met
 
     abstract fun run(): T?
 
-    abstract fun template(baseCommand: String, param: MutableMap<Parameter, Any?>): String
+    abstract fun template(baseCommand: String, param: MutableMap<String, Any?>): String
 
-    abstract fun selectStatement(statement: Statement, command: String, param: MutableMap<Parameter, Any?>, statement1: Statement): T?
+    abstract fun selectStatement(statement: Statement, command: String, param: MutableMap<String, Any?>, statement1: Statement): T?
 }

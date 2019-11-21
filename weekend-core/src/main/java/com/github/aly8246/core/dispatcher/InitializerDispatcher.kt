@@ -1,24 +1,24 @@
 package com.github.aly8246.core.dispatcher
 
-import com.github.aly8246.core.configuration.Configurations
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.driver.MongoStatement
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.template.RegexTemplate
-import com.github.aly8246.core.util.PrintImpl
+import com.github.aly8246.core.util.WordUtil
 import net.sf.jsqlparser.parser.CCJSqlParserManager
 import net.sf.jsqlparser.statement.delete.Delete
 import net.sf.jsqlparser.statement.insert.Insert
 import net.sf.jsqlparser.statement.select.Select
 import net.sf.jsqlparser.statement.update.Update
 import java.io.StringReader
-import java.lang.Exception
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.sql.Statement
+import java.util.*
 
+@Suppress("NAME_SHADOWING")
 abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, var mongoConnection: MongoConnection, var target: Class<T>) : AbstractDispatcher<T>(proxy, method, args, target) {
 
     protected lateinit var baseCommand: String
@@ -58,26 +58,100 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
     //如果存在注解,则注解替换成_id
     abstract fun resolverPrimaryKey(originalCommand: String): String
 
-    protected fun resolverParam(method: Method): MutableMap<Parameter, Any?> {
-        val paramMap: MutableMap<Parameter, Any?> = mutableMapOf()
+    //解析参数
+    protected fun resolverParam(method: Method): MutableMap<String, Any?> {
+        val paramMap: MutableMap<String, Any?> = mutableMapOf()
         for (index in method.parameters.indices) {
-            if (args!![index] != null)
-                paramMap[method.parameters[index]] = args!![index]
-        }
-        if (Configurations.configuration.showParam!!)
-            paramMap.entries.forEach { e ->
-                run {
-                    try {
-                        PrintImpl().debug("param >>   " + e.key.name + ":" + e.value.toString())
-                    } catch (ex: Exception) {
+            val typeSimpleName = method.parameters[index].type.simpleName
+            when {
+                //是不定长数组参数
+                method.parameters[index].isVarArgs -> {
+                    val paramArray = args!![index] as Array<*>
+                    for ((i, param) in paramArray.withIndex()) {
+                        when {
+                            isBasicDataType(param!!) -> paramMap["param${i + 1}"] = param
+                            else -> this.resolverClassParam(null, param, paramMap)
+                        }
+                    }
+                }
+
+                //是普通参数
+                method.parameters[index] is Parameter -> {
+                    println(args!![index])
+                    //基础参数
+                    if (this.isBasicDataType(args!![index])) {
+                        paramMap[method.parameters[index].name] = args!![index]
+                    } else if (typeSimpleName == "List" || typeSimpleName == "Set") {//是集合参数
+                        val paramArray = args!![index] as MutableList<*>
+
+                        if (paramArray.size > 0) {
+                            //基础类型的参数List直接  nameList = 1,2,3,4就行，不用解析类
+                            if (this.isBasicDataType(paramArray[0]!!)) {
+                                //如果是基础类型的集合
+                                paramMap[method.parameters[index].name] = paramArray
+                            } else {
+                                for (index in 0 until paramArray.size) {
+                                    this.resolverClassParam(index.toString(), paramArray[index], paramMap)
+                                    //类本身   0.user = user
+                                    paramMap["$index." + WordUtil.camelToUnderline(paramArray[index]!!.javaClass.simpleName)] = paramArray[index]
+                                }
+                            }
+                        }
+
+                        //是集合参数 true
+                        paramMap["isBatch"] = "true"
+                        //用户传递参数的名称  userList
+                        paramMap["paramName"] = method.parameters[index].name
+                        //用户传递参数的类实例名称 user
+                        paramMap["paramTypeName"] = WordUtil.camelToUnderline(paramArray[0]!!::class.java.simpleName)
+                        //集合大小 10
+                        paramMap["batchSize"] = paramArray.size
+                    } else {//类参数
+                        this.resolverClassParam(null, args!![index], paramMap)
+                        paramMap["paramName"] = WordUtil.camelToUnderline(args!![index].javaClass.simpleName)
+                        paramMap["paramTypeName"] = WordUtil.camelToUnderline(args!![index].javaClass.simpleName)
+                        paramMap[WordUtil.camelToUnderline(args!![index].javaClass.simpleName)] = args!![index]
                     }
                 }
             }
-
+        }
         return paramMap
     }
 
-    override fun selectStatement(statement: Statement, command: String, param: MutableMap<Parameter, Any?>, statement1: Statement): T? {
+    private fun isBasicDataType(param: Any): Boolean {
+        return when (param) {
+            is String, Int, Long, Float, Double, Short -> true
+            is java.util.Date -> true
+            is java.lang.Integer -> true
+            is java.lang.Boolean -> true
+            is java.lang.String -> true
+            is java.lang.Double -> true
+            is java.lang.Float -> true
+            is java.lang.Short -> true
+            else -> false
+        }
+    }
+
+    protected fun resolverClassParam(paramNamePrefix: String?, param: Any?, paramMap: MutableMap<String, Any?>) {
+        val valueInstance = param!!::class.java
+        val declaredFields = valueInstance.declaredFields
+        for (field in declaredFields) {
+            //class com.other.test.boot.enitiy.User.id
+            //User 转小写才是类名
+            var name = field.toString().split(".")[field.toString().split(".").size - 2]
+            name = WordUtil.toLowerCaseFirstOne(name)
+
+            val declaredField = valueInstance.getDeclaredField(field.name)
+            declaredField.isAccessible = true
+            val entityValue = declaredField.get(param)
+            if (entityValue != null && entityValue != "") {
+                if (paramNamePrefix != null) paramMap["$paramNamePrefix.$name.${field.name}"] = entityValue
+                else paramMap["$name.${field.name}"] = entityValue
+            }
+        }
+    }
+
+    override fun selectStatement(statement: Statement, command: String, param: MutableMap<String, Any?>, statement1: Statement): T? {
         return when (val sqlStatement = CCJSqlParserManager().parse(StringReader(command.trim()))) {
             is Select -> {
                 val executeQuery = statement.executeQuery(command) as MongoResultSet
@@ -105,5 +179,5 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         }
     }
 
-    override fun template(baseCommand: String, param: MutableMap<Parameter, Any?>): String = RegexTemplate().completeCommand(baseCommand, param)
+    override fun template(baseCommand: String, param: MutableMap<String, Any?>): String = RegexTemplate().completeCommand(baseCommand, param)
 }

@@ -3,12 +3,9 @@ package com.github.aly8246.core.template
 import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
-import com.github.aly8246.core.util.BasicDataTypeUtil
 import com.github.aly8246.core.util.PrintImpl
-import com.github.aly8246.core.util.WordUtil
 import net.sf.jsqlparser.parser.CCJSqlParserManager
 import java.io.StringReader
-import java.lang.reflect.Parameter
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
@@ -18,7 +15,7 @@ import java.util.stream.Collectors.toList
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 open class RegexTemplate : BaseTemplate() {
-    override fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String {
+    override fun replaceParam(sourceCommand: String, paramMap: MutableMap<String, Any?>): String {
         if (configuration.showCommand!!)
             PrintImpl().debug("originalCommand >>   $sourceCommand")
         var command = ""
@@ -27,15 +24,12 @@ open class RegexTemplate : BaseTemplate() {
                 || sourceCommand.startsWith("DELETE") || sourceCommand.startsWith("delete") || sourceCommand.startsWith("Delete")
                 || sourceCommand.startsWith("UPDATE") || sourceCommand.startsWith("update") || sourceCommand.startsWith("Update")
         ) {
-            val paramMap: MutableMap<String, Any?> = this.convertParamMap(param, true)
-
             //替换普通参数
             command = this.processSimpleTemplate(sourceCommand, paramMap, "\$\\{.*?\\}")
             command = this.processSimpleTemplate(command, paramMap, "\\#\\{.*?\\}")
             //执行when条件判断
             command = processConditionTemplate(command, paramMap)
         } else if (sourceCommand.startsWith("INSERT") || sourceCommand.startsWith("insert") || sourceCommand.startsWith("Insert")) {
-            val paramMap: MutableMap<String, Any?> = this.convertParamMap(param, false)
             //为insert方法处理参数
             command = this.processInsertValue(sourceCommand, paramMap)
         }
@@ -58,39 +52,27 @@ open class RegexTemplate : BaseTemplate() {
     }
 
     private fun processInsertValue(sourceCommand: String, paramMap: MutableMap<String, Any?>): String {
-        if (paramMap.size > 1 || paramMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
+        // if (paramMap.size > 1 || paramMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
 
-        var paramName = ""
-        var paramValue: Any? = null
+        //step1. 判断是单个插入的sql还是多个插入的sql
         val insertColumn = this.insertColumn(sourceCommand)
+        val paramName = paramMap["paramName"]
+        val paramTypeName = paramMap["paramTypeName"]
 
-        paramMap.entries.forEach { e ->
-            run {
-                paramName = e.key
-                paramValue = e.value
+        val insertValue = StringBuilder()
+        if (paramMap["isBatch"] != null) {
+            for (index in 0 until paramMap["batchSize"].toString().toInt()) {
+                val buildInsertValue = buildInsertValue(insertColumn, paramMap["$index.$paramTypeName"])
+                insertValue.append(buildInsertValue).append(",")
             }
+            insertValue.deleteCharAt(insertValue.length - 1)
+        } else {
+            insertValue.append(buildInsertValue(insertColumn, paramMap["$paramTypeName"]))
         }
 
         val sb = StringBuffer()
         val matcher = Pattern.compile("#\\{$paramName}").matcher(sourceCommand)
         while (matcher.find()) {
-            //插入的values 无论是单个插入还是批量插入
-            val insertValue = StringBuilder()
-            when (paramValue) {
-                is Collections, is Collection<*> -> {
-                    val arrayList = paramValue as ArrayList<*>
-                    arrayList.forEach { e ->
-                        run {
-                            val buildInsertValue = buildInsertValue(insertColumn, e)
-                            insertValue.append(buildInsertValue).append(",")
-                        }
-                    }
-                    insertValue.deleteCharAt(insertValue.length - 1)
-                }
-                else -> {
-                    insertValue.append(buildInsertValue(insertColumn, paramValue))
-                }
-            }
             matcher.appendReplacement(sb, insertValue.toString())
         }
         matcher.appendTail(sb)
@@ -142,6 +124,7 @@ open class RegexTemplate : BaseTemplate() {
         stringBuilder.append(")")
         return stringBuilder.toString()
     }
+
 
     //获取新增的时候需要新增的行
     private fun insertColumn(sourceCommand: String): MutableList<String> {
@@ -214,54 +197,6 @@ open class RegexTemplate : BaseTemplate() {
         }
         whenRegex.appendTail(sb)
         return sb.toString()
-    }
-
-    // resolverClass 是否解析类里面的字段，新增的时候不需要解析
-    private fun convertParamMap(params: MutableMap<Parameter, Any?>, resolverClass: Boolean): MutableMap<String, Any?> {
-        val resultParamMap: MutableMap<String, Any?> = mutableMapOf()
-        params.forEach { e ->
-            //如果要解析是类的参数
-            if (resolverClass) {
-                when {
-                    //数组参数
-                    e.key.parameterizedType.typeName == "java.lang.Object[]" -> {
-                        val paramArray = e.value as Array<Object>
-                        for (index in paramArray.indices) {
-                            resultParamMap["param${index + 1}"] = paramArray[index]
-                        }
-                    }
-                    //非基本类型:参数的key为一个类
-                    !BasicDataTypeUtil.isBasicDataType(e.key) -> {
-                        //val className = WordUtil.toLowerCaseFirstOne(e.key.type.simpleName)
-                        val valueInstance = e.value!!::class.java
-                        val declaredFields = valueInstance.declaredFields
-
-                        for (field in declaredFields) {
-                            //class com.other.test.boot.enitiy.User.id
-                            //User 转小写才是类名
-                            var name = field.toString().split(".")[field.toString().split(".").size - 2]
-                            name = WordUtil.toLowerCaseFirstOne(name)
-
-                            val declaredField = valueInstance.getDeclaredField(field.name)
-                            declaredField.isAccessible = true
-                            val entityValue = declaredField.get(e.value)
-                            if (entityValue != null && entityValue != "") {
-                                resultParamMap["$name.${field.name}"] = entityValue
-                            }
-                        }
-                        resultParamMap[e.key.name] = e.value
-                    }
-                }
-            }
-        }
-        return resultParamMap
-    }
-
-    private fun toLowerCaseFirstOne(str: String): String {
-        if (str[0].isLowerCase()) {
-            return str
-        }
-        return java.lang.StringBuilder().append(str[0].toLowerCase()).append(str.substring((1))).toString()
     }
 
     private fun processSimpleTemplate(template: String, paramMap: MutableMap<String, Any?>, regx: String): String {

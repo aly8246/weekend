@@ -6,7 +6,7 @@ import java.lang.reflect.Parameter
 
 interface Executor {
     fun select(sql: String): FindIterable<Document>
-    fun insert(sql: String, param: MutableMap<Parameter, Any?>): Int
+    fun insert(sql: String, param: MutableMap<String, Any?>): Int
     fun update(sql: String): Int
     fun delete(sql: String): Int
 }

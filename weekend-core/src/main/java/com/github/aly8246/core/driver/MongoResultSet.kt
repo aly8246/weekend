@@ -11,6 +11,7 @@ import com.mongodb.client.MongoCursor
 import org.bson.Document
 import java.io.InputStream
 import java.io.Reader
+import java.lang.Exception
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.math.BigDecimal
@@ -245,7 +246,11 @@ class MongoResultSet() : ResultSet {
                         field.set(newInstance, mappingMap[key].toString().toFloat())
                     }
                     field.type.name == "java.util.Date" -> {
-                        field.set(newInstance, SimpleDateFormat(configuration.dataFormat!!).parse(mappingMap[key].toString()))
+                        try {
+                            field.set(newInstance, SimpleDateFormat(configuration.dataFormat!!).parse(mappingMap[key].toString()))
+                        } catch (e: Exception) {
+                            field.set(newInstance, null)
+                        }
                     }
                     field.type.name == "int" -> {
                         field.set(newInstance, mappingMap[key].toString().toInt())

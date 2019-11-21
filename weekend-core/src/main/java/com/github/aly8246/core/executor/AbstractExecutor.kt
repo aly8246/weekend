@@ -42,7 +42,7 @@ abstract class AbstractExecutor(sql: String, mongoConnection: MongoConnection) :
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun insert(sql: String, param: MutableMap<Parameter, Any?>): Int {
+    override fun insert(sql: String, param: MutableMap<String, Any?>): Int {
         return 0
     }
 

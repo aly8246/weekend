@@ -5,7 +5,7 @@ import java.lang.reflect.Parameter
 
 abstract class BaseTemplate : Template {
 
-    override fun completeCommand(baseCommand: String, param: MutableMap<Parameter, Any?>): String {
+    override fun completeCommand(baseCommand: String, param: MutableMap<String, Any?>): String {
         when {
             StringUtils.isEmpty(baseCommand) -> throw RuntimeException("BaseCommand不能为空")
         }
@@ -14,7 +14,7 @@ abstract class BaseTemplate : Template {
         return replaceParam
     }
 
-    abstract fun replaceParam(sourceCommand: String, param: MutableMap<Parameter, Any?>): String
+    abstract fun replaceParam(sourceCommand: String, param: MutableMap<String, Any?>): String
 
     abstract fun syntaxCheck(command: String)
 
