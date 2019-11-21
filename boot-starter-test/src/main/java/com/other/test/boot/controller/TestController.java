@@ -150,4 +150,10 @@ public Result<PageResult<User>> selectPage(Page page, String name) {
 public Result<PageResult<User>> selectPageByParam(Page page, String name) {
 	return Result.success(testService.selectPageByParam(page, name));
 }
+
+@ApiOperation("分页查询[用户自定义无参分页]")
+@GetMapping("customPage")
+public Result<PageResult<User>> selectPageCustom(Page page) {
+	return Result.success(testService.customPage(page));
+}
 }

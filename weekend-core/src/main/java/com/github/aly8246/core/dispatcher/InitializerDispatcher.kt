@@ -4,6 +4,7 @@ import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.driver.MongoResultSet
 import com.github.aly8246.core.driver.MongoStatement
 import com.github.aly8246.core.exception.WeekendException
+import com.github.aly8246.core.page.Page
 import com.github.aly8246.core.template.RegexTemplate
 import com.github.aly8246.core.util.WordUtil
 import net.sf.jsqlparser.parser.CCJSqlParserManager
@@ -48,6 +49,10 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         statement.close()
 
         return executorResult
+    }
+
+    override fun pageParam(): Page {
+        throw WeekendException("要获取分页参数必须自己实现此方法")
     }
 
     abstract fun transmitOriginalCommand(originalCommand: String)

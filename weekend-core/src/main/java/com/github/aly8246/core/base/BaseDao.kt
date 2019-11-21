@@ -26,7 +26,7 @@ interface BaseDao<X> {
 //    fun selectPage(page: Page, sql: String, entity: Any): PageResult<X>
 
     @BaseMethod
-    @com.github.aly8246.core.annotation.Page
+    @com.github.aly8246.core.annotation.PageMethod
     fun selectPage(page: Page, sql: String, vararg param: Any): PageResult<X>
 
 }

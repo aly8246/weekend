@@ -87,4 +87,9 @@ public class TestServiceImpl implements TestService {
         return testDao.selectPage(page, "where name = #{param1}", name);
     }
 
+@Override
+public PageResult<User> customPage(Page page) {
+	return testDao.customPage(page);
+}
+
 }

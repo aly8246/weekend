@@ -1,5 +1,6 @@
 package com.github.aly8246.core.dispatcher
 
+import com.github.aly8246.core.page.Page
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.sql.Statement
