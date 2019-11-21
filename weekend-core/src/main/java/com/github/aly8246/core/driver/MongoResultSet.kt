@@ -6,6 +6,7 @@ import com.github.aly8246.core.annotation.WeekendId
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolver
+import com.github.aly8246.core.page.PageResult
 import com.github.aly8246.core.util.PrintImpl
 import com.mongodb.client.MongoCursor
 import org.bson.Document
@@ -56,6 +57,8 @@ class MongoResultSet() : ResultSet {
 
         //是基础方法
         if (baseMethod != null) {
+            resultClassType = CollectionEntityResolver().returnClass(target)
+        } else if (returnType.name == PageResult::class.java.name) {
             resultClassType = CollectionEntityResolver().returnClass(target)
         } else {
             val canonicalName = returnType.canonicalName
@@ -126,6 +129,9 @@ class MongoResultSet() : ResultSet {
         //如果是object则证明是BaseDao的接口返回的泛型参数
         val baseMethod = method.getDeclaredAnnotation(BaseMethod::class.java)
         if (returnType.name == "java.lang.Object" && baseMethod != null) return false
+
+        //如果是分页则强制返回list而不是单个数据
+        if (returnType.name == PageResult::class.java.name) return true
 
         return returnType != javaClass
     }

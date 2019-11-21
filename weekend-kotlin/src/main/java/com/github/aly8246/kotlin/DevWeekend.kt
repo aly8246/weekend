@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.*
+import javax.annotation.PostConstruct
 import javax.annotation.Resource
 
 /**
@@ -23,6 +24,7 @@ open class DevWeekend {
     lateinit var userDao: UserDao
     @Resource
     lateinit var userDao2: UserDao2
+
 
     @Bean
     open fun test() {

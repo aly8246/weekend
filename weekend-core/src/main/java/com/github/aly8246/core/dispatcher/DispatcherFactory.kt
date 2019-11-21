@@ -2,7 +2,7 @@ package com.github.aly8246.core.dispatcher
 
 import com.github.aly8246.core.annotation.BaseMethod
 import com.github.aly8246.core.annotation.Command
-import com.github.aly8246.core.annotation.Page
+import com.github.aly8246.core.annotation.PageMethod
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.dispatcher.baseDaoHandler.BaseDaoDispatcher
 import com.github.aly8246.core.dispatcher.pageDaoHandler.PageDaoDispatcher
@@ -31,7 +31,7 @@ open class DispatcherFactory<T>(private val weekendProxy: WeekendProxy<T>) : Dis
 
         val command = method.getDeclaredAnnotation(Command::class.java)
         val baseMethod = method.getDeclaredAnnotation(BaseMethod::class.java)
-        val page = method.getDeclaredAnnotation(Page::class.java)
+        val page = method.getDeclaredAnnotation(PageMethod::class.java)
 
 
         return when {

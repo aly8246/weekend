@@ -7,4 +7,4 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Inherited
 @MustBeDocumented
-annotation class Page()
+annotation class PageMethod()

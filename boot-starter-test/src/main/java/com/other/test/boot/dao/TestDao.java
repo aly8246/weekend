@@ -1,6 +1,7 @@
 package com.other.test.boot.dao;
 
 import com.github.aly8246.core.annotation.Command;
+import com.github.aly8246.core.page.Page;
 import com.github.aly8246.core.page.PageResult;
 import com.other.test.boot.enitiy.User;
 
@@ -47,9 +48,9 @@ int updateNameByIdIs(String id, String name);
 @Command("update user set name = #{user.name} where id = #{user.id}")
 int updateByUser(User user);
 
-@Command("update user set name = #{user.name} where id = #{user.id}")
-@com.github.aly8246.core.annotation.Page
-PageResult<User> customPage();
+@Command("select * from user")
+@com.github.aly8246.core.annotation.PageMethod
+PageResult<User> customPage(Page page);
 
 
 }

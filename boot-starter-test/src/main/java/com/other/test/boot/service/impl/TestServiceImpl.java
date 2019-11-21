@@ -87,4 +87,9 @@ public PageResult<User> selectPageByParam(Page page, String name) {
 	return testDao.selectPage(page, "where name = #{param1}", name, "");
 }
 
+@Override
+public PageResult<User> customPage(Page page) {
+	return testDao.customPage(page);
+}
+
 }

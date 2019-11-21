@@ -4,7 +4,6 @@ import com.github.aly8246.core.annotation.BaseMethod
 import com.github.aly8246.core.page.Page
 import com.github.aly8246.core.page.PageResult
 import java.io.Serializable
-import java.util.*
 
 
 interface BaseDao<X> {
@@ -22,11 +21,11 @@ interface BaseDao<X> {
     fun selectAll(sql: String, queryObject: Any): List<X>
 
     @BaseMethod
-    @com.github.aly8246.core.annotation.Page
+    @com.github.aly8246.core.annotation.PageMethod
     fun selectPage(page: Page, sql: String, entity: Any): PageResult<X>
 
     @BaseMethod
-    @com.github.aly8246.core.annotation.Page
+    @com.github.aly8246.core.annotation.PageMethod
     fun selectPage(page: Page, sql: String, vararg param: Any): PageResult<X>
 
 }

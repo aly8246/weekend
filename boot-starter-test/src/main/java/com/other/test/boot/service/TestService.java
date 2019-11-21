@@ -35,4 +35,5 @@ PageResult<User> selectPage(Page page, String name);
 
 PageResult<User> selectPageByParam(Page page, String name);
 
+PageResult<User> customPage(Page page);
 }

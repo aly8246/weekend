@@ -61,7 +61,7 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         return startPage(originalCommand, param)
     }
 
-    private fun startPage(originalCommand: String, param: MutableMap<Parameter, Any?>): T? {
+    protected fun startPage(originalCommand: String, param: MutableMap<Parameter, Any?>): T? {
         val statement = mongoConnection.createStatement()
 
         var sqlStm = CCJSqlParserManager().parse(StringReader(originalCommand.trim()))
@@ -78,8 +78,8 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         val select = pageExecutor.select(plainSelect.toString())
         val count = select.count()
 
-        //method的0号参数就是page对象
-        val page = args!![0] as Page
+
+        val page = this.pageParam()
 
         /**
          * @Description mysql分页转mongodb分页
@@ -101,6 +101,13 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         return pageResult as T
     }
 
+    /**
+     * @see com.github.aly8246.core.base.BaseDao.selectPage
+     */
+    //method的0号参数就一定是是page对象
+    override fun pageParam(): Page {
+        return args!![0] as Page
+    }
     /**
      * @Description 分页算法-倒推法:根据结束index来推算起始index
      * @Author 南有乔木

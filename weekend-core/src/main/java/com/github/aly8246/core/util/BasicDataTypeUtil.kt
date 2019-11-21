@@ -14,7 +14,6 @@ object BasicDataTypeUtil {
         basicTypeList.add("java.lang.Long")
         basicTypeList.add("java.lang.Short")
         basicTypeList.add("java.lang.Float")
-        basicTypeList.add("java.lang.Object")
         basicTypeList.add("java.util.Date")
         basicTypeList.add("int")
         basicTypeList.add("double")
@@ -24,6 +23,7 @@ object BasicDataTypeUtil {
     }
 
     fun isBasicDataType(parameter: Parameter): Boolean {
+        println(parameter.parameterizedType.typeName)
         return basicTypeList.stream().anyMatch { parameter.parameterizedType.typeName == it }
     }
 }
