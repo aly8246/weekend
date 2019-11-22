@@ -1,6 +1,7 @@
 package com.github.aly8246.core.dispatcher.baseDaoHandler
 
 
+import com.github.aly8246.core.annotation.StrategyRoute
 import com.github.aly8246.core.dispatcher.InitializerDispatcher
 import com.github.aly8246.core.driver.MongoConnection
 import com.github.aly8246.core.exception.WeekendException
@@ -25,7 +26,8 @@ class BaseDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongoC
     override fun resolverBaseCommand(method: Method): String {
         //根据方法拼接sql
         val contextFactory = BaseDaoContextFactory<T>()
-        val strategy = contextFactory.produceStrategy(null, method.name)
+        val strategyRoute = method.getDeclaredAnnotation(StrategyRoute::class.java)
+        val strategy = contextFactory.produceStrategy(strategyRoute.path, method.name)
         strategySignature = strategy.strategySignature
         return strategy.create(proxy, method, args, mongoConnection, target)
     }

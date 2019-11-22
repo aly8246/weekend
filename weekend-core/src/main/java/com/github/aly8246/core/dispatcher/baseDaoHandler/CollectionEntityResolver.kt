@@ -1,7 +1,7 @@
 package com.github.aly8246.core.dispatcher.baseDaoHandler
 
 import com.github.aly8246.core.annotation.WeekendCollection
-import com.github.aly8246.core.base.BaseDao
+import com.github.aly8246.core.dispatcher.baseDaoHandler.base.BaseDao
 import com.github.aly8246.core.util.WordUtil.Companion.camelToUnderline
 import java.util.regex.Pattern
 

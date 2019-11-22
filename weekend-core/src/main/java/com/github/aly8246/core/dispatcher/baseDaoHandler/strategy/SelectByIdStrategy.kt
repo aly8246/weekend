@@ -1,5 +1,7 @@
-package com.github.aly8246.core.dispatcher.baseDaoHandler
+package com.github.aly8246.core.dispatcher.baseDaoHandler.strategy
 
+import com.github.aly8246.core.dispatcher.baseDaoHandler.BaseDaoStrategy
+import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolver
 import com.github.aly8246.core.driver.MongoConnection
 import java.lang.reflect.Method
 

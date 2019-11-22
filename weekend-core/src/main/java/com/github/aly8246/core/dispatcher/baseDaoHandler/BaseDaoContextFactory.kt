@@ -34,10 +34,8 @@ class BaseDaoContextFactory<T> {
     fun produceStrategy(strategyPath: String?, methodName: String): BaseCommandContext<T> {
         val classPath = StringBuilder()
 
-        //如果用户使用自定义策略的时候应该传入的策略路径
-        if (strategyPath != null) classPath.append(strategyPath)
-        else classPath.append("com.github.aly8246.core.dispatcher.baseDaoHandler")
-
+        //从方法上获取策略的位置
+        classPath.append(strategyPath)
         classPath.append(".")
         classPath.append(WordUtil.toUpperCaseFirstOne(methodName))
         classPath.append("Strategy")

@@ -1,6 +1,6 @@
 package com.other.test.boot.dao;
 
-import com.github.aly8246.core.base.BaseDao;
+import com.github.aly8246.core.dispatcher.baseDaoHandler.base.BaseDao;
 
 /**
  * @Author ：南有乔木
