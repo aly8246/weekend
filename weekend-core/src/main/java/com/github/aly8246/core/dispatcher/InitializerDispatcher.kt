@@ -67,6 +67,7 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
     protected fun resolverParam(method: Method): MutableMap<String, Any?> {
         val paramMap: MutableMap<String, Any?> = mutableMapOf()
         for (index in method.parameters.indices) {
+            if (args?.get(index) == null) continue
             val typeSimpleName = method.parameters[index].type.simpleName
             when {
                 //是不定长数组参数
@@ -138,7 +139,8 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
     }
 
     protected fun resolverClassParam(paramNamePrefix: String?, param: Any?, paramMap: MutableMap<String, Any?>) {
-        val valueInstance = param!!::class.java
+        if (param == null) return
+        val valueInstance = param::class.java
         val declaredFields = valueInstance.declaredFields
         for (field in declaredFields) {
             //class com.other.test.boot.enitiy.User.id

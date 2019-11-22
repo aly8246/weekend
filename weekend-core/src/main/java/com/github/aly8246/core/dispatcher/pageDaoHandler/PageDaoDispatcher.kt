@@ -29,8 +29,9 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
 
         fun resolverBaseCommand(): String {
             val collectionName = this.collectionName(this.target)
-            val userSqlCommand = args?.get(1)
-            return "select * from $collectionName $userSqlCommand"
+
+            if (args?.get(1) != null) return "select * from $collectionName ${args?.get(1)}"
+            return "select * from $collectionName "
         }
     }
 
@@ -92,7 +93,7 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         statement.close()
 
         val pageResult = PageResult<T>()
-        if (selectStatement != null)
+            if (selectStatement != null)
             pageResult.data = selectStatement as List<T>
         pageResult.page = page.page
         pageResult.total = count
