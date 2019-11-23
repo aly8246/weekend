@@ -1,6 +1,6 @@
 ## weekend
 
-> 一款轻量级mongodb持久层工具[暂时不能叫框架]，像mybatis查询mysql一样，组合动态sql查询mongodb
+> 一款轻量级mongodb持久层框架，像mybatis查询mysql一样，组合动态sql查询mongodb
 
 [在线示例，使用weekend实现的基本crud操作](http://148.70.16.82:9999/doc.html) <<--**点此查看在线示例**
 
