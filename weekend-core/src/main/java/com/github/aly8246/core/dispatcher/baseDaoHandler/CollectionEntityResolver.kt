@@ -62,8 +62,6 @@ open class CollectionEntityResolver {
     }
 
 
-    //TODO 注意mapping
-    //TODO 传递一个entity 返回不为null的字段的名称和值
     fun <T> resolverEntity(entity: Any): MutableMap<String, Any> {
         val resultMap: MutableMap<String, Any> = mutableMapOf()
         val entityClass = entity::class.java

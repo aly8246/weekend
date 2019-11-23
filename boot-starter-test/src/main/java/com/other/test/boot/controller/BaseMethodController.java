@@ -24,7 +24,6 @@ public class BaseMethodController {
     @PostMapping
     @ApiOperation("[insertOne]新增一个用户")
     public Result insertOne(@RequestBody User user) {
-        System.out.println(user);
         user.setId(IDUtil.createID());
         user.setAddress("");
         int i = baseMethodService.insertOne(user);

@@ -21,7 +21,7 @@ interface BaseDao<X> {
      * 这个方法新增一个实体到数据库。只新增不为null的字段，如果没有id则会自动生成25位随机字符
      * This method add one entity to DB.Add only non null fields,If It's haven't primaryKey,I where help you generate 25 random char.
      *
-     * @see com.github.aly8246.core.dispatcher.baseDaoHandler.strategy.InsertSelectiveStrategy
+     * @see com.github.aly8246.core.dispatcher.baseDaoHandler.strategy.InsertOneStrategy
      *
      * @param entity 实体类，它不是是空的
      * @param entity entity,Can't be null!

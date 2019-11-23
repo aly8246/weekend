@@ -27,7 +27,6 @@ public class TestController {
     @PostMapping
     @ApiOperation("新增一个用户")
     public Result insertOne(@RequestBody User user) {
-        System.out.println(user);
         user.setId(IDUtil.createID());
         user.setAddress(null);
         int i = testService.insertOne(user);
@@ -38,7 +37,6 @@ public class TestController {
     @PostMapping("multiple/")
     @ApiOperation("新增多个用户")
     public Result insertList(@RequestBody List<User> userList) {
-        System.out.println(userList);
         for (User user : userList) {
             user.setId(IDUtil.createID());
         }

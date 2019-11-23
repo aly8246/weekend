@@ -5,7 +5,7 @@ import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolve
 import com.github.aly8246.core.driver.MongoConnection
 import java.lang.reflect.Method
 
-class InsertSelectiveStrategy<T> : CollectionEntityResolver(), BaseDaoStrategy<T> {
+class InsertOneStrategy<T> : CollectionEntityResolver(), BaseDaoStrategy<T> {
     override fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>): String {
         val collectionName = this.collectionName(target)
 

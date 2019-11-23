@@ -1,6 +1,7 @@
 package com.other.test.boot.enitiy;
 
 import com.github.aly8246.core.annotation.Mapping;
+import com.github.aly8246.core.annotation.WeekendCollection;
 import com.github.aly8246.core.annotation.WeekendId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@WeekendCollection("user")
+@WeekendCollection("user2")
 public class User {
     @ApiModelProperty(value = "id", example = "aaa1111aaa")
     @WeekendId
@@ -22,7 +23,7 @@ public class User {
     private String name;
 
     @ApiModelProperty(value = "昵称", example = "张三王八")
-//@Mapping(name = "nick_name")
+    @Mapping(name = "nickName")
     private String nickName;
 
     @ApiModelProperty(value = "地址", example = "重庆市渝北区大竹林街道xxx")
