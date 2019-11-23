@@ -54,4 +54,7 @@ open class CollectionEntityResolver {
         //否则返回_id
         return "_id"
     }
+
+
+    //TODO 获取所有不为null的字段
 }

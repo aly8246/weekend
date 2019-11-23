@@ -11,7 +11,6 @@ import java.lang.StringBuilder
  * @description：
  * @version:   ：V
  */
-
 class BaseDaoContextFactory<T> {
     //每个base方法都需要解析出sql，如果不使用策略模式，则会有一大堆if else方法
     //需要定义一个接口，通过实现接口来最终获得完整的sql(还未处理模板参数)
@@ -44,7 +43,7 @@ class BaseDaoContextFactory<T> {
         try {
             strategyInstance = Class.forName(classPath.toString()).newInstance()
         } catch (e: Exception) {
-            throw WeekendException("还未实现的BaseDao方法:$methodName")
+            throw WeekendException("还未实现的BaseDao方法:$methodName 或无法使用的策略:${e.message}")
         }
 
         return BaseCommandContext(strategyInstance as BaseDaoStrategy<T>)

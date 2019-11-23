@@ -108,7 +108,7 @@ open class RegexTemplate : BaseTemplate() {
                 }
                 //通过反射取到的值,但是不一定是新增的时候需要的值
                 if (columnList.stream().anyMatch { e -> e == fieldName }) {
-
+                    //TODO 根据注解上的mapping字段获取转换规则，或者驼峰转下划线
                     val declaredField = paramValue.javaClass.getDeclaredField(field.name)
                     declaredField.isAccessible = true
 
@@ -120,6 +120,7 @@ open class RegexTemplate : BaseTemplate() {
                 }
             }
         }
+
         stringBuilder.append(valueMap.values.stream().collect(Collectors.joining(",")))
         stringBuilder.append(")")
         return stringBuilder.toString()
