@@ -16,7 +16,7 @@ public interface TestDao extends WeekendDao<User> {
     int insertOne(User user);
 
     @Command("INSERT INTO user" +
-            "(`id`, `name`, `nick_name`, `address`, `age`, `password`, `safe_key`,`state`,`creator`,`create_time`) " +
+            "(`id`, `name`, `nickName`, `address`, `age`, `password`, `safe_key`,`state`,`creator`,`create_time`) " +
             "VALUES #{userList}")
     int insertList(List<User> userList);
 
