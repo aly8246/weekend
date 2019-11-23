@@ -23,7 +23,10 @@ class WordUtil {
             return java.lang.StringBuilder().append(str[0].toUpperCase()).append(str.substring((1))).toString()
         }
 
-        fun camelToUnderline(str: String?): String {
+        /**
+         * 驼峰转下划线
+         */
+        fun underscoreName(str: String?): String {
             if (str == null || str.trim { it <= ' ' }.isEmpty()) {
                 return ""
             }
@@ -41,6 +44,32 @@ class WordUtil {
             }
             return sb.toString()
         }
+
+        /**
+         * 下划线转驼峰
+         */
+        fun camelName(name: String?): String {
+            val result = java.lang.StringBuilder()
+            if (name == null || name.isEmpty()) {
+                return ""
+            } else if (!name.contains("_")) {
+                return name.substring(0, 1).toLowerCase() + name.substring(1)
+            }
+            val camels = name.split("_").toTypedArray()
+            for (camel in camels) {
+                if (camel.isEmpty()) {
+                    continue
+                }
+                if (result.length == 0) {
+                    result.append(camel.toLowerCase())
+                } else {
+                    result.append(camel.substring(0, 1).toUpperCase())
+                    result.append(camel.substring(1).toLowerCase())
+                }
+            }
+            return result.toString()
+        }
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.github.aly8246.core.executor
 
+import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.driver.MongoConnection
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
@@ -21,6 +22,8 @@ import org.bson.Document
 import org.bson.conversions.Bson
 import java.io.StringReader
 import java.lang.reflect.Parameter
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -30,6 +33,7 @@ import java.util.regex.Pattern
  * @description：
  * @version:   ：V
  */
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 abstract class AbstractExecutor(sql: String, mongoConnection: MongoConnection) : Executor {
     private val orderBy: Int = 1
     private val orderByDesc: Int = -1
@@ -72,10 +76,15 @@ abstract class AbstractExecutor(sql: String, mongoConnection: MongoConnection) :
 
     protected fun expressionValue(expression: Expression): Any? {
         return when (expression) {
-            is StringValue -> expression.value
+            is StringValue -> {
+                val matcher = Pattern.compile("^'2\\d{3}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}'$").matcher(expression.toString())
+                while (matcher.find()) {
+                    return SimpleDateFormat(configuration.dataFormat).parse(expression.value)
+                }
+                expression.value
+            }
             is LongValue -> expression.value
             is DoubleValue -> expression.value
-            is DateValue -> expression.value
             is TimeValue -> expression.value
             is TimestampValue -> expression.value
             is NullValue -> null

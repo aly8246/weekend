@@ -8,6 +8,7 @@ import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolver
 import com.github.aly8246.core.page.PageResult
 import com.github.aly8246.core.util.PrintImpl
+import com.github.aly8246.core.util.WordUtil
 import com.mongodb.client.MongoCursor
 import org.bson.Document
 import java.io.InputStream
@@ -197,7 +198,7 @@ class MongoResultSet() : ResultSet {
 
     private fun mapToPojo(map: Map<*, *>?, clazz: Class<*>?): Any? {
         if (map == null) return null
-        var mappingMap: MutableMap<Any?, Any?> = map.toMutableMap()
+        val mappingMap: MutableMap<Any?, Any?> = map.toMutableMap()
         if (clazz == null) throw WeekendException("未知错误")
         val newInstance = clazz.newInstance()
 
@@ -216,15 +217,21 @@ class MongoResultSet() : ResultSet {
                     clazz.getDeclaredField(mapping?.codeFieldName)
                 } catch (e2: NullPointerException) {
                     try {
-                        //尝试拿隐藏字段
-                        clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
-                    } catch (e2: NoSuchFieldException) {
+                        //尝试下划线转驼峰
+                        clazz.getDeclaredField(WordUtil.camelName(key as String))
+                    } catch (e3: Exception) {
                         try {
-                            clazz.getDeclaredField(this._id.toString())
-                        } catch (e3: NoSuchFieldException) {
-                            if (configuration.nonFieldRemind!!)
-                                PrintImpl().debug("不存在的字段${key.toString()}")
-                            continue
+                            //尝试拿隐藏字段
+                            clazz.getDeclaredField(key.toString().substring(1, key.toString().length))
+                        } catch (e4: NoSuchFieldException) {
+                            try {
+                                //尝试用主键id获取
+                                clazz.getDeclaredField(this._id.toString())
+                            } catch (e5: NoSuchFieldException) {
+                                if (configuration.nonFieldRemind!!)
+                                    PrintImpl().debug("不存在的字段${key.toString()}")
+                                continue
+                            }
                         }
                     }
                 }
@@ -253,7 +260,9 @@ class MongoResultSet() : ResultSet {
                     }
                     field.type.name == "java.util.Date" -> {
                         try {
-                            field.set(newInstance, SimpleDateFormat(configuration.dataFormat!!).parse(mappingMap[key].toString()))
+                            val dateStr = SimpleDateFormat(configuration.dataFormat!!).format(java.util.Date(mappingMap[key].toString()))
+                            val date = SimpleDateFormat(configuration.dataFormat!!).parse(dateStr)
+                            field.set(newInstance, date)
                         } catch (e: Exception) {
                             field.set(newInstance, null)
                         }

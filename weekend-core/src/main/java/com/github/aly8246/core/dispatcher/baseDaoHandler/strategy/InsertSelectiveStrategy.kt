@@ -8,9 +8,10 @@ import java.lang.reflect.Method
 class InsertSelectiveStrategy<T> : CollectionEntityResolver(), BaseDaoStrategy<T> {
     override fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>): String {
         val collectionName = this.collectionName(target)
-        //TODO 获取所有不为null的字段，
-        var insertField = "(`id`)"
-        var insertValue = "(`1234567`)"
-        return "INSERT INTO $collectionName $insertField values $insertValue"
+
+        //第0个参数一定是实体类
+        val resolverEntity = this.resolverEntity<T>(args!![0])
+
+        return "INSERT INTO $collectionName (${resolverEntity.keys.joinToString(",")}) values (${resolverEntity.values.joinToString(",")})"
     }
 }

@@ -12,12 +12,12 @@ import net.sf.jsqlparser.statement.delete.Delete
 import net.sf.jsqlparser.statement.insert.Insert
 import net.sf.jsqlparser.statement.select.Select
 import net.sf.jsqlparser.statement.update.Update
+import org.springframework.util.StringUtils
 import java.io.StringReader
 
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.sql.Statement
-import java.util.*
 
 @Suppress("NAME_SHADOWING")
 abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, var mongoConnection: MongoConnection, var target: Class<T>) : AbstractDispatcher<T>(proxy, method, args, target) {
@@ -75,6 +75,8 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
                     val paramArray = args!![index] as Array<*>
                     for ((i, param) in paramArray.withIndex()) {
                         when {
+                            StringUtils.isEmpty(param) -> {
+                            }
                             isBasicDataType(param!!) -> paramMap["param${i + 1}"] = param
                             else -> this.resolverClassParam(null, param, paramMap)
                         }
@@ -83,7 +85,6 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
 
                 //是普通参数
                 method.parameters[index] is Parameter -> {
-                    println(args!![index])
                     //基础参数
                     if (this.isBasicDataType(args!![index])) {
                         paramMap[method.parameters[index].name] = args!![index]
@@ -99,7 +100,7 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
                                 for (index in 0 until paramArray.size) {
                                     this.resolverClassParam(index.toString(), paramArray[index], paramMap)
                                     //类本身   0.user = user
-                                    paramMap["$index." + WordUtil.camelToUnderline(paramArray[index]!!.javaClass.simpleName)] = paramArray[index]
+                                    paramMap["$index." + WordUtil.underscoreName(paramArray[index]!!.javaClass.simpleName)] = paramArray[index]
                                 }
                             }
                         }
@@ -109,14 +110,14 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
                         //用户传递参数的名称  userList
                         paramMap["paramName"] = method.parameters[index].name
                         //用户传递参数的类实例名称 user
-                        paramMap["paramTypeName"] = WordUtil.camelToUnderline(paramArray[0]!!::class.java.simpleName)
+                        paramMap["paramTypeName"] = WordUtil.underscoreName(paramArray[0]!!::class.java.simpleName)
                         //集合大小 10
                         paramMap["batchSize"] = paramArray.size
                     } else {//类参数
                         this.resolverClassParam(null, args!![index], paramMap)
-                        paramMap["paramName"] = WordUtil.camelToUnderline(args!![index].javaClass.simpleName)
-                        paramMap["paramTypeName"] = WordUtil.camelToUnderline(args!![index].javaClass.simpleName)
-                        paramMap[WordUtil.camelToUnderline(args!![index].javaClass.simpleName)] = args!![index]
+                        paramMap["paramName"] = WordUtil.underscoreName(args!![index].javaClass.simpleName)
+                        paramMap["paramTypeName"] = WordUtil.underscoreName(args!![index].javaClass.simpleName)
+                        paramMap[WordUtil.underscoreName(args!![index].javaClass.simpleName)] = args!![index]
                     }
                 }
             }

@@ -4,7 +4,9 @@ import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
+import com.github.aly8246.core.util.WordUtil
 import net.sf.jsqlparser.parser.CCJSqlParserManager
+import org.springframework.util.StringUtils
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,7 +36,10 @@ open class RegexTemplate : BaseTemplate() {
             command = this.processInsertValue(sourceCommand, paramMap)
         }
 
+        //如果发生参数为空，则回退set|where|and 条件匹配
         command = this.processNullParam(command)
+        //如果用户强制需要查询为空字符串''
+        command = this.processEmptyString(command)
         if (configuration.showCommand!!)
             PrintImpl().debug("analyzedCommand >>   $command")
         return command
@@ -51,6 +56,18 @@ open class RegexTemplate : BaseTemplate() {
         return sb.toString()
     }
 
+    //where name = #{param1}
+    //where name = ''''
+    protected fun processEmptyString(command: String): String {
+        val matcher = Pattern.compile("##EMPTY_STRING##").matcher(command)
+        val sb = StringBuffer()
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "''")
+        }
+        matcher.appendTail(sb)
+        return sb.toString()
+    }
+
     private fun processInsertValue(sourceCommand: String, paramMap: MutableMap<String, Any?>): String {
         // if (paramMap.size > 1 || paramMap.isEmpty()) throw WeekendException("要新增数据的时候参数应当是一个类,用来承载参数")
 
@@ -59,21 +76,20 @@ open class RegexTemplate : BaseTemplate() {
         val paramName = paramMap["paramName"]
         val paramTypeName = paramMap["paramTypeName"]
 
-        val insertValue = StringBuilder()
+        val insertValueList: MutableList<String> = mutableListOf()
         if (paramMap["isBatch"] != null) {
             for (index in 0 until paramMap["batchSize"].toString().toInt()) {
                 val buildInsertValue = buildInsertValue(insertColumn, paramMap["$index.$paramTypeName"])
-                insertValue.append(buildInsertValue).append(",")
+                insertValueList.add(buildInsertValue)
             }
-            insertValue.deleteCharAt(insertValue.length - 1)
         } else {
-            insertValue.append(buildInsertValue(insertColumn, paramMap["$paramTypeName"]))
+            insertValueList.add(buildInsertValue(insertColumn, paramMap["$paramTypeName"]))
         }
 
         val sb = StringBuffer()
         val matcher = Pattern.compile("#\\{$paramName}").matcher(sourceCommand)
         while (matcher.find()) {
-            matcher.appendReplacement(sb, insertValue.toString())
+            matcher.appendReplacement(sb, insertValueList.joinToString(","))
         }
         matcher.appendTail(sb)
         return sb.toString()
@@ -84,46 +100,33 @@ open class RegexTemplate : BaseTemplate() {
         val paramValueClass = paramValue!!::class.java
         val declaredFields = paramValueClass.declaredFields
 
-        val stringBuilder = StringBuilder()
-        stringBuilder.append(" (")
-
         //paramValue是传递的参数类,依次取出参数值
         //如果参数值在columnList则说明需要,放到map里,为了防止参数位置错乱
-        val valueMap: MutableMap<String, String> = mutableMapOf()
-        columnList.forEach { e ->
-            run {
-                valueMap.put(e, "")
-            }
-        }
+        val valueList: MutableList<Any> = mutableListOf()
+
         for (field in declaredFields) {
             run {
-                val annotationList = field.annotations.toList()
-                val mappingList = annotationList.stream().filter { it is Mapping }.collect(toList())
+                val mapping = field.getAnnotation(Mapping::class.java)
                 val fieldName = when {
-                    mappingList.size >= 1 -> {
-                        val fieldMappingName = (mappingList[0] as Mapping).name.joinToString { it + "" }
-                        fieldMappingName
-                    }
-                    else -> field.name
+                    mapping != null -> mapping.name.joinToString { it + "" }
+                    else -> WordUtil.underscoreName(field.name)
                 }
                 //通过反射取到的值,但是不一定是新增的时候需要的值
                 if (columnList.stream().anyMatch { e -> e == fieldName }) {
-                    //TODO 根据注解上的mapping字段获取转换规则，或者驼峰转下划线
                     val declaredField = paramValue.javaClass.getDeclaredField(field.name)
                     declaredField.isAccessible = true
 
                     when (val value = declaredField.get(paramValue)) {
-                        is String -> valueMap[fieldName] = "'$value'"
-                        is Date -> valueMap[fieldName] = "'" + SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(value.toString())) + "'"
-                        else -> valueMap[fieldName] = "$value"
+                        StringUtils.isEmpty(value) -> valueList.add("''")
+                        is String -> valueList.add("'$value'")
+                        is Date -> valueList.add("'" + SimpleDateFormat(configuration.dataFormat).format(Date(value.toString())) + "'")
+                        else -> valueList.add("$value")
                     }
                 }
             }
         }
 
-        stringBuilder.append(valueMap.values.stream().collect(Collectors.joining(",")))
-        stringBuilder.append(")")
-        return stringBuilder.toString()
+        return "(${valueList.joinToString(",")})"
     }
 
 

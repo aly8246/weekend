@@ -80,7 +80,7 @@ open class InsertExecutor(sql: String, mongoConnection: MongoConnection) : Abstr
     private fun buildDocument(columns: MutableList<Column>, expressionList: MutableList<Expression>): Document {
         val document = Document()
         for (index in 0 until expressionList.count()) {
-            document[columns[index].toString().replace("`", "")] = this.expressionValue(expressionList[index] as Expression)
+            document[columns[index].toString().replace("`", "")] = this.expressionValue(expressionList[index])
         }
         return document
     }

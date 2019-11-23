@@ -18,7 +18,6 @@ import java.io.Serializable
  */
 interface BaseDao<X> {
     /**
-     * TODO
      * 这个方法新增一个实体到数据库。只新增不为null的字段，如果没有id则会自动生成25位随机字符
      * This method add one entity to DB.Add only non null fields,If It's haven't primaryKey,I where help you generate 25 random char.
      *
@@ -34,12 +33,11 @@ interface BaseDao<X> {
      */
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
-    fun insertSelective(entity: X): Int
+    fun insertOne(entity: X): Int
 
     /**
-     * TODO
-     * 这个方法新增很多实体到数据库。如果其中有些实体的字段为null则会为此补全默认类型，其他和[insertSelective]差不多
-     * This method add entities to DB.If the field of some of these entities is null,the default type will be supplemented!Others explain like [insertSelective]
+     * 这个方法新增很多实体到数据库。如果其中有些实体的字段为null则会为此补全默认类型，其他和[insertOne]差不多
+     * This method add entities to DB.If the field of some of these entities is null,the default type will be supplemented!Others explain like [insertOne]
      *
      * @see com.github.aly8246.core.dispatcher.baseDaoHandler.strategy.InsertAllStrategy
      * @param entity 一些实体类，不能为空

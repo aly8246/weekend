@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("user/baseMethod/")
@@ -20,12 +22,20 @@ public class BaseMethodController {
     private final BaseMethodService baseMethodService;
 
     @PostMapping
-    @ApiOperation("[insertSelective]新增一个用户")
+    @ApiOperation("[insertOne]新增一个用户")
     public Result insertOne(@RequestBody User user) {
         System.out.println(user);
         user.setId(IDUtil.createID());
         user.setAddress("");
-        int i = baseMethodService.insertSelective(user);
+        int i = baseMethodService.insertOne(user);
+        String msg = "新增了:" + i + "行记录";
+        return Result.success(msg, null);
+    }
+
+    @PostMapping("batch/")
+    @ApiOperation("[insertAll]新增多个用户")
+    public Result insertBatch(@RequestBody List<User> userList) {
+        int i = baseMethodService.insertAll(userList);
         String msg = "新增了:" + i + "行记录";
         return Result.success(msg, null);
     }
