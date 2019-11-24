@@ -1,6 +1,8 @@
 ## weekend
 
-> 一款轻量级mongodb持久层框架，像mybatis查询mysql一样，组合动态sql查询mongodb
+> 一款轻量级mongodb持久层框架，像mybatis查询mysql一样，组合动态sql查询mongodb.还集成了类似通用mapper这样的通用方法，无需学习开箱即用！
+> 本工具遵从springboot的设定理念:约定大于配置
+> 使用本插件可以开箱即用，如果日常使用基本上无需任何配置[数据库信息除外]，如果你需要对某些地方进行定制修改，也提供了一些注解进行配置修改
 
 [在线示例，使用weekend实现的基本crud操作](http://148.70.16.82:9999/doc.html) <<--**点此查看在线示例**
 
