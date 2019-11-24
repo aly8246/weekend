@@ -19,24 +19,37 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 public class BaseMethodController {
-    private final BaseMethodService baseMethodService;
+private final BaseMethodService baseMethodService;
 
-    @PostMapping
-    @ApiOperation("[insertOne]新增一个用户")
-    public Result insertOne(@RequestBody User user) {
-        user.setId(IDUtil.createID());
-        user.setAddress("");
-        int i = baseMethodService.insertOne(user);
-        String msg = "新增了:" + i + "行记录";
-        return Result.success(msg, null);
-    }
+@PostMapping
+@ApiOperation("[insertOne]新增一个用户")
+public Result insertOne(@RequestBody User user) {
+	user.setId(IDUtil.createID());
+	user.setAddress("");
+	int i = baseMethodService.insertOne(user);
+	String msg = "新增了:" + i + "行记录";
+	return Result.success(msg, null);
+}
 
-    @PostMapping("batch/")
-    @ApiOperation("[insertAll]新增多个用户")
-    public Result insertBatch(@RequestBody List<User> userList) {
-        int i = baseMethodService.insertAll(userList);
-        String msg = "新增了:" + i + "行记录";
-        return Result.success(msg, null);
-    }
+@PostMapping("batch/")
+@ApiOperation("[insertAll]新增多个用户")
+public Result insertBatch(@RequestBody List<User> userList) {
+	int i = baseMethodService.insertAll(userList);
+	String msg = "新增了:" + i + "行记录";
+	return Result.success(msg, null);
+}
+
+@GetMapping
+@ApiOperation("selectAll() 查询全部用户")
+public Result<List<User>> selectAll() {
+	return Result.success(baseMethodService.selectAll());
+}
+
+@GetMapping("idIn/")
+@ApiOperation("selectAll(String sql,param...) 查询全部用户")
+public Result<List<User>> selectAll(@RequestParam("idList") List<String> idList) {
+	return Result.success(baseMethodService.selectAllByIdIn(idList));
+}
+
 
 }

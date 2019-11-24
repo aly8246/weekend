@@ -68,10 +68,13 @@ interface BaseDao<X> {
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun updateById(entity: X): Int
 
-    //TODO
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun deleteById(id: Serializable): Int
+
+    @BaseMethod
+    @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
+    fun deleteByIdIn(idList: MutableList<String>): Int
 
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
@@ -81,7 +84,6 @@ interface BaseDao<X> {
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun selectAll(): List<X>
 
-    //TODO
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun selectAll(sql: String, vararg param: Any): List<X>

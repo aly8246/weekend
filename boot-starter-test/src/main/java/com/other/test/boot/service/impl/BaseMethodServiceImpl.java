@@ -11,15 +11,26 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BaseMethodServiceImpl implements BaseMethodService {
-    private final BaseMethodDao baseMethodDao;
+private final BaseMethodDao baseMethodDao;
 
-    @Override
-    public Integer insertOne(User user) {
-        return baseMethodDao.insertOne(user);
-    }
+@Override
+public Integer insertOne(User user) {
+	return baseMethodDao.insertOne(user);
+}
 
-    @Override
-    public Integer insertAll(List<User> userList) {
-        return baseMethodDao.insertAll(userList);
-    }
+@Override
+public Integer insertAll(List<User> userList) {
+	return baseMethodDao.insertAll(userList);
+}
+
+@Override
+public List<User> selectAll() {
+	return baseMethodDao.selectAll();
+}
+
+@Override
+public List<User> selectAllByIdIn(List<String> idList) {
+	return baseMethodDao.selectAll("where id in #{idList}", idList);
+}
+
 }

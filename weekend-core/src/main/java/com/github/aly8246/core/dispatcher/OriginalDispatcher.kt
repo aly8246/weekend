@@ -13,6 +13,7 @@ import java.sql.Statement
 @Suppress("UNCHECKED_CAST")
 open class OriginalDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>) : InitializerDispatcher<T>(proxy, method, args, mongoConnection, target) {
     protected lateinit var commandAnnotation: Command
+
     protected lateinit var originalCommand: String
 
     override fun resolverBaseCommand(method: Method): String {

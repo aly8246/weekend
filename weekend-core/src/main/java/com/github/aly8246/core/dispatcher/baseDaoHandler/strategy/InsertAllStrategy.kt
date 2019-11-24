@@ -3,11 +3,13 @@ package com.github.aly8246.core.dispatcher.baseDaoHandler.strategy
 import com.github.aly8246.core.dispatcher.baseDaoHandler.BaseDaoStrategy
 import com.github.aly8246.core.dispatcher.baseDaoHandler.CollectionEntityResolver
 import com.github.aly8246.core.driver.MongoConnection
-import java.lang.StringBuilder
 import java.lang.reflect.Method
 
+/**
+ * @see com.github.aly8246.core.dispatcher.baseDaoHandler.base.BaseDao.insertAll
+ */
 class InsertAllStrategy<T> : CollectionEntityResolver(), BaseDaoStrategy<T> {
-    override fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>): String {
+    override fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>, param: MutableMap<String, Any?>): String {
         val collectionName = this.collectionName(target)
 
         //实体集合

@@ -93,7 +93,7 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         statement.close()
 
         val pageResult = PageResult<T>()
-            if (selectStatement != null)
+        if (selectStatement != null)
             pageResult.data = selectStatement as List<T>
         pageResult.page = page.page
         pageResult.total = count

@@ -16,4 +16,8 @@ abstract class AbstractDispatcher<T>(protected var proxy: Any, protected var met
     abstract fun selectStatement(statement: Statement, command: String, param: MutableMap<String, Any?>, statement1: Statement): T?
 
     abstract fun pageParam(): Page
+
+    abstract fun transmitOriginalCommand(originalCommand: String)
+
+    abstract fun transmitParam(paramMap: MutableMap<String, Any?>)
 }

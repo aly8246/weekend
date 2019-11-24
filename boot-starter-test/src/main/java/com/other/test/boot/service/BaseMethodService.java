@@ -6,7 +6,12 @@ import com.other.test.boot.enitiy.User;
 import java.util.List;
 
 public interface BaseMethodService {
-    Integer insertOne(User user);
+Integer insertOne(User user);
 
-    Integer insertAll(List<User> userList);
+Integer insertAll(List<User> userList);
+
+List<User> selectAll();
+
+List<User> selectAllByIdIn(List<String> idList);
+
 }

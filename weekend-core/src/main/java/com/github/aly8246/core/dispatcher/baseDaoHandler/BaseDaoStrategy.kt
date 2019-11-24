@@ -11,5 +11,5 @@ import java.lang.reflect.Method
  * @version:   ：V
  */
 interface BaseDaoStrategy<T> {
-    fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>): String
+    fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>, param: MutableMap<String, Any?>): String
 }

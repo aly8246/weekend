@@ -25,12 +25,13 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
     protected lateinit var baseCommand: String
 
     override fun run(): T? {
-        //从方法的注解中获得sql/或者生成base sql
-        baseCommand = this.resolverBaseCommand(method)
-
         //解析获得参数
         val param = resolverParam(method)
 
+        this.transmitParam(param)
+
+        //从方法的注解中获得sql/或者生成base sql
+        baseCommand = this.resolverBaseCommand(method)
         //获得原始sql(模板替换完成)
         var originalCommand = template(baseCommand, param)
 
@@ -55,7 +56,13 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         throw WeekendException("要获取分页参数必须自己实现此方法")
     }
 
-    abstract fun transmitOriginalCommand(originalCommand: String)
+    //向下传递
+    override fun transmitOriginalCommand(originalCommand: String) {
+
+    }
+
+    override fun transmitParam(paramMap: MutableMap<String, Any?>) {
+    }
 
     //获得用户传入的command
     abstract fun resolverBaseCommand(method: Method): String
@@ -69,6 +76,7 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
         for (index in method.parameters.indices) {
             if (args?.get(index) == null) continue
             val typeSimpleName = method.parameters[index].type.simpleName
+
             when {
                 //是不定长数组参数
                 method.parameters[index].isVarArgs -> {

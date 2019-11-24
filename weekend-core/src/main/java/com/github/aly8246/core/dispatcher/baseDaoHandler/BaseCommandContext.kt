@@ -19,8 +19,8 @@ class BaseCommandContext<T> {
         strategySignature = baseDaoStrategy::class.java.simpleName
     }
 
-    fun create(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>): String {
-        return this.baseDaoStrategy.createBaseCommand(proxy, method, args, mongoConnection, target)
+    fun create(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>, param: MutableMap<String, Any?>): String {
+        return this.baseDaoStrategy.createBaseCommand(proxy, method, args, mongoConnection, target,param)
     }
 
 }
