@@ -17,4 +17,5 @@ class InsertOneStrategy<T> : CollectionEntityResolver(), BaseDaoStrategy<T> {
 
         return "INSERT INTO $collectionName (${resolverEntity.keys.joinToString(",")}) values (${resolverEntity.values.joinToString(",")})"
     }
+
 }

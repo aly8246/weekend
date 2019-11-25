@@ -26,8 +26,8 @@ interface BaseDao<X> {
      * @param entity 实体类，它不是是空的
      * @param entity entity,Can't be null!
      *
-     * @return  返回值总是1或者0,因为它只是新增一个实体类
-     * @return  Return value is always 1 or 0 ,Because Is't only insert one entity
+     * @return 返回值总是1或者0,因为它只是新增一个实体类
+     * @return Return value is always 1 or 0 ,Because Is't only insert one entity
      *
      * @exception NullPointerException
      */
@@ -53,7 +53,6 @@ interface BaseDao<X> {
     fun insertAll(entity: MutableList<X>): Int
 
     /**
-     * TODO
      * 根据实体类里的主键更新，只更新不为null的字段
      *
      * @param entity 实体类，主键ID不能为空
@@ -68,18 +67,60 @@ interface BaseDao<X> {
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun updateById(entity: X): Int
 
+    /**
+     * 根据主键删除
+     *
+     * @param id 主键
+     * @param id primaryKey,primaryKey Can't be null
+     *
+     * @return 返回值总是1或者0,因为它只是删除一个实体类
+     * @return Return value is always 1 or 0 ,Because Is't only remove one entity
+     *
+     * @exception NullPointerException
+     */
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun deleteById(id: Serializable): Int
 
+    /**
+     * 根据主键删除
+     *
+     * @param idList 主键
+     * @param idList primaryKeys,primaryKeys Can't be null
+     *
+     * @return 通常它返回了参数的size,如果其中没有重复的主键
+     * @return In the ordinary It's return entities.size,If It's haven't duplicate primaryKey
+     *
+     * @exception NullPointerException
+     */
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun deleteByIdIn(idList: MutableList<String>): Int
 
+    /**
+     * 根据主键查询单个对象
+     *
+     * @param id 主键
+     * @param id primaryKey,primaryKey Can't be null
+     *
+     * @return 返回一个对象，如果这个主键存在
+     * @return
+     *
+     * @exception NullPointerException
+     */
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun selectById(id: Serializable): X
 
+    /**
+     * 查询全部
+     *
+     *
+     * @return 返回全部集合
+     * @return
+     *
+     * @exception NullPointerException
+     */
     @BaseMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun selectAll(): List<X>
@@ -88,9 +129,18 @@ interface BaseDao<X> {
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun selectAll(sql: String, vararg param: Any): List<X>
 
+    /**
+     * 初始分页,但是我仍然建议你自己实现分页
+     * @param page 分页参数类，如果你使用自定义分页，也必须继承自com.github.aly8246.core.page.Page
+     * @param sql 自定义sql命令片段
+     * @param param 参数合集
+     *
+     * @return 返回分页查询结果
+     *
+     * @exception NullPointerException
+     */
     @BaseMethod
     @com.github.aly8246.core.annotation.PageMethod
     @StrategyRoute("com.github.aly8246.core.dispatcher.baseDaoHandler.strategy")
     fun selectPage(page: Page, sql: String, vararg param: Any): PageResult<X>
-
 }

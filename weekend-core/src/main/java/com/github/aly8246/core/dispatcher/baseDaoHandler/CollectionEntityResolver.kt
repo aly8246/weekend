@@ -5,6 +5,7 @@ import com.github.aly8246.core.annotation.WeekendCollection
 import com.github.aly8246.core.annotation.WeekendId
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.dispatcher.baseDaoHandler.base.BaseDao
+import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.WordUtil.Companion.underscoreName
 import java.text.SimpleDateFormat
 import java.util.*
@@ -61,6 +62,30 @@ open class CollectionEntityResolver {
         return "_id"
     }
 
+
+    fun <T> resolverPrimaryKeyValue(entity: Any): Any {
+        //尝试获取id字段
+        val entityClass = entity::class.java
+        val idField = entityClass.getDeclaredField("id")
+        if (idField != null) {
+            idField.isAccessible = true
+            return idField.get(entity)
+        }
+
+        val annotation = entityClass.getAnnotation(WeekendId::class.java)
+        if (annotation != null) {
+            return annotation.name
+        }
+
+        //通过WeekendId获取
+        val _idField = entityClass.getDeclaredField("_id")
+        if (_idField != null) {
+            _idField.isAccessible = true
+            return _idField.get(entity)
+        }
+        //尝试获取_id字段
+        throw WeekendException("不明确的主键类型,既不是id或者_id,又没有指定command注解的primaryKey")
+    }
 
     fun <T> resolverEntity(entity: Any): MutableMap<String, Any> {
         val resultMap: MutableMap<String, Any> = mutableMapOf()

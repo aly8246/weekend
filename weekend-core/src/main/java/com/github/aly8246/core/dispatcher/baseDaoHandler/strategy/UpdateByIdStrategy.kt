@@ -12,12 +12,21 @@ class UpdateByIdStrategy<T> : CollectionEntityResolver(), BaseDaoStrategy<T> {
     override fun createBaseCommand(proxy: Any, method: Method, args: Array<Any>?, mongoConnection: MongoConnection, target: Class<T>, param: MutableMap<String, Any?>): String {
         val collectionName = this.collectionName(target)
         val primaryKeyName = this.primaryKeyName(target)
-        //TODO 获取所有不为null的字段，
-        var updateField = "set `name` = 100 set `age` = 80"
 
-        //TODO 注意区分是字符串还是数字的id
-        var idValue = "'1234567'"
-        var idValue2 = "1234567"
-        return "update $collectionName $updateField where $primaryKeyName = $idValue"
+        //第0个参数一定是实体类
+        val resolverEntity = this.resolverEntity<T>(args!![0])
+        //获取id的值
+        val primaryKeyValue = this.resolverPrimaryKeyValue<T>(args[0])
+
+        //所有不为null的字段
+        val updateField = StringBuffer()
+        for (entityEntry in resolverEntity) {
+            when (entityEntry.value) {
+                is String -> updateField.append("set `${entityEntry.key}` = ' ${entityEntry.value}'")
+                else -> updateField.append("set `${entityEntry.key}` = ${entityEntry.value}")
+            }
+        }
+
+        return "update $collectionName $updateField where $primaryKeyName = $primaryKeyValue"
     }
 }
