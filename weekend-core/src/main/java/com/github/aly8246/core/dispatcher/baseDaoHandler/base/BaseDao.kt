@@ -4,6 +4,7 @@ import com.github.aly8246.core.annotation.BaseMethod
 import com.github.aly8246.core.annotation.StrategyRoute
 import com.github.aly8246.core.page.Page
 import com.github.aly8246.core.page.PageResult
+import org.jetbrains.annotations.Nullable
 import java.io.Serializable
 
 
@@ -18,16 +19,13 @@ import java.io.Serializable
  */
 interface BaseDao<X> {
     /**
-     * 这个方法新增一个实体到数据库。只新增不为null的字段，如果没有id则会自动生成25位随机字符
-     * This method add one entity to DB.Add only non null fields,If It's haven't primaryKey,I where help you generate 25 random char.
+     * 新增一个文档
      *
      * @see com.github.aly8246.core.dispatcher.baseDaoHandler.strategy.InsertOneStrategy
      *
-     * @param entity 实体类，它不是是空的
-     * @param entity entity,Can't be null!
+     * @param entity 实体类
      *
-     * @return 返回值总是1或者0,因为它只是新增一个实体类
-     * @return Return value is always 1 or 0 ,Because Is't only insert one entity
+     * @return 一般是1，如果主键重复之类的则是0
      *
      * @exception NullPointerException
      */
@@ -36,15 +34,12 @@ interface BaseDao<X> {
     fun insertOne(entity: X): Int
 
     /**
-     * 这个方法新增很多实体到数据库。如果其中有些实体的字段为null则会为此补全默认类型，其他和[insertOne]差不多
-     * This method add entities to DB.If the field of some of these entities is null,the default type will be supplemented!Others explain like [insertOne]
+     * 新增多个文档，如果实体的某些字段为空，则补全为默认值，其他和[insertOne]差不多
      *
      * @see com.github.aly8246.core.dispatcher.baseDaoHandler.strategy.InsertAllStrategy
-     * @param entity 一些实体类，不能为空
-     * @param entity entities,Can't be empty!
+     * @param entity 实体类集合
      *
-     * @return 通常它返回了参数的size,如果其中没有重复的主键
-     * @return In the ordinary It's return entities.size,If It's haven't duplicate primaryKey
+     * @return 新增成功的个数，一般是 [entity]的大小，除非存在主键重复
      *
      * @exception NullPointerException
      */
@@ -53,13 +48,11 @@ interface BaseDao<X> {
     fun insertAll(entity: MutableList<X>): Int
 
     /**
-     * 根据实体类里的主键更新，只更新不为null的字段
+     * 根据实体类里的主键更新文档，只更新不为null的字段
      *
      * @param entity 实体类，主键ID不能为空
-     * @param entity entity,primaryKey Can't be null
      *
      * @return 返回值总是1或者0,因为它只是新增一个实体类
-     * @return Return value is always 1 or 0 ,Because Is't only modify one entity
      *
      * @exception NullPointerException
      */
@@ -70,8 +63,7 @@ interface BaseDao<X> {
     /**
      * 根据主键删除
      *
-     * @param id 主键
-     * @param id primaryKey,primaryKey Can't be null
+     * @param id 主键，不能为空
      *
      * @return 返回值总是1或者0,因为它只是删除一个实体类
      * @return Return value is always 1 or 0 ,Because Is't only remove one entity
