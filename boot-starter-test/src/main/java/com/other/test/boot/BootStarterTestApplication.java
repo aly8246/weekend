@@ -1,6 +1,6 @@
 package com.other.test.boot;
 
-import com.github.aly8246.core.annotation.WeekendDaoScan;
+import com.github.aly8246.weekend.spring.register.WeekendDaoScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;

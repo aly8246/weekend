@@ -1,3 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.aly8246.auto.configuration.WeekendAutoConfiguration,\
-com.github.aly8246.auto.configuration.WeekendGlobalConfiguration
+com.github.aly8246.weekend.spring.configuration.datasource.BeanDatasourceConfiguration,\
+com.github.aly8246.weekend.spring.configuration.global.BeanGlobalConfiguration,\
+com.github.aly8246.weekend.spring.configuration.datasource.PropertyDatasourceConfiguration,\
+com.github.aly8246.weekend.spring.configuration.global.PropertyGlobalConfiguration

@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.aly8246.kotlin.DevWeekend,\
-com.github.aly8246.auto.configuration.WeekendAutoConfiguration
-
