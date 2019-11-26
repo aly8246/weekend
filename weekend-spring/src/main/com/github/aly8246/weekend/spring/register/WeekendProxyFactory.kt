@@ -1,7 +1,8 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.github.aly8246.core.proxy
+package com.github.aly8246.weekend.spring.register
 
+import com.github.aly8246.core.proxy.WeekendProxy
 import org.springframework.beans.factory.FactoryBean
 import java.lang.reflect.Proxy
 

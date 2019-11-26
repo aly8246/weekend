@@ -1,7 +1,6 @@
 package com.github.aly8246.core.template
 
-import org.springframework.util.StringUtils
-import java.lang.reflect.Parameter
+import com.github.aly8246.core.util.StringUtils
 
 abstract class BaseTemplate : Template {
 

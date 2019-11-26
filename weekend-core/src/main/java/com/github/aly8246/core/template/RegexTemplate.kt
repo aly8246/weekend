@@ -4,16 +4,14 @@ import com.github.aly8246.core.annotation.Mapping
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.exception.WeekendException
 import com.github.aly8246.core.util.PrintImpl
+import com.github.aly8246.core.util.StringUtils
 import com.github.aly8246.core.util.WordUtil
 import net.sf.jsqlparser.parser.CCJSqlParserManager
-import org.springframework.util.StringUtils
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import java.util.stream.Collectors
-import java.util.stream.Collectors.toList
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 open class RegexTemplate : BaseTemplate() {

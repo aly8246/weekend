@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@WeekendCollection("user2")
+@WeekendCollection("user")
 public class User {
     @ApiModelProperty(value = "id", example = "aaa1111aaa")
     @WeekendId
@@ -36,7 +36,7 @@ public class User {
     private String password;
 
     @ApiModelProperty(value = "安全码", example = "1111")
-//@Mapping(name = "safe_key")
+    //@Mapping(name = "safe_key")
     private String safeKey;
 
     @ApiModelProperty(value = "状态: 0正常 1禁用", example = "0")

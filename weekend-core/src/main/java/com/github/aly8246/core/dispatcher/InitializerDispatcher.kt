@@ -12,7 +12,6 @@ import net.sf.jsqlparser.statement.delete.Delete
 import net.sf.jsqlparser.statement.insert.Insert
 import net.sf.jsqlparser.statement.select.Select
 import net.sf.jsqlparser.statement.update.Update
-import org.springframework.util.StringUtils
 import java.io.StringReader
 
 import java.lang.reflect.Method
@@ -83,9 +82,9 @@ abstract class InitializerDispatcher<T>(proxy: Any, method: Method, args: Array<
                     val paramArray = args!![index] as Array<*>
                     for ((i, param) in paramArray.withIndex()) {
                         when {
-                            StringUtils.isEmpty(param) -> {
+                            param == null || param == "" -> {
                             }
-                            isBasicDataType(param!!) -> paramMap["param${i + 1}"] = param
+                            isBasicDataType(param) -> paramMap["param${i + 1}"] = param
                             else -> this.resolverClassParam(null, param, paramMap)
                         }
                     }

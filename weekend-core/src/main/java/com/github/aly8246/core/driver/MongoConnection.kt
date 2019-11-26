@@ -2,13 +2,13 @@ package com.github.aly8246.core.driver
 
 import com.github.aly8246.core.configuration.Configurations.Companion.configuration
 import com.github.aly8246.core.util.PrintImpl
+import com.github.aly8246.core.util.StringUtils
 import com.mongodb.MongoClient
 import com.mongodb.MongoCredential
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import net.sf.jsqlparser.schema.Table
 import org.bson.Document
-import org.springframework.util.StringUtils
 import java.sql.*
 import java.util.*
 import java.util.concurrent.Executor
@@ -20,7 +20,7 @@ class MongoConnection() : Connection {
 
     constructor(dbAddress: MongoAddress) : this() {
         //连接mongodb
-        if (!StringUtils.isEmpty(configuration.username) && !StringUtils.isEmpty(configuration.password)) {
+        if (StringUtils.isNotEmpty(configuration.username) && StringUtils.isEmpty(configuration.password)) {
             val createCredential = MongoCredential.createCredential(configuration.username!!, dbAddress.dbName(), configuration.password!!.toCharArray())
             this.mongoClient = MongoClient(dbAddress, mutableListOf(createCredential))
         } else {

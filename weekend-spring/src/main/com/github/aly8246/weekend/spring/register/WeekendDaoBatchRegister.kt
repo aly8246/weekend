@@ -1,6 +1,5 @@
 package com.github.aly8246.weekend.spring.register
 
-import com.github.aly8246.core.proxy.WeekendProxyFactory
 import com.github.aly8246.core.util.PrintImpl
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
@@ -17,9 +16,8 @@ import org.springframework.core.io.support.ResourcePatternUtils
 import org.springframework.core.type.AnnotationMetadata
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory
 import org.springframework.core.type.classreading.MetadataReaderFactory
-
 import java.io.IOException
-import java.util.*
+
 
 /**
  * @Author ：南有乔木
