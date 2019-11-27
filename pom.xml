@@ -27,37 +27,22 @@
         <java.version>1.8</java.version>
         <kotlin.version>1.3.50</kotlin.version>
     </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.github.aly8246</groupId>
-                <artifactId>weekend-core</artifactId>
-                <version>${project.RELEASE.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.aly8246</groupId>
-                <artifactId>weekend-spring</artifactId>
-                <version>${project.RELEASE.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <!--    <dependencyManagement>-->
+    <!--        <dependencies>-->
+    <!--            <dependency>-->
+    <!--                <groupId>com.github.aly8246</groupId>-->
+    <!--                <artifactId>weekend-core</artifactId>-->
+    <!--                <version>${project.RELEASE.version}</version>-->
+    <!--            </dependency>-->
+    <!--            <dependency>-->
+    <!--                <groupId>com.github.aly8246</groupId>-->
+    <!--                <artifactId>weekend-spring</artifactId>-->
+    <!--                <version>${project.RELEASE.version}</version>-->
+    <!--            </dependency>-->
+    <!--        </dependencies>-->
+    <!--    </dependencyManagement>-->
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
@@ -73,10 +58,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
