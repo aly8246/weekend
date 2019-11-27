@@ -52,7 +52,5 @@ int updateByUser(User user);
 @Command("select * from user")
 @PageMethod
 PageResult<User> customPage(Page page);
-
-
 }
 
