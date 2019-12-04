@@ -20,7 +20,7 @@ class MongoConnection() : Connection {
 
     constructor(dbAddress: MongoAddress) : this() {
         //连接mongodb
-        if (StringUtils.isNotEmpty(configuration.username) && StringUtils.isEmpty(configuration.password)) {
+        if (StringUtils.isNotEmpty(configuration.username) && StringUtils.isNotEmpty(configuration.password)) {
             val createCredential = MongoCredential.createCredential(configuration.username!!, dbAddress.dbName(), configuration.password!!.toCharArray())
             this.mongoClient = MongoClient(dbAddress, mutableListOf(createCredential))
         } else {

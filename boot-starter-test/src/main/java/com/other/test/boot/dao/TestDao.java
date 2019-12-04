@@ -49,8 +49,9 @@ int updateNameByIdIs(String id, String name);
 @Command("update user set name = #{user.name} where id = #{user.id}")
 int updateByUser(User user);
 
-@Command("select * from user")
+@Command("select * from user where user_id = #{user.id} and user_name = #{user.userName}")
 @PageMethod
-PageResult<User> customPage(Page page);
+PageResult<User> customPage(Page page, User user);
+
 }
 

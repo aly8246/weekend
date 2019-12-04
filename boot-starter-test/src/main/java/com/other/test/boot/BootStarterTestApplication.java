@@ -9,8 +9,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 @SpringBootApplication(exclude = MongoAutoConfiguration.class)
 @WeekendDaoScan("com.other.test.boot.dao")
 public class BootStarterTestApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(BootStarterTestApplication.class, args);
-    }
-
+public static void main(String[] args) {
+	SpringApplication.run(BootStarterTestApplication.class, args);
+}
 }

@@ -102,9 +102,7 @@ open class PageDaoDispatcher<T>(proxy: Any, method: Method, args: Array<Any>?, m
         return pageResult as T
     }
 
-    /**
-     * @see com.github.aly8246.core.base.BaseDao.selectPage
-     */
+
     //method的0号参数就一定是是page对象
     override fun pageParam(): Page {
         return args!![0] as Page

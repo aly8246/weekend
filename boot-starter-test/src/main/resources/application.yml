@@ -4,6 +4,10 @@ weekend:
   mongodb:
     uri: jdbc:mongodb://148.70.16.82:27017/weekend-dev
     driver-name: com.github.aly8246.core.driver.MongoDriver
+  #    uri: jdbc:mongodb://192.168.1.204:27017/wenxin
+  #    driver-name: com.github.aly8246.core.driver.MongoDriver
+  #    username: wenxin
+  #    password: wenxin123456
   config:
     non-field-remind: true
     show-param: true
